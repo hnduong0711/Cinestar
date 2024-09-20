@@ -30,8 +30,8 @@ const IntroductionPage = () => {
     <div className="text-center mt-[50px] mb-[5px]">
       <h2 className="text-[#f8fafc] text-4xl font-black ">SỨ MỆNH</h2>
     </div>
-    {/* <div>
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <div>
+    {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {listmission.map((mission, index) => (
           <div key={index} className="text-center p-4 bg-gray-800 rounded-lg">
             <h2 className="text-3xl text-white font-bold">{mission.title}</h2>

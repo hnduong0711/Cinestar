@@ -11,7 +11,7 @@ const subnav = [
     },
     {
         name: "Giới thiệu",
-        to: '/about'
+        to: '/Test2'
     }
     
 ];

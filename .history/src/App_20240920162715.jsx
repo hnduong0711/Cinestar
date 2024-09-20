@@ -14,8 +14,12 @@ function App() {
     <BrowserRouter>
       <div className="bg-cinestar-black md:px-2">
         <Header />
+        <Slider />
+        <SearchContextWrapper>
+          <SearchBox />
+        </SearchContextWrapper>
         <AppRouter />
-       
+        <Now />
       </div>
     </BrowserRouter>
   );
