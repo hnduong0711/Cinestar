@@ -75,12 +75,12 @@ const Header = () => {
         </div>
         {/* Login */}
         <div className="">
-          <a className="text-white flex items-center" href="">
+          <Link className="text-white flex items-center" to="login">
             <img src={UserIcon} alt="user" width={24} height={24} />
             <span className="ml-2 hidden lg:block hover:text-cinestar-gold hover:transition-all">
               Đăng nhập
             </span>
-          </a>
+          </Link>
         </div>
       </div>
 
