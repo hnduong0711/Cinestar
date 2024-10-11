@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { ClockIcon, FilmTest1, SubtitleIcon, TagIcon } from "../../assets";
 import { GlobeAltIcon } from "@heroicons/react/24/outline";
+import MovieSchedule from "../MovieSchedule/MovieSchedule";
 
 const MovieDetail = () => {
   const { id } = useParams();
@@ -68,6 +69,9 @@ const MovieDetail = () => {
             laboriosam sed expedita quisquam!
           </div>
         </div>
+      </div>
+      <div className="py-10 flex justify-center">
+        <MovieSchedule />
       </div>
     </div>
   );

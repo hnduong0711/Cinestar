@@ -57,7 +57,7 @@ const Login = () => {
           <div className="flex items-center justify-around uppercase font-title font-bold text-xl text-center">
             <div
               className={`${
-                haveAccount ? "bg-[#F8FAFC]" : "opacity-0"
+                haveAccount ? "bg-[#F8FAFC]" : "text-white hover:bg-slate-300 hover:text-black rounded-md m-1"
               } rounded-tl-md rounded-tr-md py-2 px-2 w-full cursor-pointer transition-all duration-400`}
               onClick={() => setHaveAccount(true)}
             >
@@ -65,16 +65,16 @@ const Login = () => {
             </div>
             <div
               className={`${
-                !haveAccount ? "bg-[#F8FAFC]" : "opacity-0"
+                !haveAccount ? "bg-[#F8FAFC]" : "text-white hover:bg-slate-300 hover:text-black rounded-md m-1"
               } rounded-tl-md rounded-tr-md py-2 px-2 w-full cursor-pointer transition-all duration-400`}
               onClick={() => setHaveAccount(false)}
             >
-              Đăng kí
+              Đăng ký
             </div>
           </div>
           {/* Content: login */}
           <form
-            className={`bg-[#F8FAFC] space-y-2 px-10 py-16 rounded-b-md ${
+            className={`bg-[#F8FAFC] space-y-2 px-10 py-16 rounded-b-md relative -mt-1 ${
               haveAccount ? "block" : "hidden transition-all duration-200"
             }`}
           >
@@ -123,7 +123,7 @@ const Login = () => {
           </form>
           {/* Content: register */}
           <form
-            className={`bg-[#F8FAFC] space-y-2 px-10 py-16 rounded-b-md ${
+            className={`bg-[#F8FAFC] space-y-2 px-10 py-16 rounded-b-md relative -mt-1 ${
               !haveAccount ? "block" : "hidden transition-all duration-200"
             }`}
           >
