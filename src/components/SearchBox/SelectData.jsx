@@ -70,12 +70,8 @@ const SelectData = ({ list, id }) => {
     }
   };
 
-  useEffect(() => {
-    console.log(searchData);
-  }, [searchData]);
-
   return (
-    <div className="bg-gray-100 rounded-sm absolute left-0 md:top-19 lg:top-14 backdrop-blur-xl shadow-2xl w-full z-[11]">
+    <div className="bg-gray-100 rounded-sm absolute left-0 md:top-19 lg:top-14 backdrop-blur-xl shadow-2xl w-full z-[11] max-h-[220px] overflow-y-auto">
       {list.map((item, index) => (
         <div
           key={index}

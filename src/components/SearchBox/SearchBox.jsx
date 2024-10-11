@@ -3,12 +3,12 @@ import Button from "../Button/Button";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import {
   listTheater,
-  listFilm,
-  listDay,
   listTime,
 } from "../../constants/searchbox";
 import SelectData from "./SelectData";
 import SearchContext from "../../context/SearchContext/SearchContext";
+import { filmList } from "../../constants/movie";
+import { schedule } from "../../constants/scheduleTest";
 
 const SearchBox = () => {
   const { searchData, statusData, setStatusData } = useContext(SearchContext);
@@ -19,6 +19,14 @@ const SearchBox = () => {
       [type]: !status,
     }));
   };
+
+  const listFilm = filmList.map(item => item.name);
+
+  useEffect(() => {
+    console.log(searchData);
+    
+  }, [searchData])
+  
 
   return (
     <div className="xl:p-4 lg:p-3 md:p-2 xs:p-1">

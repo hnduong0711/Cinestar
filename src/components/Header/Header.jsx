@@ -68,7 +68,7 @@ const Header = () => {
             icon={SearchIcon}
             width="24"
             height="24"
-            className="bg-white min-w-[80px] w-[125px] h-[40px] button md:hidden"
+            className="bg-white min-w-[70px] max-w-[125px] px-4 h-[40px] button md:hidden"
             text={isSmallScreen ? "" : "Tìm kiếm"}
             onClick={showModal}
           />
