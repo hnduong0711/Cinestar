@@ -13,7 +13,6 @@ const MovieSchedule = () => {
   const [day, setDay] = useState(listDay[0].date);
   const listTime = listDay.find((item) => item.date === day);
   const [time, setTime] = useState();
-  console.log(time);
 
   return (
     <div className="space-y-8">
