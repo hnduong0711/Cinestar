@@ -8,7 +8,7 @@ const MovieDetail = () => {
   const { id } = useParams();
 
   return (
-    <div className="w-full pt-36 px-[4.5rem] py-14">
+    <div className="w-full pt-36 px-[4.5rem] py-10">
       <div className="flex">
         {/* Poster */}
         <div className="basis-1/3 min-w-[260px]">
@@ -59,6 +59,7 @@ const MovieDetail = () => {
           </div>
         </div>
       </div>
+      {/* Description mobile view */}
       <div className="mobile md:hidden inline-block">
         <div className="pt-5 text-gray-100">
           <div className="heading text-[22px]">Nội dung phim</div>
@@ -70,7 +71,7 @@ const MovieDetail = () => {
           </div>
         </div>
       </div>
-      <div className="py-10 flex justify-center">
+      <div className="py-10">
         <MovieSchedule />
       </div>
     </div>

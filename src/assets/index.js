@@ -38,6 +38,7 @@ import MYTHO1 from './Locations/MYTHO1.jpg'
 import UD1 from './Locations/UD1.jpg'
 import About from './Locations/About/about.jpg'
 import BgRegis from './bg-regis.jpg'
+import Screen from './Room/screen.png'
 
 
 
@@ -81,5 +82,6 @@ export {
     MYTHO1,
     UD1,
     About,
-    BgRegis
+    BgRegis,
+    Screen
 }
