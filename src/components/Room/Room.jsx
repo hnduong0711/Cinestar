@@ -1,5 +1,6 @@
 import React from "react";
 import { Screen } from "../../assets";
+import Room1 from "./Room1";
 
 const Room = ({ roomNum }) => {
   console.log(roomNum);
@@ -7,7 +8,7 @@ const Room = ({ roomNum }) => {
   return (
     <div className="w-full flex flex-col gap-5">
       {/* Screen */}
-      <div className="w-full">
+      <div className="">
         <img src={Screen} alt="" />
       </div>
       {/* Content */}

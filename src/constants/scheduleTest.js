@@ -1,75 +1,159 @@
 const schedule = [
   {
-    id: '1',
+    id: "1",
     date: "10/10",
     dow: "Thứ 5",
-    showTime: ['8:00','11:00','12:30','13:00','16:00','21:00']
+    showTime: [
+      { time: "8:00", room: 1 },
+      { time: "11:00", room: 1 },
+      { time: "12:30", room: 2 },
+      { time: "13:00", room: 3 },
+      { time: "16:00", room: 4 },
+      { time: "21:00", room: 5 },
+    ],
   },
   {
-    id: '1',
+    id: "1",
     date: "11/10",
     dow: "Thứ 6",
-    showTime: ['7:00','13:00','14:30','15:00','16:00','22:00']
+    showTime: [
+      { time: "7:00", room: 1 },
+      { time: "13:00", room: 1 },
+      { time: "14:30", room: 2 },
+      { time: "15:00", room: 3 },
+      { time: "16:00", room: 4 },
+      { time: "22:00", room: 5 },
+    ],
   },
   {
-    id: '1',
+    id: "1",
     date: "12/10",
     dow: "Thứ 7",
-    showTime: ['8:45','12:00','12:30','14:15','19:00','21:00']
+    showTime: [
+      { time: "8:45", room: 1 },
+      { time: "12:00", room: 1 },
+      { time: "12:30", room: 2 },
+      { time: "14:15", room: 3 },
+      { time: "19:00", room: 4 },
+      { time: "21:00", room: 5 },
+    ],
   },
   {
-    id: '2',
+    id: "2",
     date: "13/10",
     dow: "Chủ nhật",
-    showTime: ['8:00','11:00','12:30','13:00','16:00','21:00']
+    showTime: [
+      { time: "8:00", room: 1 },
+      { time: "11:00", room: 1 },
+      { time: "12:30", room: 2 },
+      { time: "13:00", room: 3 },
+      { time: "16:00", room: 4 },
+      { time: "21:00", room: 5 },
+    ],
   },
   {
-    id: '2',
+    id: "2",
     date: "14/10",
     dow: "Thứ 2",
-    showTime: ['7:00','13:00','14:30','15:00','16:00','22:00']
+    showTime: [
+      { time: "7:00", room: 1 },
+      { time: "13:00", room: 1 },
+      { time: "14:30", room: 2 },
+      { time: "15:00", room: 3 },
+      { time: "16:00", room: 4 },
+      { time: "22:00", room: 5 },
+    ],
   },
   {
-    id: '2',
+    id: "2",
     date: "15/10",
     dow: "Thứ 3",
-    showTime: ['8:45','12:00','12:30','14:15','19:00','21:00']
+    showTime: [
+      { time: "8:45", room: 1 },
+      { time: "12:00", room: 1 },
+      { time: "12:30", room: 2 },
+      { time: "14:15", room: 3 },
+      { time: "19:00", room: 4 },
+      { time: "21:00", room: 5 },
+    ],
   },
   {
-    id: '3',
+    id: "3",
     date: "16/10",
     dow: "Thứ 4",
-    showTime: ['8:00','11:00','12:30','13:00','16:00','21:00']
+    showTime: [
+      { time: "8:00", room: 1 },
+      { time: "11:00", room: 1 },
+      { time: "12:30", room: 2 },
+      { time: "13:00", room: 3 },
+      { time: "16:00", room: 4 },
+      { time: "21:00", room: 5 },
+    ],
   },
   {
-    id: '3',
+    id: "3",
     date: "17/10",
     dow: "Thứ 5",
-    showTime: ['8:45','12:00','12:30','14:15','19:00','21:00']
+    showTime: [
+      { time: "7:00", room: 1 },
+      { time: "13:00", room: 1 },
+      { time: "14:30", room: 2 },
+      { time: "15:00", room: 3 },
+      { time: "16:00", room: 4 },
+      { time: "22:00", room: 5 },
+    ],
   },
   {
-    id: '3',
+    id: "3",
     date: "18/10",
     dow: "Thứ 6",
-    showTime: ['7:00','13:00','14:30','15:00','16:00','22:00']
+    showTime: [
+      { time: "8:45", room: 1 },
+      { time: "12:00", room: 1 },
+      { time: "12:30", room: 2 },
+      { time: "14:15", room: 3 },
+      { time: "19:00", room: 4 },
+      { time: "21:00", room: 5 },
+    ],
   },
   {
-    id: '4',
+    id: "4",
     date: "19/10",
     dow: "Thứ 7",
-    showTime: ['8:00','11:00','12:30','13:00','16:00','21:00']
+    showTime: [
+      { time: "8:00", room: 1 },
+      { time: "11:00", room: 1 },
+      { time: "12:30", room: 2 },
+      { time: "13:00", room: 3 },
+      { time: "16:00", room: 4 },
+      { time: "21:00", room: 5 },
+    ],
   },
   {
-    id: '4',
+    id: "4",
     date: "20/10",
     dow: "Chủ nhật",
-    showTime: ['8:45','12:00','12:30','14:15','19:00','21:00']
+    showTime: [
+      { time: "7:00", room: 1 },
+      { time: "13:00", room: 1 },
+      { time: "14:30", room: 2 },
+      { time: "15:00", room: 3 },
+      { time: "16:00", room: 4 },
+      { time: "22:00", room: 5 },
+    ],
   },
   {
-    id: '4',
+    id: "4",
     date: "21/10",
     dow: "Thứ 2",
-    showTime: ['7:00','13:00','14:30','15:00','16:00','22:00']
+    showTime: [
+      { time: "8:45", room: 1 },
+      { time: "12:00", room: 1 },
+      { time: "12:30", room: 2 },
+      { time: "14:15", room: 3 },
+      { time: "19:00", room: 4 },
+      { time: "21:00", room: 5 },
+    ],
   },
 ];
 

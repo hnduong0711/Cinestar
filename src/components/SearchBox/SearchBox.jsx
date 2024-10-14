@@ -1,32 +1,27 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import Button from "../Button/Button";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import {
-  listTheater,
-  listTime,
-} from "../../constants/searchbox";
+import { listTheater, listDay, listTime } from "../../constants/searchbox";
 import SelectData from "./SelectData";
 import SearchContext from "../../context/SearchContext/SearchContext";
 import { filmList } from "../../constants/movie";
 import { schedule } from "../../constants/scheduleTest";
+import { useNavigate } from "react-router-dom";
 
 const SearchBox = () => {
-  const { searchData, statusData, setStatusData } = useContext(SearchContext);
+  const navigate = useNavigate();
+  const { searchData, statusData, openList } = useContext(SearchContext);
 
-  const openList = (type, status) => {
-    setStatusData((prevState) => ({
-      ...prevState,
-      [type]: !status,
-    }));
+  const listFilm = filmList.map((item) => item.name);
+
+  const findMovie = (name) => {
+    return filmList.find((item) => item.name === name)
+  }
+
+  const quickSearchFilm = (name) => {
+    const film = findMovie(name);
+    navigate(`/movie/${film.id}`, {state: film});
   };
-
-  const listFilm = filmList.map(item => item.name);
-
-  useEffect(() => {
-    console.log(searchData);
-    
-  }, [searchData])
-  
 
   return (
     <div className="xl:p-4 lg:p-3 md:p-2 xs:p-1">
@@ -96,6 +91,7 @@ const SearchBox = () => {
         {/* Button booking */}
         <Button
           text="Đặt ngay"
+          onClick={() => quickSearchFilm(searchData.film)}
           className="button bg-cinestar-gold w-full h-[50px] mr-3 group hover:text-white text-[16px]"
           colorChange="bg-purple-blue-gradient"
         />

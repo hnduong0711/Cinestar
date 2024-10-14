@@ -78,7 +78,7 @@ const SeatBooking = () => {
         </div>
       </div>
       {/* Chọn vị trí ghế */}
-      <Room roomNum="1"/>
+      <Room roomNum={1}/>
       {/* Chọn bắp nước */}
       {/* <ListCombo onSelectCombos={onSelectCombos} /> */}
       {/* Thanh toán */}

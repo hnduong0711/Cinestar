@@ -12,7 +12,7 @@ import { Link } from "react-router-dom";
 const Movie = ({ film }) => {
   return (
     <div className="flex flex-col w-full p-2">
-      <Link to={`/movie/${film.id}`}>
+      <Link to={`/movie/${film.id}`} state={film}>
         {/* Poster */}
         <div className="basis-3/4 cursor-pointer relative">
           <img
@@ -30,7 +30,12 @@ const Movie = ({ film }) => {
                 <span className="mr-1">
                   <img src={TagIcon} alt="" />
                 </span>
-                Thể loại
+                {film.genres.map((item, index) => (
+                  <span key={index}>
+                    {item}
+                    {index === film.genres.length - 1 ? "." : ",\u00A0"}
+                  </span>
+                ))}
               </div>
               <div className="flex items-center">
                 <span className="mr-1">
