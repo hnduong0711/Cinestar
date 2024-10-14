@@ -2,9 +2,13 @@ import React, { useContext, useEffect, useState } from "react";
 import { schedule } from "../../constants/scheduleTest";
 import { useParams } from "react-router-dom";
 import SeatBooking from "../SeatBooking/SeatBooking";
+import TicketContext from "../../context/TickerContext/TicketContext";
 
 const MovieSchedule = () => {
   const { id } = useParams();
+  // Context
+  const { ticketData } = useContext(TicketContext)
+
   // Filter date
   const listDay = schedule.filter((item) => {
     return item.id === id;
@@ -40,14 +44,14 @@ const MovieSchedule = () => {
         {listTime.showTime.map((item, index) => (
           <div
             key={index}
-            onClick={() => setTime(item)}
+            onClick={() => setTime(item.time)}
             className={`border hover:border-cinestar-gold  hover:text-cinestar-gold rounded-md cursor-pointer p-2 w-[60px] text-center ${
-              time === item
+              time === item.time
                 ? "text-cinestar-gold border-cinestar-gold"
                 : "border-white text-white"
             }`}
           >
-            {item}
+            {item.time}
           </div>
         ))}
       </div>
