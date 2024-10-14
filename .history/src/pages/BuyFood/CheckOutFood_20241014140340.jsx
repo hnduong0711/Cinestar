@@ -32,9 +32,8 @@ const CheckOutFood = ({ selectedCinema, selectedCombos }) => {
                             <div className="flex items-center">
                                 <div className="w-[50%] text-white font-content">Tạm tính</div>
                                 {selectedCombos.map((combo, index) => (
-
                                     // <span key={index} className="text-white text-[13px] font-content">{combo.content}</span>
-                                    <div className="text-white font-content text-[30px]">{combo.price} VNĐ</div>
+                                    <div className="text-white font-content text-[30px]">20.000 VNĐ</div>
                                 ))}
                                 
                             </div>
@@ -44,7 +43,6 @@ const CheckOutFood = ({ selectedCinema, selectedCombos }) => {
                                     className="button md:button bg-cinestar-black w-[400px] h-[40px] text-white hidden group items-center font-content border border-solid border-white"
                                     text="THANH TOÁN"
                                     colorChange="bg-oragan-yellow-dradient"
-                                    
                                     />
                             </div>
                         </div>
