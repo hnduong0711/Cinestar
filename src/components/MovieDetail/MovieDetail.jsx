@@ -2,12 +2,13 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { ClockIcon, FilmTest1, SubtitleIcon, TagIcon } from "../../assets";
 import { GlobeAltIcon } from "@heroicons/react/24/outline";
+import MovieSchedule from "../MovieSchedule/MovieSchedule";
 
 const MovieDetail = () => {
   const { id } = useParams();
 
   return (
-    <div className="w-full pt-36 px-[4.5rem] py-14">
+    <div className="w-full pt-36 px-[4.5rem] py-10">
       <div className="flex">
         {/* Poster */}
         <div className="basis-1/3 min-w-[260px]">
@@ -58,6 +59,7 @@ const MovieDetail = () => {
           </div>
         </div>
       </div>
+      {/* Description mobile view */}
       <div className="mobile md:hidden inline-block">
         <div className="pt-5 text-gray-100">
           <div className="heading text-[22px]">Nội dung phim</div>
@@ -68,6 +70,9 @@ const MovieDetail = () => {
             laboriosam sed expedita quisquam!
           </div>
         </div>
+      </div>
+      <div className="py-10">
+        <MovieSchedule />
       </div>
     </div>
   );

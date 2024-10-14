@@ -68,19 +68,19 @@ const Header = () => {
             icon={SearchIcon}
             width="24"
             height="24"
-            className="bg-white min-w-[80px] w-[125px] h-[40px] button md:hidden"
+            className="bg-white min-w-[70px] max-w-[125px] px-4 h-[40px] button md:hidden"
             text={isSmallScreen ? "" : "Tìm kiếm"}
             onClick={showModal}
           />
         </div>
         {/* Login */}
         <div className="">
-          <a className="text-white flex items-center" href="">
+          <Link className="text-white flex items-center" to="login">
             <img src={UserIcon} alt="user" width={24} height={24} />
             <span className="ml-2 hidden lg:block hover:text-cinestar-gold hover:transition-all">
               Đăng nhập
             </span>
-          </a>
+          </Link>
         </div>
       </div>
 
