@@ -1,6 +1,6 @@
 const schedule = [
   {
-    id: "1",
+    id: 1,
     date: "10/10",
     dow: "Thứ 5",
     showTime: [
@@ -13,7 +13,7 @@ const schedule = [
     ],
   },
   {
-    id: "1",
+    id: 1,
     date: "11/10",
     dow: "Thứ 6",
     showTime: [
@@ -26,7 +26,7 @@ const schedule = [
     ],
   },
   {
-    id: "1",
+    id: 1,
     date: "12/10",
     dow: "Thứ 7",
     showTime: [
@@ -39,7 +39,7 @@ const schedule = [
     ],
   },
   {
-    id: "2",
+    id: 2,
     date: "13/10",
     dow: "Chủ nhật",
     showTime: [
@@ -52,7 +52,7 @@ const schedule = [
     ],
   },
   {
-    id: "2",
+    id: 2,
     date: "14/10",
     dow: "Thứ 2",
     showTime: [
@@ -65,7 +65,7 @@ const schedule = [
     ],
   },
   {
-    id: "2",
+    id: 2,
     date: "15/10",
     dow: "Thứ 3",
     showTime: [
@@ -78,7 +78,7 @@ const schedule = [
     ],
   },
   {
-    id: "3",
+    id: 3,
     date: "16/10",
     dow: "Thứ 4",
     showTime: [
@@ -91,7 +91,7 @@ const schedule = [
     ],
   },
   {
-    id: "3",
+    id: 3,
     date: "17/10",
     dow: "Thứ 5",
     showTime: [
@@ -104,7 +104,7 @@ const schedule = [
     ],
   },
   {
-    id: "3",
+    id: 4,
     date: "18/10",
     dow: "Thứ 6",
     showTime: [
@@ -117,7 +117,7 @@ const schedule = [
     ],
   },
   {
-    id: "4",
+    id: 4,
     date: "19/10",
     dow: "Thứ 7",
     showTime: [
@@ -130,7 +130,7 @@ const schedule = [
     ],
   },
   {
-    id: "4",
+    id: 4,
     date: "20/10",
     dow: "Chủ nhật",
     showTime: [
@@ -143,7 +143,7 @@ const schedule = [
     ],
   },
   {
-    id: "4",
+    id: 4,
     date: "21/10",
     dow: "Thứ 2",
     showTime: [
