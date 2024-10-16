@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useMemo, useState } from "react";
 import { schedule } from "../../constants/scheduleTest";
 import { useParams } from "react-router-dom";
 import SeatBooking from "../SeatBooking/SeatBooking";
@@ -7,15 +7,20 @@ import TicketContext from "../../context/TickerContext/TicketContext";
 const MovieSchedule = () => {
   const { id } = useParams();
   // Context
-  const { ticketData } = useContext(TicketContext)
+  const { ticketData } = useContext(TicketContext);
 
   // Filter date
-  const listDay = schedule.filter((item) => {
-    return item.id === id;
-  });
+  const listDay = useMemo(() => {
+    return schedule.filter((item) => item.id === id);
+  }, [id]);
+
+  console.log("re-render");
+
   // Filter time
   const [day, setDay] = useState(listDay[0].date);
-  const listTime = listDay.find((item) => item.date === day);
+  const listTime = useMemo(() => {
+    return listDay.find((item) => item.date === day);
+  }, [day, listDay]);
   const [time, setTime] = useState();
 
   return (
@@ -40,14 +45,14 @@ const MovieSchedule = () => {
       </div>
       {/* Thời gian chiếu */}
       <div className="heading text-white text-center">Thời gian chiếu</div>
-      <div className="bg-cinestar-purple space-x-4 flex justify-center p-8 rounded-md">
+      <div className="bg-purple-blue-gradient space-x-4 flex justify-center p-8 rounded-md">
         {listTime.showTime.map((item, index) => (
           <div
             key={index}
             onClick={() => setTime(item.time)}
-            className={`border hover:border-cinestar-gold  hover:text-cinestar-gold rounded-md cursor-pointer p-2 w-[60px] text-center ${
+            className={`border hover:border-cinestar-gold  hover:text-cinestar-gold rounded-md cursor-pointer p-2 w-[60px] text-center transition-all duration-200 ${
               time === item.time
-                ? "text-cinestar-gold border-cinestar-gold"
+                ? "text-cinestar-black bg-cinestar-gold border-2 font-bold"
                 : "border-white text-white"
             }`}
           >

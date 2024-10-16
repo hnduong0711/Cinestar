@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import Button from "../Button/Button";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import { listTheater, listDay, listTime } from "../../constants/searchbox";
+import { listTheater, listTime } from "../../constants/searchbox";
 import SelectData from "./SelectData";
 import SearchContext from "../../context/SearchContext/SearchContext";
 import { filmList } from "../../constants/movie";
@@ -11,16 +11,42 @@ import { useNavigate } from "react-router-dom";
 const SearchBox = () => {
   const navigate = useNavigate();
   const { searchData, statusData, openList } = useContext(SearchContext);
-
   const listFilm = filmList.map((item) => item.name);
-
+  // Lấy object phim
   const findMovie = (name) => {
-    return filmList.find((item) => item.name === name)
-  }
+    return filmList.find((item) => item.name === name);
+  };
+  // Lấy date
+  const listDay = useMemo(() => {
+    return schedule.reduce((acc, item) => {
+      if (searchData.film) {
+        const film = findMovie(searchData.film);
+        if (film && item.id === film.id) {
+          const newItem = `${item.date}: ${item.dow}`;
+          acc.push(newItem);
+        }
+      }
+      return acc;
+    }, []);
+  }, [searchData.film]);
 
+  // const listTime = useMemo(() => {
+  //   return schedule.reduce((acc, item) => {
+  //     if (searchData.film && searchData.date) {
+  //       const film = findMovie(searchData.film);
+  //       if ((film && item.id === film.id) && (item.date === searchData.date)) {
+  //         const newItem = item.showTime[time];
+  //         acc.push(newItem);
+  //       }
+  //     }
+  //     return acc;
+  //   }, []);
+  // }, [searchData.date]);
+  
+  // Xử lý đặt vé nhanh
   const quickSearchFilm = (name) => {
     const film = findMovie(name);
-    navigate(`/movie/${film.id}`, {state: film});
+    navigate(`/movie/${film.id}`, { state: film });
   };
 
   return (

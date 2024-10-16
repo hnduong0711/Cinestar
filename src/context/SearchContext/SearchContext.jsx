@@ -17,6 +17,14 @@ const SearchContext = React.createContext({
     time: false,
   },
   setStatusData: () => {},
+  // Detail booking
+  ticketData: {
+    room: null,
+    seatNum: null,
+    seats: [],
+    foods: []
+  },
+  setTicketData: () => {},
 });
 
 export default SearchContext;
