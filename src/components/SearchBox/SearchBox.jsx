@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import Button from "../Button/Button";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import { listTheater, listTime } from "../../constants/searchbox";
+import { listTheater } from "../../constants/searchbox";
 import SelectData from "./SelectData";
 import SearchContext from "../../context/SearchContext/SearchContext";
 import { filmList } from "../../constants/movie";
@@ -29,20 +29,25 @@ const SearchBox = () => {
       return acc;
     }, []);
   }, [searchData.film]);
+  // Lấy thời gian
+  const listTime = useMemo(() => {
+    if (searchData.film) {
+      const film = findMovie(searchData.film);
+      const scheduleItem = schedule.find((item) => {
+        return (
+          item.date === searchData.date.split(":")[0] && item.id === film.id
+        );
+      });
+      if (scheduleItem) {
+        return scheduleItem.showTime.map((timeObj) => timeObj.time);
+      }
+    }
+    return [];
+  }, [searchData.date, searchData.film]);
 
-  // const listTime = useMemo(() => {
-  //   return schedule.reduce((acc, item) => {
-  //     if (searchData.film && searchData.date) {
-  //       const film = findMovie(searchData.film);
-  //       if ((film && item.id === film.id) && (item.date === searchData.date)) {
-  //         const newItem = item.showTime[time];
-  //         acc.push(newItem);
-  //       }
-  //     }
-  //     return acc;
-  //   }, []);
-  // }, [searchData.date]);
+  console.log('search Data: ',searchData);
   
+
   // Xử lý đặt vé nhanh
   const quickSearchFilm = (name) => {
     const film = findMovie(name);
