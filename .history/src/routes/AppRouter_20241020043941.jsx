@@ -3,7 +3,6 @@ import { Routes, Route } from "react-router-dom";
 import HomePage from "../pages/Homepage"; // Trang chủ
 import AboutPage from "../pages/AboutPage/index"; // Trang giới thiệu
 import BuyCorn from "../pages/BuyFood";
-import Stepper from "../pages/Stepper"
 import Header from "../components/Header/Header";
 import FooterTest from "../components/FooterTest/FooterTest";
 import MovieDetail from "../components/MovieDetail/MovieDetail";

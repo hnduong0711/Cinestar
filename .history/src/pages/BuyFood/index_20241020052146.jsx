@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import ChoseCinema from './ChoseCinema';
 import ListCombo from './CompoFirst';
 import CheckOutFood from './CheckOutFood';
+import Stepper from "./Stepper";
 import Button from "../../components/Button/Button";
 
 const BuyCorn = () => {
@@ -18,7 +19,7 @@ const BuyCorn = () => {
                 <div className='pt-[8rem] text-center'>
                     <ChoseCinema setSelectedCinema={setSelectedCinema} />
                     <ListCombo onSelectCombos={onSelectCombos} setSelectedCinema={setSelectedCinema} />
-                  
+                    <Stepper selectedCinema={selectedCinema} selectedCombos={selectedCombos} /> {/* Truyền dữ liệu nếu cần */}
                 </div>
             </div>
             <CheckOutFood selectedCinema={selectedCinema} selectedCombos={selectedCombos} />

@@ -1,4 +1,6 @@
 import React, {useState} from "react";
+import { useNavigate } from "react-router-dom"; // Thêm dòng này
+import Button from "../../components/Button/Button";
 import { choseLocationNears, CompoFoods } from "../../constants/BuyFoot";
 const ListCombo = ({ onSelectCombos, setSelectedCinema }) => {
 
@@ -116,12 +118,12 @@ const ListCombo = ({ onSelectCombos, setSelectedCinema }) => {
                                                             className="text-center w-[30px] h-[30px] bg-gray-300 group-hover:bg-cinestar-custom-yellow cursor-default" // Đặt kích thước bằng với nút
                                                             style={{ appearance: 'none', MozAppearance: 'textfield', WebkitAppearance: 'none' }} // Bỏ border và các mũi tên
                                                         />
-                                                        <button 
-                                                            className="bg-gray-300 text-black w-[30px] h-[30px] group-hover:bg-cinestar-custom-yellow cursor-default"
-                                                            onClick={() => handleIncrease(food.id)}
-                                                        >
-                                                            +
-                                                        </button>
+                                                      <Button
+                                                            className="button md:button bg-cinestar-black w-[400px] h-[40px] text-white hidden group items-center font-content border border-solid border-white"
+                                                            text="THANH TOÁN"
+                                                            colorChange="bg-oragan-yellow-dradient"
+                                                            onClick={() => navigate("/path-to-stepper")} // Thay thế /path-to-stepper bằng đường dẫn thực tế
+                                                        />
                                                     </div>
                                                 </div>
 

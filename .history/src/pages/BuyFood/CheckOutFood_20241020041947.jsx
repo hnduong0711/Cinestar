@@ -1,45 +1,36 @@
 import React from "react";
 import Button from "../../components/Button/Button";
-import { useNavigate } from "react-router-dom"; // Thêm dòng này
 
 
 
 // Hàm chuyển chuỗi giá tiền sang số nguyên
 const parsePrice = (price) => {
     const parsed = parseInt(price.replace(/\D/g, ""), 10);
-    console.log(`Parsed Price: ${price} -> ${parsed}`); // Kiểm tra giá trị sau khi parse
     return parsed;
 };
 
 
 
-const CheckOutFood = ({ selectedCinema, selectedCombos, onPayment }) => {
+const CheckOutFood = ({ selectedCinema, selectedCombos }) => {
 
-    const navigate = useNavigate();
+ 
     const totalPriceById = selectedCombos.reduce((acc, combo) => {
         const price = parsePrice(combo.price);
-        const quantity = combo.quantity || 1; // Giả định số lượng mặc định là 1 nếu không có
-
-        // Tính tổng giá cho combo với số lượng
-        const totalComboPrice = price * quantity;
-
         if (acc[combo.id]) {
-            acc[combo.id] += totalComboPrice; // Nếu đã có ID này, cộng thêm vào
+            acc[combo.id] += price; // Nếu đã có id này, cộng thêm vào
         } else {
-            acc[combo.id] = totalComboPrice; // Nếu chưa có, khởi tạo giá trị
+            acc[combo.id] = price; // Nếu chưa có, khởi tạo giá trị
         }
         return acc;
     }, {});
+
+    console.log("Total Price by ID:", totalPriceById); // Kiểm tra tổng tiền theo từng ID
 
     // Tính tổng tất cả giá tiền (cộng dồn các ID)
     const totalPrice = Object.values(totalPriceById).reduce(
         (total, price) => total + price,
         0
     );
-
-    const handlePayment = () => {
-        navigate("stepper", { state: { totalPrice, selectedCombos } }); // Gửi data đến Stepper
-    };
 
     return (
         <div className="flex flex-col">
@@ -71,18 +62,24 @@ const CheckOutFood = ({ selectedCinema, selectedCombos, onPayment }) => {
                         <div className="flex-grow-[4] w-[40%] pr-15">
                             <div className="flex items-center">
                                 <div className="w-[50%] text-white font-content">Tạm tính</div>
-                                <div className="text-white font-content text-[15px]">
-                                    {totalPrice.toLocaleString()} VNĐ
+                                       {/* Hiển thị tổng tiền theo từng ID */}
+                                       <div className="mt-4">
+                                    {Object.entries(totalPriceById).map(([id, price]) => (
+                                        <div key={id} className="text-white font-content">
+                                            ID {id}: {price.toLocaleString()} VNĐ
+                                        </div>
+                                    ))}
                                 </div>
                                 
                             </div>
                             <div>
-                            <Button
-                                className="button md:button bg-cinestar-black w-[400px] h-[40px] text-white hidden group items-center font-content border border-solid border-white"
-                                text="THANH TOÁN"
-                                colorChange="bg-oragan-yellow-dradient"
-                                onClick={handlePayment} // Sử dụng hàm handlePayment
-                            />
+                                <Button
+                                    
+                                    className="button md:button bg-cinestar-black w-[400px] h-[40px] text-white hidden group items-center font-content border border-solid border-white"
+                                    text="THANH TOÁN"
+                                    colorChange="bg-oragan-yellow-dradient"
+                                    
+                                    />
                             </div>
                         </div>
                     </div>

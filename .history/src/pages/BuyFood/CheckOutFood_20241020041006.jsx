@@ -1,46 +1,34 @@
 import React from "react";
 import Button from "../../components/Button/Button";
-import { useNavigate } from "react-router-dom"; // Thêm dòng này
 
 
 
 // Hàm chuyển chuỗi giá tiền sang số nguyên
-const parsePrice = (price) => {
-    const parsed = parseInt(price.replace(/\D/g, ""), 10);
-    console.log(`Parsed Price: ${price} -> ${parsed}`); // Kiểm tra giá trị sau khi parse
-    return parsed;
-};
+const parsePrice = (price) => parseInt(price.replace(/\D/g, ""), 10);
 
 
 
-const CheckOutFood = ({ selectedCinema, selectedCombos, onPayment }) => {
-
-    const navigate = useNavigate();
+const CheckOutFood = ({ selectedCinema, selectedCombos }) => {
+    console.log("Selected Cinema:", selectedCinema); // Kiểm tra giá trị selectedCinema
+    console.log("Selected Combos:", selectedCombos); // Kiểm tra giá trị selectedCombos
+ 
+    // Tính tổng giá tiền cho từng combo theo id
     const totalPriceById = selectedCombos.reduce((acc, combo) => {
         const price = parsePrice(combo.price);
-        const quantity = combo.quantity || 1; // Giả định số lượng mặc định là 1 nếu không có
-
-        // Tính tổng giá cho combo với số lượng
-        const totalComboPrice = price * quantity;
-
         if (acc[combo.id]) {
-            acc[combo.id] += totalComboPrice; // Nếu đã có ID này, cộng thêm vào
+            acc[combo.id] += price; // Nếu đã có id này, cộng thêm vào
         } else {
-            acc[combo.id] = totalComboPrice; // Nếu chưa có, khởi tạo giá trị
+            acc[combo.id] = price; // Nếu chưa có, khởi tạo giá trị
         }
         return acc;
     }, {});
 
-    // Tính tổng tất cả giá tiền (cộng dồn các ID)
+    // Tính tổng tất cả giá tiền (cộng dồn các id)
     const totalPrice = Object.values(totalPriceById).reduce(
         (total, price) => total + price,
         0
     );
-
-    const handlePayment = () => {
-        navigate("stepper", { state: { totalPrice, selectedCombos } }); // Gửi data đến Stepper
-    };
-
+    
     return (
         <div className="flex flex-col">
             
@@ -77,12 +65,13 @@ const CheckOutFood = ({ selectedCinema, selectedCombos, onPayment }) => {
                                 
                             </div>
                             <div>
-                            <Button
-                                className="button md:button bg-cinestar-black w-[400px] h-[40px] text-white hidden group items-center font-content border border-solid border-white"
-                                text="THANH TOÁN"
-                                colorChange="bg-oragan-yellow-dradient"
-                                onClick={handlePayment} // Sử dụng hàm handlePayment
-                            />
+                                <Button
+                                    
+                                    className="button md:button bg-cinestar-black w-[400px] h-[40px] text-white hidden group items-center font-content border border-solid border-white"
+                                    text="THANH TOÁN"
+                                    colorChange="bg-oragan-yellow-dradient"
+                                    
+                                    />
                             </div>
                         </div>
                     </div>
