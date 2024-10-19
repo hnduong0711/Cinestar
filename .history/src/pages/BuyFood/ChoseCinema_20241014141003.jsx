@@ -15,10 +15,10 @@ const ChoseCinema = ({ setSelectedCinema }) => {
     const handleCinestarChange = (event) => {
         setCinema(event.target.title.toUpperCase());
         setSelectedCinema(event.target.value);
-       
+        console.log('Rạp đã chọn:', event.target.value);
     };
 
-  
+    console.log(selectedCinema);
 
     return (
         <div>

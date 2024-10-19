@@ -1,45 +1,38 @@
 import React from "react";
 import Button from "../../components/Button/Button";
-import { useNavigate } from "react-router-dom"; // Thêm dòng này
 
+const CheckOutFood = ({ selectedCinema, selectedCombos }) => {
+    console.log("Selected Cinema:", selectedCinema); // Kiểm tra giá trị selectedCinema
+    console.log("Selected Combos:", selectedCombos); // Kiểm tra giá trị selectedCombos
+    // Tính tổng giá tiền của tất cả combo
+    // Hàm chuyển chuỗi giá tiền về số
+const parsePrice = (price) => parseInt(price.replace(/\D/g, ""), 10);
 
-
-// Hàm chuyển chuỗi giá tiền sang số nguyên
-const parsePrice = (price) => {
-    const parsed = parseInt(price.replace(/\D/g, ""), 10);
-    console.log(`Parsed Price: ${price} -> ${parsed}`); // Kiểm tra giá trị sau khi parse
-    return parsed;
-};
-
-
-
-const CheckOutFood = ({ selectedCinema, selectedCombos, onPayment }) => {
-
-    const navigate = useNavigate();
-    const totalPriceById = selectedCombos.reduce((acc, combo) => {
-        const price = parsePrice(combo.price);
-        const quantity = combo.quantity || 1; // Giả định số lượng mặc định là 1 nếu không có
-
-        // Tính tổng giá cho combo với số lượng
-        const totalComboPrice = price * quantity;
-
-        if (acc[combo.id]) {
-            acc[combo.id] += totalComboPrice; // Nếu đã có ID này, cộng thêm vào
-        } else {
-            acc[combo.id] = totalComboPrice; // Nếu chưa có, khởi tạo giá trị
-        }
+// Hàm nhóm và cộng dồn chi phí dựa trên ID
+const calculateTotalById = (combos) => {
+    const groupedCombos = combos.reduce((acc, combo) => {
+        if (!acc[combo.id]) acc[combo.id] = { ...combo, total: 0 };
+        acc[combo.id].total += parsePrice(combo.price);
         return acc;
     }, {});
 
-    // Tính tổng tất cả giá tiền (cộng dồn các ID)
-    const totalPrice = Object.values(totalPriceById).reduce(
-        (total, price) => total + price,
-        0
-    );
+    return Object.values(groupedCombos); // Trả về mảng các combo đã nhóm
+};
 
-    const handlePayment = () => {
-        navigate("stepper", { state: { totalPrice, selectedCombos } }); // Gửi data đến Stepper
-    };
+// Hàm tính tổng tất cả chi phí
+const calculateGrandTotal = (groupedCombos) =>
+    groupedCombos.reduce((total, combo) => total + combo.total, 0);
+
+// Sử dụng các hàm trên
+const groupedCombos = calculateTotalById(CompoFoods);
+const grandTotal = calculateGrandTotal(groupedCombos);
+
+console.log("Các combo đã nhóm:", groupedCombos);
+console.log("Tổng chi phí:", grandTotal + " VND");
+
+
+
+
 
     return (
         <div className="flex flex-col">
@@ -72,17 +65,18 @@ const CheckOutFood = ({ selectedCinema, selectedCombos, onPayment }) => {
                             <div className="flex items-center">
                                 <div className="w-[50%] text-white font-content">Tạm tính</div>
                                 <div className="text-white font-content text-[15px]">
-                                    {totalPrice.toLocaleString()} VNĐ
-                                </div>
+                                        {totalPrice} VNĐ
+                                    </div>
                                 
                             </div>
                             <div>
-                            <Button
-                                className="button md:button bg-cinestar-black w-[400px] h-[40px] text-white hidden group items-center font-content border border-solid border-white"
-                                text="THANH TOÁN"
-                                colorChange="bg-oragan-yellow-dradient"
-                                onClick={handlePayment} // Sử dụng hàm handlePayment
-                            />
+                                <Button
+                                    
+                                    className="button md:button bg-cinestar-black w-[400px] h-[40px] text-white hidden group items-center font-content border border-solid border-white"
+                                    text="THANH TOÁN"
+                                    colorChange="bg-oragan-yellow-dradient"
+                                    
+                                    />
                             </div>
                         </div>
                     </div>

@@ -1,6 +1,5 @@
 import React from "react";
 import Button from "../../components/Button/Button";
-import { useNavigate } from "react-router-dom"; // Thêm dòng này
 
 
 
@@ -13,9 +12,9 @@ const parsePrice = (price) => {
 
 
 
-const CheckOutFood = ({ selectedCinema, selectedCombos, onPayment }) => {
+const CheckOutFood = ({ selectedCinema, selectedCombos }) => {
 
-    const navigate = useNavigate();
+ 
     const totalPriceById = selectedCombos.reduce((acc, combo) => {
         const price = parsePrice(combo.price);
         const quantity = combo.quantity || 1; // Giả định số lượng mặc định là 1 nếu không có
@@ -36,10 +35,6 @@ const CheckOutFood = ({ selectedCinema, selectedCombos, onPayment }) => {
         (total, price) => total + price,
         0
     );
-
-    const handlePayment = () => {
-        navigate("stepper", { state: { totalPrice, selectedCombos } }); // Gửi data đến Stepper
-    };
 
     return (
         <div className="flex flex-col">
@@ -77,12 +72,13 @@ const CheckOutFood = ({ selectedCinema, selectedCombos, onPayment }) => {
                                 
                             </div>
                             <div>
-                            <Button
-                                className="button md:button bg-cinestar-black w-[400px] h-[40px] text-white hidden group items-center font-content border border-solid border-white"
-                                text="THANH TOÁN"
-                                colorChange="bg-oragan-yellow-dradient"
-                                onClick={handlePayment} // Sử dụng hàm handlePayment
-                            />
+                                <Button
+                                    
+                                    className="button md:button bg-cinestar-black w-[400px] h-[40px] text-white hidden group items-center font-content border border-solid border-white"
+                                    text="THANH TOÁN"
+                                    colorChange="bg-oragan-yellow-dradient"
+                                    
+                                    />
                             </div>
                         </div>
                     </div>

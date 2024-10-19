@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import HomePage from "../pages/Homepage"; // Trang chủ
 import AboutPage from "../pages/AboutPage/index"; // Trang giới thiệu
 import BuyCorn from "../pages/BuyFood";
-import Stepper from "../pages/Stepper"
+import Stepper from "../pages/BuyFood/Stepper"
 import Header from "../components/Header/Header";
 import FooterTest from "../components/FooterTest/FooterTest";
 import MovieDetail from "../components/MovieDetail/MovieDetail";
@@ -22,7 +22,7 @@ export default function AppRouter() {
         {/* Update thêm MovieDetail nhưng đang lỗi */}
         <Route path="/movie/:id" element={<MovieDetail />} />
         <Route path="/popcorn-drink" element={<BuyCorn/>}/>
-        <Route path="/stepper" element={<Stepper />} />
+        <Route path="/popcorn-drink/stepper" element={<Stepper />} />
       </Routes>
       <FooterTest />
     </>

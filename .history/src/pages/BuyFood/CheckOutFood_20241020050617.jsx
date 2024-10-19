@@ -38,7 +38,7 @@ const CheckOutFood = ({ selectedCinema, selectedCombos, onPayment }) => {
     );
 
     const handlePayment = () => {
-        navigate("stepper", { state: { totalPrice, selectedCombos } }); // Gửi data đến Stepper
+        navigate("/popcorn-drink/stepper", { state: { totalPrice, selectedCombos } }); // Gửi data đến Stepper
     };
 
     return (
