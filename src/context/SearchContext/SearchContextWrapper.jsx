@@ -16,12 +16,23 @@ const SearchContextWrapper = (props) => {
     time: false,
   });
 
+  // Control status
+  const openList = (type, status) => {
+    setStatusData((prevState) => ({
+      ...prevState,
+      [type]: !status,
+    }));
+  };
+
+  // Control search: chưa viết
+
   return (
     <SearchContext.Provider value={{
         searchData,
         setSearchData,
         statusData,
-        setStatusData
+        setStatusData,
+        openList
     }}>
         {props.children}
     </SearchContext.Provider>

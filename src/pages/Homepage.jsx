@@ -13,9 +13,7 @@ const Homepage = () => {
   return (
     <div className="bg-cinestar-black xs:px-1 md:px-2">
       <Slider />
-      <SearchContextWrapper>
-        <SearchBox />
-      </SearchContextWrapper>
+      <SearchBox />
       <Now />
       <ComingSoon />
       <Promotion />
