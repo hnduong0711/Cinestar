@@ -4,7 +4,7 @@ import SearchBox from "./components/SearchBox/SearchBox";
 import Slider from "./components/Slider/Slider";
 import MainLayout from "./layout/MainLayout";
 import Homepage from "./pages/Homepage";
-import SearchContextWrapper from "./context/SearchContext/SearchContextWrapper";
+import TicketContextWrapper from "./context/TicketContext/TicketContextWrapper";
 import AppRouter from "./routes/AppRouter";
 import { BrowserRouter } from "react-router-dom"; // Thêm dòng này
 import ComingSoon from "./components/ComingSoon/ComingSoon";

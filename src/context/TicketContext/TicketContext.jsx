@@ -1,12 +1,12 @@
 import React from "react";
 
-const SearchContext = React.createContext({
+const TicketContext = React.createContext({
   // Data
   searchData: {
-    theater: "",
-    film: "",
-    date: "",
-    time: "",
+    theater: null,
+    film: null,
+    date: null,
+    time: null,
   },
   setSearchData: () => {},
   // Status
@@ -27,4 +27,4 @@ const SearchContext = React.createContext({
   setTicketData: () => {},
 });
 
-export default SearchContext;
+export default TicketContext;

@@ -1,9 +1,9 @@
 import React, { useContext, useEffect } from "react";
-import SearchContext from "../../context/SearchContext/SearchContext";
+import TicketContext from "../../context/TicketContext/TicketContext";
 
 const SelectData = ({ list, id }) => {
   const { searchData, setSearchData, setStatusData } =
-    useContext(SearchContext);
+    useContext(TicketContext);
 
   const handleSelect = (item, group) => {
     // Điều kiện cho theater

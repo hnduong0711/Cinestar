@@ -3,14 +3,14 @@ import Button from "../Button/Button";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { listTheater } from "../../constants/searchbox";
 import SelectData from "./SelectData";
-import SearchContext from "../../context/SearchContext/SearchContext";
+import TicketContext from "../../context/TicketContext/TicketContext";
 import { filmList } from "../../constants/movie";
 import { schedule } from "../../constants/scheduleTest";
 import { useNavigate } from "react-router-dom";
 
 const SearchBox = () => {
   const navigate = useNavigate();
-  const { searchData, statusData, openList } = useContext(SearchContext);
+  const { searchData, statusData, openList } = useContext(TicketContext);
   const listFilm = filmList.map((item) => item.name);
   // Lấy object phim
   const findMovie = (name) => {
@@ -34,9 +34,11 @@ const SearchBox = () => {
     if (searchData.film) {
       const film = findMovie(searchData.film);
       const scheduleItem = schedule.find((item) => {
-        return (
-          item.date === searchData.date.split(":")[0] && item.id === film.id
-        );
+        if (searchData.date) {
+          return (
+            item.date === searchData.date.split(":")[0] && item.id === film.id
+          );
+        }
       });
       if (scheduleItem) {
         return scheduleItem.showTime.map((timeObj) => timeObj.time);
@@ -45,8 +47,7 @@ const SearchBox = () => {
     return [];
   }, [searchData.date, searchData.film]);
 
-  console.log('search Data: ',searchData);
-  
+  console.log("search Data: ", searchData);
 
   // Xử lý đặt vé nhanh
   const quickSearchFilm = (name) => {

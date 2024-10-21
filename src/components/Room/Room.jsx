@@ -6,9 +6,9 @@ const Room = ({ roomNum }) => {
   console.log(roomNum);
 
   return (
-    <div className="w-full flex flex-col gap-5">
+    <div className="flex flex-col gap-5 justify-center">
       {/* Screen */}
-      <div className="">
+      <div className="flex m-auto">
         <img src={Screen} alt="" />
       </div>
       {/* Content */}
