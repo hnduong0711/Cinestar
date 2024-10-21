@@ -1,15 +1,15 @@
-import SearchContextWrapper from "./context/SearchContext/SearchContextWrapper";
+import TicketContextWrapper from "./context/TicketContext/TicketContextWrapper";
 import AppRouter from "./routes/AppRouter";
 import { BrowserRouter } from "react-router-dom"; // Thêm dòng này
 
 function App() {
   return (
     <BrowserRouter>
-      <SearchContextWrapper>
+      <TicketContextWrapper>
         <div className="bg-cinestar-black px-1 md:px-2">
           <AppRouter />
         </div>
-      </SearchContextWrapper>
+      </TicketContextWrapper>
     </BrowserRouter>
   );
 }

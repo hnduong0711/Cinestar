@@ -3,13 +3,13 @@ import { useLocation } from "react-router-dom";
 import { ClockIcon, SubtitleIcon, TagIcon } from "../../assets";
 import { GlobeAltIcon } from "@heroicons/react/24/outline";
 import MovieSchedule from "../MovieSchedule/MovieSchedule";
-import SearchContext from "../../context/SearchContext/SearchContext";
+import TicketContext from "../../context/TicketContext/TicketContext";
 
 const MovieDetail = () => {
   const location = useLocation();
   const film = location.state;
   
-  const { searchData } = useContext(SearchContext); // Hàm để cập nhật context
+  const { searchData } = useContext(TicketContext); // Hàm để cập nhật context
 
   console.log('searchDaa in MD:', searchData) ;
 

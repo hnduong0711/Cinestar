@@ -2,26 +2,28 @@ import React, { useContext, useEffect, useMemo, useState } from "react";
 import { schedule } from "../../constants/scheduleTest";
 import { useLocation, useParams } from "react-router-dom";
 import SeatBooking from "../SeatBooking/SeatBooking";
-import SearchContext from "../../context/SearchContext/SearchContext";
+import TicketContext from "../../context/TicketContext/TicketContext";
+import { listTheater } from "../../constants/searchbox";
 
 const MovieSchedule = () => {
   const { id } = useParams();
-  const { searchData, setSearchData } = useContext(SearchContext);
-
+  const { searchData, setSearchData } = useContext(TicketContext);
   // Filter date
   const listDay = useMemo(() => {
     return schedule.filter((item) => {
       return item.id === Number(id);
     });
   }, [id]);
-
   // Filter time
   const [day, setDay] = useState(
-    searchData.date.split(":")[0] || `${listDay[0].date}: ${listDay[0].dow}`
+    searchData.date
+      ? searchData.date.split(":")[0]
+      : `${listDay[0].date}: ${listDay[0].dow}`
   );
-
   const listTime = useMemo(() => {
-    return listDay.find((item) => item.date === day.split(":")[0]);
+    if (day) {
+      return listDay.find((item) => item.date === day.split(":")[0]);
+    }
   }, [day, listDay]);
   const [time, setTime] = useState(searchData.time);
 
@@ -50,7 +52,7 @@ const MovieSchedule = () => {
     if (day && time) {
       const element = document.getElementById("hear");
       if (element) {
-        element.scrollIntoView({ behavior: "smooth"});
+        element.scrollIntoView({ behavior: "smooth" });
       }
     }
   }, [day, time]);
@@ -76,7 +78,22 @@ const MovieSchedule = () => {
         ))}
       </div>
       {/* Thời gian chiếu */}
-      <div className="heading text-white text-center">Thời gian chiếu</div>
+      <div className="flex justify-between">
+        <div className="heading text-white text-center">Thời gian chiếu</div>
+        <div className="">
+          <select className="border border-cinestar-gold rounded-md h-full w-40">
+            {listTheater.map((item) => (
+              <option
+                onClick={() =>
+                  setSearchData((prev) => ({ ...prev, theater: item }))
+                }
+              >
+                {item}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
       <div className="bg-purple-blue-gradient space-x-4 flex justify-center p-8 rounded-md">
         {listTime.showTime.map((item, index) => (
           <div

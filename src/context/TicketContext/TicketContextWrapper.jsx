@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import SearchContext from "./SearchContext";
+import TicketContext from "./TicketContext";
 
-const SearchContextWrapper = (props) => {
+const TicketContextWrapper = (props) => {
   const [searchData, setSearchData] = useState({
-    theater: '',
-    film: '',
-    date: '',
-    time: ''
+    theater: null,
+    film: null,
+    date: null,
+    time: null
   })
 
   const [statusData, setStatusData] = useState({
@@ -24,19 +24,27 @@ const SearchContextWrapper = (props) => {
     }));
   };
 
-  // Control search: chưa viết
+  // Detail booking
+  const [ticketData, setTicketData] = useState({
+    room: null,
+    seatNum: null,
+    seats: [],
+    foods: []
+  });
 
   return (
-    <SearchContext.Provider value={{
+    <TicketContext.Provider value={{
         searchData,
         setSearchData,
         statusData,
         setStatusData,
-        openList
+        openList,
+        ticketData,
+        setTicketData
     }}>
         {props.children}
-    </SearchContext.Provider>
+    </TicketContext.Provider>
   );
 };
 
-export default SearchContextWrapper;
+export default TicketContextWrapper;
