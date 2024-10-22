@@ -45,7 +45,7 @@ const SelectData = ({ list, id }) => {
     ) {
       setSearchData((prevData) => ({
         ...prevData,
-        date: item,
+        date: item.split(':')[0],
       }));
       setStatusData((prevState) => ({
         ...prevState,

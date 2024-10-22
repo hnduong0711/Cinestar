@@ -7,55 +7,63 @@ import { listTheater } from "../../constants/searchbox";
 
 const MovieSchedule = () => {
   const { id } = useParams();
+
   const { searchData, setSearchData } = useContext(TicketContext);
-  // Filter date
+
+  // Lọc ra ngày dưới dạng DD/MM
   const listDay = useMemo(() => {
     return schedule.filter((item) => {
       return item.id === Number(id);
     });
   }, [id]);
-  // Filter time
-  const [day, setDay] = useState(
-    searchData.date
-      ? searchData.date.split(":")[0]
-      : `${listDay[0].date}: ${listDay[0].dow}`
-  );
-  const listTime = useMemo(() => {
-    if (day) {
-      return listDay.find((item) => item.date === day.split(":")[0]);
-    }
-  }, [day, listDay]);
-  const [time, setTime] = useState(searchData.time);
 
-  console.log("day: ", day);
-  console.log("time: ", time);
-  console.log(searchData);
+  // Lọc ra thời gian từ ngày
+  const [day, setDay] = useState(
+    searchData.date ? searchData.date : `${listDay[0].date}`
+  );
+
+  const listTime = useMemo(() => {
+    return day ? listDay.find((item) => item.date === day) : [];
+  }, [searchData, day, listDay]);
+
+  const [time, setTime] = useState(null);
+
+  useEffect(() => {
+    if (listTime && listTime.showTime.length > 0) {
+      const defaultTime = searchData.time || listTime.showTime[0].time;
+      setTime(defaultTime);
+      setSearchData((prevData) => ({
+        ...prevData,
+        date: day,
+        time: defaultTime
+      }));
+    }
+  }, [listTime, day, searchData.time, setSearchData]);
 
   const handleChangeData = (item, flag) => {
     if (flag) {
       setDay(item);
-      setTime(null);
       setSearchData((prevData) => ({
         ...prevData,
-        date: item, // Sử dụng item trực tiếp
+        date: item,
+        time: null
       }));
     } else {
       setTime(item);
       setSearchData((prevData) => ({
         ...prevData,
-        time: item, // Sử dụng item trực tiếp
+        time: item,
       }));
     }
   };
 
-  useEffect(() => {
-    if (day && time) {
-      const element = document.getElementById("hear");
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
-      }
-    }
-  }, [day, time]);
+  console.log("day: ", day);
+  console.log("time: ", time);
+  console.log("search date:", searchData.date);
+  console.log("list day: ", listDay);
+  console.log("list time: ", listTime);
+  console.log("search date in MS: ", searchData);
+  console.log(time);
 
   return (
     <div className="space-y-8">
@@ -64,10 +72,10 @@ const MovieSchedule = () => {
       <div className="flex space-x-2 justify-center">
         {listDay.map((item, index) => (
           <div
-            onClick={() => handleChangeData(`${item.date}: ${item.dow}`, true)}
+            onClick={() => handleChangeData(item.date, true)}
             key={index}
             className={`flex flex-col border border-cinestar-gold/70 text-cinestar-gold font-content w-28 py-7 rounded-md cursor-pointer ${
-              day.split(":")[0] === item.date
+              day === item.date
                 ? "bg-cinestar-gold text-cinestar-purple/90 font-bold"
                 : ""
             }`}
@@ -81,13 +89,14 @@ const MovieSchedule = () => {
       <div className="flex justify-between">
         <div className="heading text-white text-center">Thời gian chiếu</div>
         <div className="">
-          <select className="border border-cinestar-gold rounded-md h-full w-40">
-            {listTheater.map((item) => (
-              <option
-                onClick={() =>
-                  setSearchData((prev) => ({ ...prev, theater: item }))
-                }
-              >
+          <select
+            className="border border-cinestar-gold rounded-md h-full w-64"
+            onChange={(e) =>
+              setSearchData((prev) => ({ ...prev, theater: e.target.value }))
+            }
+          >
+            {listTheater.map((item, index) => (
+              <option key={index} value={item}>
                 {item}
               </option>
             ))}
@@ -95,7 +104,7 @@ const MovieSchedule = () => {
         </div>
       </div>
       <div className="bg-purple-blue-gradient space-x-4 flex justify-center p-8 rounded-md">
-        {listTime.showTime.map((item, index) => (
+        {listTime?.showTime?.map((item, index) => (
           <div
             key={index}
             onClick={() => handleChangeData(item.time, false)}
@@ -110,8 +119,6 @@ const MovieSchedule = () => {
         ))}
       </div>
       {/* Chọn ghế */}
-      {/* Div cần chuyển hướng tới */}
-      <div id="hear"></div>
       {day && time && <SeatBooking />}
     </div>
   );
