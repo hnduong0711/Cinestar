@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   ClockIcon,
   PlayTrailerIcon,
@@ -7,9 +7,22 @@ import {
 } from "../../assets";
 import Button from "../Button/Button";
 import { GlobeAltIcon } from "@heroicons/react/24/outline";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import TicketContext from "../../context/TicketContext/TicketContext";
 
 const Movie = ({ film }) => {
+
+  const { searchData, setSearchData } = useContext(TicketContext)
+
+  const navigate = useNavigate();
+  const bookTicket = () => {
+    setSearchData((prevData) => ({
+      ...prevData,
+      film: film.name
+    }));
+    navigate(`/movie/${film.id}`, { state: film });
+  }
+
   return (
     <div className="flex flex-col w-full p-2">
       <Link to={`/movie/${film.id}`} state={film}>
@@ -75,6 +88,7 @@ const Movie = ({ film }) => {
             className="button bg-cinestar-gold w-[125px] h-[40px] font-title text-[14px] group hover:text-white hover:duration-300"
             text="Đặt vé"
             colorChange="bg-orange-yellow-gradient"
+            onClick={bookTicket}
           ></Button>
         </div>
       </div>

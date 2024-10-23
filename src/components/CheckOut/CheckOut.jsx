@@ -1,7 +1,6 @@
 import React from "react";
 
 const CheckOut = (selectedCinema, selectedCombos) => {
-    selectedCombos = 1;
   return (
     <div className="flex flex-col min-h-screen">
       {selectedCombos.length > 0 && (

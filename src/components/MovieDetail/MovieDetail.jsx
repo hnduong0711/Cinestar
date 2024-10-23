@@ -3,15 +3,21 @@ import { useLocation } from "react-router-dom";
 import { ClockIcon, SubtitleIcon, TagIcon } from "../../assets";
 import { GlobeAltIcon } from "@heroicons/react/24/outline";
 import MovieSchedule from "../MovieSchedule/MovieSchedule";
-import SearchContext from "../../context/SearchContext/SearchContext";
+import TicketContext from "../../context/TicketContext/TicketContext";
 
 const MovieDetail = () => {
   const location = useLocation();
   const film = location.state;
   
-  const { searchData } = useContext(SearchContext); // Hàm để cập nhật context
+  const { searchData, setSearchData } = useContext(TicketContext); // Hàm để cập nhật context
 
-  console.log('searchDaa in MD:', searchData) ;
+  useEffect(() => {
+    setSearchData((prev) => ({
+      ...prev,
+      film: film.name,
+    }))
+  }, [film])
+  console.log('searchDaa in MD:', searchData);
 
   return (
     <div className="w-full pt-36 px-[4.5rem] py-10">

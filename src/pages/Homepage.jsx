@@ -1,6 +1,6 @@
 import React from "react";
 import Header from "../components/Header/Header";
-import SearchContextWrapper from "../context/SearchContext/SearchContextWrapper";
+import TicketContextWrapper from "../context/TicketContext/TicketContextWrapper";
 import SearchBox from "../components/SearchBox/SearchBox";
 import Now from "../components/Now/Now";
 import ComingSoon from "../components/ComingSoon/ComingSoon";

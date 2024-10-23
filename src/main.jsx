@@ -5,9 +5,9 @@ import "./index.css";
 import GlobalContextWrapper from "./context/GlobalContext/GlobalContextWrapper.jsx";
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
+  // <StrictMode>
     <GlobalContextWrapper>
       <App />
     </GlobalContextWrapper>
-  </StrictMode>
+  // </StrictMode>
 );

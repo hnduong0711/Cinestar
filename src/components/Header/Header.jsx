@@ -30,7 +30,7 @@ const Header = () => {
     <div className="bg-cinestar-black flex-wrap py-4 xs:px-2 md:px-5 lg:px-20 fixed w-full left-0 z-[1000]">
       <div className="flex items-center justify-between border-b border-white border-opacity-20 pb-4">
         <div className="flex items-center justify-between basis-4/5 gap-3">
-          <Link to="/" className="w-[130px]"><img src={CinestarLogo} alt="Logo" /></Link>
+          <a href="/" className="w-[130px]"><img src={CinestarLogo} alt="Logo" /></a>
           <div className="flex">
             <Button
               icon={TicketIcon}
