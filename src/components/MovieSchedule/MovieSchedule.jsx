@@ -34,11 +34,14 @@ const MovieSchedule = () => {
       setTime(defaultTime);
       setSearchData((prevData) => ({
         ...prevData,
+        theater: theater,
         date: day,
-        time: defaultTime
+        time: defaultTime,
       }));
     }
   }, [listTime, day, searchData.time, setSearchData]);
+
+ const [theater, setTheater] = useState(searchData.theater || listTheater[0]) 
 
   const handleChangeData = (item, flag) => {
     if (flag) {
@@ -46,7 +49,7 @@ const MovieSchedule = () => {
       setSearchData((prevData) => ({
         ...prevData,
         date: item,
-        time: null
+        time: null,
       }));
     } else {
       setTime(item);
@@ -57,19 +60,34 @@ const MovieSchedule = () => {
     }
   };
 
-  console.log("day: ", day);
-  console.log("time: ", time);
-  console.log("search date:", searchData.date);
-  console.log("list day: ", listDay);
-  console.log("list time: ", listTime);
-  console.log("search date in MS: ", searchData);
-  console.log(time);
+  // console.log("day: ", day);
+  // console.log("time: ", time);
+  // console.log("search date:", searchData.date);
+  // console.log("list day: ", listDay);
+  // console.log("list time: ", listTime);
+  // console.log("search date in MS: ", searchData);
+  // console.log(theater);
 
   return (
     <div className="space-y-8">
+      <div className="heading text-white text-center">rạp chiếu</div>
+      <div className="w-full h-14">
+        <select
+          className="border border-cinestar-gold rounded-md w-full h-full text-xl font-bold text-center"
+          onChange={(e) =>
+            setSearchData((prev) => ({ ...prev, theater: e.target.value }))
+          }
+        >
+          {listTheater.map((item, index) => (
+            <option key={index} value={item}>
+              {item}
+            </option>
+          ))}
+        </select>
+      </div>
       <div className="heading text-white text-center">lịch chiếu</div>
       {/* Ngày chiếu */}
-      <div className="flex space-x-2 justify-center">
+      <div className="flex gap-2 flex-wrap md:justify-center">
         {listDay.map((item, index) => (
           <div
             onClick={() => handleChangeData(item.date, true)}
@@ -84,34 +102,21 @@ const MovieSchedule = () => {
             <div className="text-center">{item.dow}</div>
           </div>
         ))}
+        
       </div>
       {/* Thời gian chiếu */}
       <div className="flex justify-between">
         <div className="heading text-white text-center">Thời gian chiếu</div>
-        <div className="">
-          <select
-            className="border border-cinestar-gold rounded-md h-full w-64"
-            onChange={(e) =>
-              setSearchData((prev) => ({ ...prev, theater: e.target.value }))
-            }
-          >
-            {listTheater.map((item, index) => (
-              <option key={index} value={item}>
-                {item}
-              </option>
-            ))}
-          </select>
-        </div>
       </div>
-      <div className="bg-purple-blue-gradient space-x-4 flex justify-center p-8 rounded-md">
+      <div className="bg-purple-blue-gradient gap-4 flex justify-center flex-wrap p-8 rounded-md">
         {listTime?.showTime?.map((item, index) => (
           <div
             key={index}
             onClick={() => handleChangeData(item.time, false)}
-            className={`border hover:border-cinestar-gold  hover:text-cinestar-gold rounded-md cursor-pointer p-2 w-[60px] text-center transition-all duration-200 ${
+            className={`rounded-md cursor-pointer p-2 w-[60px] text-center transition-all duration-200 ${
               time === item.time
                 ? "text-cinestar-black bg-cinestar-gold border-2 font-bold"
-                : "border-white text-white"
+                : "border text-white hover:text-cinestar-gold hover:border-cinestar-gold"
             }`}
           >
             {item.time}
@@ -119,7 +124,7 @@ const MovieSchedule = () => {
         ))}
       </div>
       {/* Chọn ghế */}
-      {day && time && <SeatBooking />}
+      {day && time && <SeatBooking listTime={listTime} />}
     </div>
   );
 };

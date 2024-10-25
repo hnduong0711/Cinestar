@@ -8,25 +8,29 @@ import TicketContext from "../../context/TicketContext/TicketContext";
 const MovieDetail = () => {
   const location = useLocation();
   const film = location.state;
-  
-  const { searchData, setSearchData } = useContext(TicketContext); // Hàm để cập nhật context
+
+  const { searchData, setSearchData } = useContext(TicketContext);
 
   useEffect(() => {
     setSearchData((prev) => ({
       ...prev,
       film: film.name,
-    }))
-  }, [film])
-  console.log('searchDaa in MD:', searchData);
+    }));
+  }, [film]);
+  // console.log("searchDaa in MD:", searchData);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <div className="w-full pt-36 px-[4.5rem] py-10">
-      <div className="flex">
+      <div className="flex md:flex-row flex-col">
         {/* Poster */}
-        <div className="basis-1/3 min-w-[260px]">
-          <img src={film.poster} className="rounded-md" alt="film" />
+        <div className="md:basis-1/3 min-w-[260px]">
+          <img src={film.poster} className="rounded-md md:w-full w-[70%] flex m-auto" alt="film" />
         </div>
-        <div className="pl-6 basis-2/3 flex flex-col">
+        <div className="md:pl-6 md:pt-0 pt-6 basis-2/3 flex flex-col">
           {/* Info */}
           <div className="">
             <div className="heading text-gray-100 pb-5">{film.name}</div>
