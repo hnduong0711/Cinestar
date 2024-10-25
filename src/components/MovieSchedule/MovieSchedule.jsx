@@ -60,13 +60,13 @@ const MovieSchedule = () => {
     }
   };
 
-  console.log("day: ", day);
-  console.log("time: ", time);
-  console.log("search date:", searchData.date);
-  console.log("list day: ", listDay);
-  console.log("list time: ", listTime);
-  console.log("search date in MS: ", searchData);
-  console.log(theater);
+  // console.log("day: ", day);
+  // console.log("time: ", time);
+  // console.log("search date:", searchData.date);
+  // console.log("list day: ", listDay);
+  // console.log("list time: ", listTime);
+  // console.log("search date in MS: ", searchData);
+  // console.log(theater);
 
   return (
     <div className="space-y-8">
@@ -87,7 +87,7 @@ const MovieSchedule = () => {
       </div>
       <div className="heading text-white text-center">lịch chiếu</div>
       {/* Ngày chiếu */}
-      <div className="flex space-x-2 justify-center">
+      <div className="flex gap-2 flex-wrap md:justify-center">
         {listDay.map((item, index) => (
           <div
             onClick={() => handleChangeData(item.date, true)}
@@ -102,12 +102,13 @@ const MovieSchedule = () => {
             <div className="text-center">{item.dow}</div>
           </div>
         ))}
+        
       </div>
       {/* Thời gian chiếu */}
       <div className="flex justify-between">
         <div className="heading text-white text-center">Thời gian chiếu</div>
       </div>
-      <div className="bg-purple-blue-gradient space-x-4 flex justify-center p-8 rounded-md">
+      <div className="bg-purple-blue-gradient gap-4 flex justify-center flex-wrap p-8 rounded-md">
         {listTime?.showTime?.map((item, index) => (
           <div
             key={index}
@@ -123,7 +124,7 @@ const MovieSchedule = () => {
         ))}
       </div>
       {/* Chọn ghế */}
-      {day && time && <SeatBooking />}
+      {day && time && <SeatBooking listTime={listTime} />}
     </div>
   );
 };

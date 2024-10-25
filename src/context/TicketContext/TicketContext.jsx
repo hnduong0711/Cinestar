@@ -20,7 +20,6 @@ const TicketContext = React.createContext({
   // Detail booking
   ticketData: {
     room: null,
-    seatNum: null,
     seats: [],
     foods: []
   },
