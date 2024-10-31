@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="79" height="29" viewBox="0 0 79 29" fill="none">
+    <rect width="40" height="29" rx="6" fill="#F9F9F9" />
+    <rect x="39" width="40" height="29" rx="6" fill="#F9F9F9" />
+    <savior-host xmlns="http://www.w3.org/1999/xhtml"
+        style="all: unset; position: absolute; top: 0; z-index: 99999999999999; display: block !important; overflow: unset"></savior-host>
+</svg>

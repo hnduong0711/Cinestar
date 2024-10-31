@@ -1,37 +1,15 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { typeTikcet } from "../../constants/seatBooking";
-import CheckOut from "../CheckOut/CheckOut";
-import ListCombo from "../../pages/BuyFood/CompoFirst";
-import CheckOutFood from "../../pages/BuyFood/CheckOutFood";
 import Room from "../Room/Room";
 import TicketContext from "../../context/TicketContext/TicketContext";
-import { schedule } from "../../constants/scheduleTest";
 
-const SeatBooking = ({ listTime }) => {
-  const { ticketData, setTicketData, searchData } = useContext(TicketContext);
+const SeatBooking = () => {
+  const { setTicketData, searchData } = useContext(TicketContext);
   const [seatQuantity, setSeatQuantity] = useState([]);
 
-  useEffect(() => {
-    setTicketData((prev) => ({
-      ...prev,
-      room: getRoom(),
-    }));
-  }, [searchData.film]);
+  
+  console.log('search data in SB: ',searchData);
 
-  // Lấy số phòng
-  const getRoom = () => {
-    const selectedDay = schedule.find((item) => item.date === searchData.date);
-    if (!selectedDay) {
-      return null;
-    }
-    const selectedTime = selectedDay.showTime.find(
-      (show) => show.time === searchData.time
-    );
-    if (!selectedTime) {
-      return null;
-    }
-    return selectedTime.room;
-  };
   // Cập nhật số lượng ghế trong vé
   const handleUpdate = (id, type, newQuantity) => {
     setSeatQuantity((prevSeatQuantity) => {
@@ -51,7 +29,7 @@ const SeatBooking = ({ listTime }) => {
       }
     });
   };
-  // console.log(seatQuantity);
+  console.log(seatQuantity);
   // Tăng số lượng ghế trong vé
   const handleIncrease = (id, type) => {
     const currentTicket = seatQuantity.find((ticket) => ticket.id === id);
@@ -124,7 +102,7 @@ const SeatBooking = ({ listTime }) => {
         </div>
       </div>
       {/* Chọn vị trí ghế */}
-      <Room roomNum={getRoom()} seats={seatQuantity}/>
+      {searchData.time && <Room seats={seatQuantity}/>}
       {/* Chọn bắp nước */}
       {/* <ListCombo onSelectCombos={onSelectCombos} /> */}
       {/* Thanh toán */}

@@ -1,33 +1,58 @@
-import React, { useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { Screen } from "../../assets";
-import { room, roomDetail } from "../../constants/roomTest";
+import { rooms, seatInRoom } from "../../constants/roomTest";
 import Seat from "./Seat";
+import { schedule } from "../../constants/scheduleTest";
+import { filmList } from "../../constants/movie";
+import TicketContext from "../../context/TicketContext/TicketContext";
 
 const Room = ({ roomNum, seats }) => {
-  // console.log(roomNum);
-  console.log(seats);
-  const room = roomDetail.find((room) => room.id === roomNum);
+  const { searchData } = useContext(TicketContext);
+
+  console.log("search data in Room: ", searchData);
+
+  // Lấy số phòng
+  const getRoom = () => {
+    const film = filmList.find((item) => item.name === searchData.film);
+    // console.log('id film: ', film );
+    const selectedFilm = schedule.filter((item) => item.id === film.id);
+    if (!selectedFilm) return null;
+    // console.log('selected film: ', selectedFilm);
+    const selectedDay = selectedFilm.find(
+      (item) => item.date === searchData.date
+    );
+    // console.log('seleced day: ',selectedDay);
+    if (!selectedDay) return null;
+    const selectedTime = selectedDay.showTime.find(
+      (show) => show.time === searchData.time
+    );
+    // console.log('seleced time: ',selectedTime);
+    if (!selectedTime) return null;
+    return selectedTime.room;
+  };
+
+  useEffect(() => {
+    if (searchData.time) {
+      getRoom(); // Chỉ gọi getRoom khi time có giá trị hợp lệ
+    }
+  }, [searchData.time]);
+
+  const room = rooms.find((room) => room.room === getRoom());
+
+  console.log("room: ", room);
+
   const rows = room.rows;
   const cols = room.cols;
-  const rowsCount = rows.length;
-  const colsCount = cols.reduce((a, b) => Math.max(a, b), -Infinity);
-  // console.log(cols);
-  // console.log("rows: ", rowsCount);
-  // console.log("cols: ", colsCount);
+
+  console.log("rows & cols: ", rows, cols);
 
   const [selectedSeats, setSelectedSeats] = useState([]);
 
-  const getSeatsArray = useMemo(() => {
-    let seats = [];
-
-    for (let i = 0; i < rows.length; i++) {
-      for (let j = 1; j <= cols[i]; j++) {
-        let seatNumber = rows[i] + (j < 10 ? "0" + j : j);
-        seats.push(seatNumber);
-      }
-    }
-    return seats;
-  }, [seats]);
+  const getSeatByRoom = useMemo(() => {
+    return seatInRoom.filter((seat) => {
+      return seat.room === getRoom();
+    });
+  }, []);
 
   const handleChoice = (seatNumber) => {
     setSelectedSeats((prevSelectedSeats) => {
@@ -49,24 +74,43 @@ const Room = ({ roomNum, seats }) => {
         </span>
       </div>
       {/* Content */}
-      <div className="w-[60%] flex m-auto ">
+      <div className="sm:w-full md:w-[90%] lg:w-[85%] flex m-auto">
         <div
-          className={`grid gap-y-4 justify-items-center items-center w-full`}
+          className={`grid gap-y-4 gap-x-2 justify-items-center items-center w-full`}
           style={{
-            gridTemplateColumns: `repeat(${colsCount}, minmax(0, 1fr))`,
-            gridTemplateRows: `repeat(${rowsCount}, minmax(0, 1fr))`,
+            gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
+            gridTemplateRows: `repeat(${rows}, minmax(0, 1fr))`,
           }}
         >
-          {getSeatsArray.map((seat) => (
+          {getSeatByRoom.map((seat) => (
             <Seat
-              key={seat}
-              seatNumber={seat}
-              isBooked={seats[seat]?.isBooked || false} // Từ dữ liệu đổ xuống
+              key={seat.row + seat.col}
+              seatNumber={seat.row + seat.col}
+              isBooked={seat.isBooked || false} // Từ dữ liệu đổ xuống
               isSelected={selectedSeats.includes(seat)}
-              isCouple={seats[seat]?.isCouple || false}
+              isCouple={seat.type === "couple"}
               onClick={() => handleChoice(seat)}
             />
           ))}
+        </div>
+      </div>
+      {/* Test */}
+      <div className="">
+        <div
+          className={`grid gap-y-4 gap-x-2 justify-items-center items-center w-full`}
+          style={{
+            gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
+            gridTemplateRows: `repeat(${rows}, minmax(0, 1fr))`,
+          }}
+        >
+          <div
+            className="bg-red-300"
+            onClick={() => {
+              console.log();
+            }}
+          >
+            A
+          </div>
         </div>
       </div>
     </div>
