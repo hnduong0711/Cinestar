@@ -9,6 +9,18 @@ const MovieDetail = () => {
   const location = useLocation();
   const film = location.state;
 
+  // useEffect(() => {
+  //   // Nếu `film` không có trong `state`, tải lại từ server
+  //   if (!film) {
+  //     fetch(`https://api.example.com/movies/${id}`)
+  //       .then((response) => response.json())
+  //       .then((data) => setFilm(data))
+  //       .catch((error) => console.error("Lỗi khi tải dữ liệu phim:", error));
+  //   }
+  // }, [film, id]);
+  // if (!film) return <div>Loading...</div>; // Hiển thị Loading khi chờ dữ liệu
+  
+
   const { searchData, setSearchData } = useContext(TicketContext);
 
   useEffect(() => {

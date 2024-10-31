@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { schedule } from "../../constants/scheduleTest";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import SeatBooking from "../SeatBooking/SeatBooking";
 import TicketContext from "../../context/TicketContext/TicketContext";
 import { listTheater } from "../../constants/searchbox";
@@ -24,7 +24,7 @@ const MovieSchedule = () => {
 
   const listTime = useMemo(() => {
     return day ? listDay.find((item) => item.date === day) : [];
-  }, [searchData, day, listDay]);
+  }, [searchData.date, day, listDay]);
 
   const [time, setTime] = useState(null);
 
@@ -65,7 +65,7 @@ const MovieSchedule = () => {
   // console.log("search date:", searchData.date);
   // console.log("list day: ", listDay);
   // console.log("list time: ", listTime);
-  // console.log("search date in MS: ", searchData);
+  console.log("search date in MS: ", searchData);
   // console.log(theater);
 
   return (
@@ -124,7 +124,7 @@ const MovieSchedule = () => {
         ))}
       </div>
       {/* Chọn ghế */}
-      {day && time && <SeatBooking listTime={listTime} />}
+      {day && time && <SeatBooking />}
     </div>
   );
 };

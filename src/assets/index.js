@@ -39,6 +39,9 @@ import UD1 from './Locations/UD1.jpg'
 import About from './Locations/About/about.jpg'
 import BgRegis from './bg-regis.jpg'
 import Screen from './Room/screen.png'
+import SingleSeat from './Seat/singleSeat.svg'
+import CoupleSeat from './Seat/coupleSeat.svg'
+
 
 
 
@@ -83,5 +86,7 @@ export {
     UD1,
     About,
     BgRegis,
-    Screen
+    Screen,
+    SingleSeat,
+    CoupleSeat
 }
