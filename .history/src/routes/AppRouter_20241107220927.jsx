@@ -23,11 +23,11 @@ export default function AppRouter() {
         <Route path="/movie/:id" element={<MovieDetail />} />
         <Route path="/popcorn-drink" element={<BuyCorn/>}/>
 
-        <Route path="/popcorn-drink/stepper" element={<Stepper />} />
+        {/* <Route path="/popcorn-drink/stepper" element={<Stepper />} /> */}
 
         <Route path="/stepper" element={<Stepper />} />
-        {/* <Route path="/user" element={<UserPage />} /> */}
-        {/* <Route path="/promotion" element={<PromotionPage />} /> */}
+        <Route path="/user" element={<UserPage />} />
+        <Route path="/promotion" element={<PromotionPage />} />
 
       </Routes>
       <FooterTest />
