@@ -12,8 +12,12 @@ export default {
       xl: "1280px",
     },
     backgroundImage: {
-      "blur-right": "url('/assets/blur-right.webp')",
-      "blur-left": "url('/assets/blur-left.webp')",
+      "single-seat": "url('assets/Seat/singleSeat.svg')",
+      "couple-seat": "url('assets/Seat/coupleSeat.svg')",
+      "selected-single-seat": "url('assets/Seat/selectedSingleSeat.svg')",
+      "booked-single-seat": "url('assets/Seat/bookedSingleSeat.svg')",
+      "selected-couple-seat": "url('assets/Seat/selectedCoupleSeat.svg')",
+      "booked-couple-seat": "url('assets/Seat/bookedCoupleSeat.svg')",
       'custom-gradient': 'linear-gradient(90deg, rgba(86,47,132,1) 15%, rgba(47,84,171,1) 85%)',
     },
     fontFamily: {
@@ -45,7 +49,6 @@ export default {
         "purple-blue-gradient": "linear-gradient(to right, #7b2cbf, #4a90e2)",
         "orange-yellow-gradient": "linear-gradient(to right, #ffa500, #ff4500)",
         "oragan-yellow-dradient": "linear-gradient(to right, #ff6e00, #ffba06)",
-        
       },
 
       borderRadius: {
