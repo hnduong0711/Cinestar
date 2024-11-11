@@ -50,7 +50,7 @@ export default {
         "purple-blue-gradient": "linear-gradient(to right, #7b2cbf, #4a90e2)",
         "orange-yellow-gradient": "linear-gradient(to right, #ffa500, #ff4500)",
         "oragan-yellow-dradient": "linear-gradient(to right, #ff6e00, #ffba06)",
-        "discount" : "linear-gradient(to right, #5e3ba1, #3663c9)",
+        "discount:" : "linear-gradient(to right, #5e3ba1, #3663c9)",
       },
 
       borderRadius: {

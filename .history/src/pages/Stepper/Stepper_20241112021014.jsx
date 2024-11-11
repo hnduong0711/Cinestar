@@ -270,7 +270,7 @@ const [receivePromo, setReceivePromo] = useState(false); // Checkbox nhận thô
         //  opacity-60
           )}
           {activeStep === 2 && (
-           <div className='flex flex-col bg-purple-blue-gradient p-6 rounded-lg'>
+           <div className='flex flex-col bg-cinestar-bill-food p-6 rounded-lg'>
            <ul>
              {selectedCombos && selectedCombos.length > 0 ? (
                selectedCombos.map((combo, index) => (
@@ -290,7 +290,6 @@ const [receivePromo, setReceivePromo] = useState(false); // Checkbox nhận thô
 
           <Box sx={{ marginTop: '1rem' }}>
             <Button
-            className='bg-discount'
               variant="contained"
               onClick={handleNext12}
               sx={{ marginRight: '1rem' }}

@@ -290,7 +290,7 @@ const [receivePromo, setReceivePromo] = useState(false); // Checkbox nhận thô
 
           <Box sx={{ marginTop: '1rem' }}>
             <Button
-            className='bg-discount'
+            className='bg-orange-yellow-gradient'
               variant="contained"
               onClick={handleNext12}
               sx={{ marginRight: '1rem' }}

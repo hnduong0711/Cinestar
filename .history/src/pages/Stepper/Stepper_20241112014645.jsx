@@ -241,16 +241,16 @@ const [receivePromo, setReceivePromo] = useState(false); // Checkbox nhận thô
               <span>Thanh toán qua Momo</span>
              </div>
              <div className="flex items-center text-white p-4 bg-[#1f294b] rounded-lg border border-gray-500 cursor-pointer hover:bg-white hover:text-black transition-colors duration-300 ease-in-out">             <img src={IconBill} alt="Local Card" className="w-6 h-6 mr-2" />
-               <span >Thanh toán qua Thẻ nội địa</span>
+               <span className="text-white">Thanh toán qua Thẻ nội địa</span>
              </div>
              <div className="flex items-center text-white p-4 bg-[#1f294b] rounded-lg border border-gray-500 cursor-pointer hover:bg-white hover:text-black transition-colors duration-300 ease-in-out">             <img src={IconBill} alt="International Card" className="w-6 h-6 mr-2" />
-               <span >Thanh toán qua thẻ quốc tế</span>
+               <span className="text-white">Thanh toán qua thẻ quốc tế</span>
              </div>
            </div>
          
            {/* Discount Code Section */}
-           <div class="p-4 bg-[#305fbf] rounded-lg flex items-center space-x-3 hover:bg-discount  transition-colors duration-300 ease-in-out hover:shadow-md">     
-                <img class="hover:transform hover:-translate-x-1" src={IconDiscount} alt="Discount" className="w-6 h-6" />
+           <div class="p-4 bg-[#305fbf] rounded-lg flex items-center space-x-3 hover:bg-oragan-yellow-dradient hover:shadow-md hover:transform hover:-translate-x-1">     
+                <img src={IconDiscount} alt="Discount" className="w-6 h-6" />
              <div>
                <p className="text-white font-bold">Chọn hoặc nhập mã giảm giá</p>
                <p className="text-sm text-[#ccd3ff]">Bạn đang có mã giảm giá</p>
@@ -259,38 +259,32 @@ const [receivePromo, setReceivePromo] = useState(false); // Checkbox nhận thô
          
            {/* Action Buttons */}
            <div className="flex space-x-4">
-             <button className="w-full py-3 bg-cinestar-custom-yellow text-[#14142b] font-bold rounded-lg">
+             <button className="w-full py-3 bg-[#ffe100] text-[#14142b] font-bold rounded-lg">
                QUAY LẠI
              </button>
-             <button className="w-full py-3 bg-cinestar-custom-yellow text-[#ccd3ff] font-bold rounded-lg opacity-60">
+             <button className="w-full py-3 bg-gray-600 text-[#ccd3ff] font-bold rounded-lg opacity-60">
                THANH TOÁN
              </button>
            </div>
          </div>
-        //  opacity-60
+         
           )}
           {activeStep === 2 && (
-           <div className='flex flex-col bg-purple-blue-gradient p-6 rounded-lg'>
-           <ul>
-             {selectedCombos && selectedCombos.length > 0 ? (
-               selectedCombos.map((combo, index) => (
-                 <div key={index} className="flex flex-col mb-4 p-4">
-                    <div className="text-white font-content text-left text-[30px] mb-[20px]">{combo.title}</div>
-                   <div className="text-cinestar-custom-yellow text-left mb-[20px] text-[15px]">{combo.content}</div>
-                   <hr />
-                   <div className="text-cinestar-custom-yellow font-bold text-left mt-[30px] text-[20px]">{combo.price} VND</div>
-                 </div>
-               ))
-             ) : (
-               <p className="no-combo">Chưa có combo nào được chọn.</p>
-             )}
-           </ul>
-         </div>
+              <ul>
+              {selectedCombos && selectedCombos.length > 0 ? (
+                selectedCombos.map((combo, index) => (
+                  <li key={index}>
+                    {combo.title} - {combo.content} - {combo.price} VND
+                  </li>
+                ))
+              ) : (
+                <p>Chưa có combo nào được chọn.</p>
+              )}
+            </ul>
           )}
 
           <Box sx={{ marginTop: '1rem' }}>
             <Button
-            className='bg-discount'
               variant="contained"
               onClick={handleNext12}
               sx={{ marginRight: '1rem' }}

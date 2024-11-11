@@ -259,10 +259,10 @@ const [receivePromo, setReceivePromo] = useState(false); // Checkbox nhận thô
          
            {/* Action Buttons */}
            <div className="flex space-x-4">
-             <button className="w-full py-3 bg-cinestar-custom-yellow text-[#14142b] font-bold rounded-lg">
+             <button className="w-full py-3 bg-[#ffe100] text-[#14142b] font-bold rounded-lg">
                QUAY LẠI
              </button>
-             <button className="w-full py-3 bg-cinestar-custom-yellow text-[#ccd3ff] font-bold rounded-lg opacity-60">
+             <button className="w-full py-3 bg-gray-600 text-[#ccd3ff] font-bold rounded-lg =">
                THANH TOÁN
              </button>
            </div>
@@ -270,27 +270,21 @@ const [receivePromo, setReceivePromo] = useState(false); // Checkbox nhận thô
         //  opacity-60
           )}
           {activeStep === 2 && (
-           <div className='flex flex-col bg-purple-blue-gradient p-6 rounded-lg'>
-           <ul>
-             {selectedCombos && selectedCombos.length > 0 ? (
-               selectedCombos.map((combo, index) => (
-                 <div key={index} className="flex flex-col mb-4 p-4">
-                    <div className="text-white font-content text-left text-[30px] mb-[20px]">{combo.title}</div>
-                   <div className="text-cinestar-custom-yellow text-left mb-[20px] text-[15px]">{combo.content}</div>
-                   <hr />
-                   <div className="text-cinestar-custom-yellow font-bold text-left mt-[30px] text-[20px]">{combo.price} VND</div>
-                 </div>
-               ))
-             ) : (
-               <p className="no-combo">Chưa có combo nào được chọn.</p>
-             )}
-           </ul>
-         </div>
+              <ul>
+              {selectedCombos && selectedCombos.length > 0 ? (
+                selectedCombos.map((combo, index) => (
+                  <li key={index}>
+                    {combo.title} - {combo.content} - {combo.price} VND
+                  </li>
+                ))
+              ) : (
+                <p>Chưa có combo nào được chọn.</p>
+              )}
+            </ul>
           )}
 
           <Box sx={{ marginTop: '1rem' }}>
             <Button
-            className='bg-discount'
               variant="contained"
               onClick={handleNext12}
               sx={{ marginRight: '1rem' }}

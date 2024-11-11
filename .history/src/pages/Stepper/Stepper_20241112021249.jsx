@@ -270,7 +270,7 @@ const [receivePromo, setReceivePromo] = useState(false); // Checkbox nhận thô
         //  opacity-60
           )}
           {activeStep === 2 && (
-           <div className='flex flex-col bg-purple-blue-gradient p-6 rounded-lg'>
+           <div className='flex flex-col bgpurple-blue-gradient p-6 rounded-lg'>
            <ul>
              {selectedCombos && selectedCombos.length > 0 ? (
                selectedCombos.map((combo, index) => (
