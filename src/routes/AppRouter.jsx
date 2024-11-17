@@ -8,6 +8,8 @@ import Header from "../components/Header/Header";
 import FooterTest from "../components/FooterTest/FooterTest";
 import MovieDetail from "../components/MovieDetail/MovieDetail";
 import Login from "../components/Login/Login";
+import PromotionPage from "../pages/PromotionPage/Promotion"
+import User from "../pages/UserPage/User"
 // import NowPage from '@/components/Now/Now'; // Trang "Now" có thể điều chỉnh
 // import NotFoundPage from '@/pages/NotFoundPage'; // Trang 404
 
@@ -23,7 +25,7 @@ export default function AppRouter() {
         <Route path="/movie/:id" element={<MovieDetail />} />
         <Route path="/popcorn-drink" element={<BuyCorn/>}/>
         <Route path="/stepper" element={<Stepper />} />
-        <Route path="/user" element={<UserPage />} />
+        <Route path="/user" element={<User />} />
         <Route path="/promotion" element={<PromotionPage />} />
       </Routes>
       <FooterTest />

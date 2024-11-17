@@ -19,12 +19,25 @@ const Header = () => {
   const isSmallScreen = useWindowSize();
   const { setIsShowModal } = useContext(GlobalContext);
   const navigate = useNavigate();
+  
   const showModal = () => {
     setIsShowModal((prev) => !prev);
   };
+
   const handleClick = () => {
     navigate('/popcorn-drink');
   };
+
+  // const checkToken = () => {
+  //   const token = sessionStorage.getItem('token');
+  //   if (token) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // };
+
+  
 
   return (
     <div className="bg-cinestar-black flex-wrap py-4 xs:px-2 md:px-5 lg:px-20 fixed w-full left-0 z-[1000]">
