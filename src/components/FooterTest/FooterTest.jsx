@@ -134,14 +134,14 @@ const FooterTest = () => {
       <div className='w-full'>
         <div className='flex float-left  font-semibold md:text-[14px] mx-10'>
           <div>
-            <h>© 2023 Cinestar. All rights reserved.</h>
+            <h4>© 2023 Cinestar. All rights reserved.</h4>
           </div>
         </div>
         <div className='flex float-right  font-semibold md:text-[14px] mx-10'>
           <div>
-            <h className='mr-5'>Chính sách bảo mật</h>
-            <h className='mr-5'>Tin điện ảnh</h>
-            <h>Hỏi và đáp</h>
+            <h4 className='mr-5'>Chính sách bảo mật</h4>
+            <h4 className='mr-5'>Tin điện ảnh</h4>
+            <h4>Hỏi và đáp</h4>
           </div>
         </div>
       </div>

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Button from "../Button/Button";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
+import { login } from "../../api/authService";
+import { useNavigate } from "react-router-dom";
 const Login = () => {
   const [haveAccount, setHaveAccount] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
@@ -8,6 +10,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [rePassword, setRePassword] = useState("");
+  const navigate = useNavigate();
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -22,14 +25,25 @@ const Login = () => {
     else return 0;
   };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     const isValid = validateInfomation();
     if (isValid === 1) {
       alert("Tên đăng nhập cần chứa chữ và số tối đa 16 kí tự");
     } else if (isValid === 2) {
       alert("Mật khẩu cần chứa chữ và số tối đa 16 kí tự");
     } else {
-      alert("Thành công");
+      try {
+        const x = await login(username, password);
+        if (x === 200) {
+          alert("Đăng nhập thành công !");
+          navigate('/');
+        } else {
+          alert("Tài khoản hoặc mật khẩu không đúng !");
+        }
+      } catch (error) {
+        console.error("Lỗi đăng nhập:", error);
+        alert("Có lỗi xảy ra khi đăng nhập.");
+      }
     }
   };
 
@@ -44,6 +58,7 @@ const Login = () => {
     } else if (password !== rePassword) {
       alert("Mật khẩu chưa khớp với xác nhận");
     } else {
+      login();
       alert("Thành công");
     }
   };
@@ -57,7 +72,9 @@ const Login = () => {
           <div className="flex items-center justify-around uppercase font-title font-bold text-xl text-center">
             <div
               className={`${
-                haveAccount ? "bg-[#F8FAFC]" : "text-white hover:bg-slate-300 hover:text-black rounded-md m-1"
+                haveAccount
+                  ? "bg-[#F8FAFC]"
+                  : "text-white hover:bg-slate-300 hover:text-black rounded-md m-1"
               } rounded-tl-md rounded-tr-md py-2 px-2 w-full cursor-pointer transition-all duration-400`}
               onClick={() => setHaveAccount(true)}
             >
@@ -65,7 +82,9 @@ const Login = () => {
             </div>
             <div
               className={`${
-                !haveAccount ? "bg-[#F8FAFC]" : "text-white hover:bg-slate-300 hover:text-black rounded-md m-1"
+                !haveAccount
+                  ? "bg-[#F8FAFC]"
+                  : "text-white hover:bg-slate-300 hover:text-black rounded-md m-1"
               } rounded-tl-md rounded-tr-md py-2 px-2 w-full cursor-pointer transition-all duration-400`}
               onClick={() => setHaveAccount(false)}
             >

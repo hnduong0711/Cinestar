@@ -66,7 +66,7 @@ const Movie = ({ film }) => {
                 <span className="mr-1">
                   <img src={SubtitleIcon} className="w-5 h-5" alt="" />
                 </span>
-                {film.subtitle}
+                {film.subTitle}
               </div>
             </div>
           </div>

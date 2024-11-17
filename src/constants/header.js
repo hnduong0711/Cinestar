@@ -7,7 +7,7 @@ const subnav = [
     },
     {
         name: "Khuyến mãi",
-        to: '/Test'
+        to: '/promotion'
     },
     {
         name: "Giới thiệu",

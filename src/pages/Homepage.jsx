@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Header from "../components/Header/Header";
 import TicketContextWrapper from "../context/TicketContext/TicketContextWrapper";
 import SearchBox from "../components/SearchBox/SearchBox";
@@ -7,7 +7,6 @@ import ComingSoon from "../components/ComingSoon/ComingSoon";
 import Promotion from "../components/Promotion/Promotion";
 import Contact from "../components/Contact/Contact";
 import Slider from "../components/Slider/Slider";
-import { Outlet } from "react-router-dom";
 
 const Homepage = () => {
   return (

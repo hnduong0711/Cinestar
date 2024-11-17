@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { filmList } from "../../constants/movie";
 import Movie from "../Movie/Movie";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
@@ -6,9 +6,27 @@ import Slider from "react-slick";
 import "./now.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import movieService from "../../api/movieService";
 
 const Now = () => {
   const sliderRef = useRef(null);
+
+  const [movies, setMovies] = useState([]);
+
+  useEffect(() => {
+    const fetchMovies = async () => {
+      try{
+        const data = await movieService.getAllMoives();
+        setMovies(data.records);
+      }catch(error){
+        console.log(error);
+      }
+    }
+    fetchMovies();
+  }, [])
+
+  console.log("movies api: ", movies);
+  
 
   const settings = {
     infinite: true,
@@ -55,7 +73,7 @@ const Now = () => {
           {/* Slider */}
           <div className="w-[90%] flex m-auto">
             <Slider {...settings} ref={sliderRef} className="w-full">
-              {filmList.map((film) => (
+              {movies.map((film) => (
                 <Movie key={film.id} film={film} />
               ))}
             </Slider>
