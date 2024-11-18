@@ -6,7 +6,6 @@ const movieService = {
   // Lấy tất cả movie
   getAllMoives: async (page = 1, limit = 10, filters = {}) => {
     try {
-      const token = sessionStorage.getItem("token");
       const { name, director, actor, genres } = filters;
       const response = await axios.get(`${movie_base_url}/getAll`, {
         params: {
@@ -18,7 +17,6 @@ const movieService = {
           genres: genres?.join(","),
         },
         headers: {
-          Authorization: `Bearer ${token}`, // Truyền token vào header
           "Content-Type": "application/json", // Xác định kiểu dữ liệu
         },
       });

@@ -38,7 +38,7 @@ const Movie = ({ film }) => {
             <div className="text-[28px] font-semibold text-center">
               {film.name}
             </div>
-            <div className="text-[16px] grid gap-3">
+            <div className="text-[14x] grid gap-3 pl-1">
               <div className="flex items-center">
                 <span className="mr-1">
                   <img src={TagIcon} alt="" />
@@ -74,7 +74,7 @@ const Movie = ({ film }) => {
       </Link>
       {/* Info */}
       <div className="basis-1/4 pt-2 w-full">
-        <div className="text-center text-xl pb-2 text-white cursor-pointer">
+        <div className="text-center text-xl pb-2 text-white cursor-pointer truncate">
           {film.name}
         </div>
         <div className="flex justify-between">
