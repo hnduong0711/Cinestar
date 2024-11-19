@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   CinestarLogo,
   Popcorn,
@@ -13,37 +13,33 @@ import GlobalContext from "../../context/GlobalContext/GlobalContext";
 import SearchModal from "../Modal/SearchModal";
 import { listTheater, subnav } from "../../constants/header";
 import { Link } from "react-router-dom";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const isSmallScreen = useWindowSize();
   const { setIsShowModal } = useContext(GlobalContext);
   const navigate = useNavigate();
-  
+
+  const usernameData = sessionStorage.getItem("username");
+  const username = usernameData
+    ? JSON.parse(usernameData)["username"]
+    : "Đăng nhập";
+
   const showModal = () => {
     setIsShowModal((prev) => !prev);
   };
 
   const handleClick = () => {
-    navigate('/popcorn-drink');
+    navigate("/popcorn-drink");
   };
-
-  // const checkToken = () => {
-  //   const token = sessionStorage.getItem('token');
-  //   if (token) {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // };
-
-  
 
   return (
     <div className="bg-cinestar-black flex-wrap py-4 xs:px-2 md:px-5 lg:px-20 fixed w-full left-0 z-[1000]">
       <div className="flex items-center justify-between border-b border-white border-opacity-20 pb-4">
         <div className="flex items-center justify-between basis-4/5 gap-3">
-          <a href="/" className="w-[130px]"><img src={CinestarLogo} alt="Logo" /></a>
+          <a href="/" className="w-[130px]">
+            <img src={CinestarLogo} alt="Logo" />
+          </a>
           <div className="flex">
             <Button
               icon={TicketIcon}
@@ -57,7 +53,6 @@ const Header = () => {
               text="Đặt bắp nước"
               colorChange="bg-orange-yellow-gradient"
               onClick={handleClick} // Thêm hàm onClick
-
             />
           </div>
           {/* Search bar */}
@@ -91,7 +86,7 @@ const Header = () => {
           <Link className="text-white flex items-center" to="login">
             <img src={UserIcon} alt="user" width={24} height={24} />
             <span className="ml-2 hidden lg:block hover:text-cinestar-gold hover:transition-all">
-              Đăng nhập
+              {username}
             </span>
           </Link>
         </div>

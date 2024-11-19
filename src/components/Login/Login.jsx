@@ -37,6 +37,7 @@ const Login = () => {
         if (x === 200) {
           alert("Đăng nhập thành công !");
           navigate('/');
+          window.scrollTo(0,0);
         } else {
           alert("Tài khoản hoặc mật khẩu không đúng !");
         }
