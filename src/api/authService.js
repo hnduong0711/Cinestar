@@ -76,4 +76,36 @@ const verifyToken = async (token) => {
   }
 };
 
-export { login };
+const registerUser = async (username, password, email) => {
+  try {
+    const body = {
+      username,
+      password,
+      email,
+      roles: ["USER"],
+      departments: [],
+    };
+
+    const response = await axios.post(
+      "http://localhost:5006/auth/api/Register",
+      body,
+      {
+        headers: {
+          // Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const token = response.data.accessToken;
+    saveToken(token);
+    verifyToken(token);
+  } catch (error) {
+    // Xử lý lỗi
+    console.error(
+      "Error during registration:",
+      error.response?.data || error.message
+    );
+  }
+};
+
+export { login, registerUser };
