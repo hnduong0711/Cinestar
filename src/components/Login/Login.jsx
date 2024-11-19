@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Button from "../Button/Button";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
-import { login } from "../../api/authService";
+import { login, registerUser } from "../../api/authService";
 import { useNavigate } from "react-router-dom";
 const Login = () => {
   const [haveAccount, setHaveAccount] = useState(true);
@@ -37,6 +37,7 @@ const Login = () => {
         if (x === 200) {
           alert("Đăng nhập thành công !");
           navigate('/');
+          window.scrollTo(0,0);
         } else {
           alert("Tài khoản hoặc mật khẩu không đúng !");
         }
@@ -58,8 +59,10 @@ const Login = () => {
     } else if (password !== rePassword) {
       alert("Mật khẩu chưa khớp với xác nhận");
     } else {
-      login();
-      alert("Thành công");
+      registerUser(username, password, email);
+      alert("Đăng kí thành công");
+      navigate('/');
+      window.scrollTo(0,0);
     }
   };
 

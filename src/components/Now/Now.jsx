@@ -33,6 +33,7 @@ const Now = () => {
     speed: 500,
     slidesToShow: 4, // Số slide hiển thị trên màn hình lớn
     slidesToScroll: 4, // Số slide trượt qua mỗi lần
+    accessibility: false,
     responsive: [
       {
         breakpoint: 1280, // Breakpoint cho màn hình lớn
