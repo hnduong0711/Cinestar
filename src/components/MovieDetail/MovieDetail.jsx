@@ -19,17 +19,18 @@ const MovieDetail = () => {
   //   }
   // }, [film, id]);
   // if (!film) return <div>Loading...</div>; // Hiển thị Loading khi chờ dữ liệu
+
+
   
 
-  const { searchData, setSearchData } = useContext(TicketContext);
-
+  const { setSearchData } = useContext(TicketContext);  
+  
   useEffect(() => {
     setSearchData((prev) => ({
       ...prev,
       film: film.name,
     }));
   }, [film]);
-  // console.log("searchDaa in MD:", searchData);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -40,7 +41,7 @@ const MovieDetail = () => {
       <div className="flex md:flex-row flex-col">
         {/* Poster */}
         <div className="md:basis-1/3 min-w-[260px]">
-          <img src={film.poster} className="rounded-md md:w-full w-[70%] flex m-auto" alt="film" />
+          <img src={`/${film.poster}`} className="rounded-md md:w-full w-[70%] flex m-auto" alt="film" />
         </div>
         <div className="md:pl-6 md:pt-0 pt-6 basis-2/3 flex flex-col">
           {/* Info */}
@@ -75,7 +76,7 @@ const MovieDetail = () => {
                   <span className="mr-1">
                     <img src={SubtitleIcon} width={24} height={24} alt="" />
                   </span>
-                  {film.subtitle}
+                  {film.subTitle}
                 </div>
               </div>
             </div>
@@ -83,7 +84,7 @@ const MovieDetail = () => {
           {/* Description */}
           <div className="pt-5 text-gray-100 hidden md:block">
             <div className="heading text-[22px]">Nội dung phim</div>
-            <div className="pt-3">{film.description}</div>
+            <div className="pt-3 text-[18px]">{film.description}</div>
           </div>
         </div>
       </div>
@@ -95,7 +96,7 @@ const MovieDetail = () => {
         </div>
       </div>
       <div className="py-10">
-        <MovieSchedule />
+        <MovieSchedule idFilm={film.id}/>
       </div>
     </div>
   );

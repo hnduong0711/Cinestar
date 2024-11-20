@@ -14,7 +14,7 @@ const login = async (username, password) => {
     const token = response.data.accessToken;
     if (token) {
       saveToken(token);
-      verifyToken(token);
+      checkTokenValidity();
       return 200;
     } else {
       return null; // Không có token
@@ -25,7 +25,7 @@ const login = async (username, password) => {
   }
 };
 
-// Lưu token và thời hạn
+// Lưu token và thời hạn --> lưu vào sessionStorage
 const saveToken = (token) => {
   const decodedToken = JSON.parse(atob(token.split(".")[1])); // Decode payload của JWT
   const expirationTime = decodedToken.exp * 1000; // Chuyển `exp` từ giây sang milliseconds
@@ -35,7 +35,7 @@ const saveToken = (token) => {
   );
 };
 
-// Kiểm tra hạn dùng của token
+// Kiểm tra hạn dùng của token --> settimeout cho thời hạn token
 const checkTokenValidity = async () => {
   const storedData = sessionStorage.getItem("authToken");
   if (!storedData) return;
@@ -43,10 +43,13 @@ const checkTokenValidity = async () => {
   const { token, expirationTime } = JSON.parse(storedData);
   const currentTime = Date.now();
 
+  const isTokenValid = await verifyToken(token);
   if (currentTime >= expirationTime) {
-    console.log("Token has expired");
-    // Gửi API kiểm tra token hoặc thực hiện hành động khác
-    await verifyToken(token);
+    if (!isTokenValid) {
+      sessionStorage.clear();
+      window.location.href = "/login";
+      alert("Phiên đăng nhập hết hạn vui lòng đăng nhập lại !");
+    }
   } else {
     console.log("Token is still valid");
     const remainingTime = expirationTime - currentTime;
@@ -54,7 +57,7 @@ const checkTokenValidity = async () => {
   }
 };
 
-// Kiểm tra token còn hạn dùng không
+// Kiểm tra token còn hạn dùng không, --> trả về username nếu hợp lệ và false nếu không hợp lệ
 const verifyToken = async (token) => {
   try {
     const response = await axios.get("http://localhost:5006/auth/api/Verify", {
@@ -64,12 +67,14 @@ const verifyToken = async (token) => {
       },
     });
 
-    if (response) {
+    if (response.status === 200 && response.data) {
       const username = response.data.username;
-      sessionStorage.setItem("username", JSON.stringify({ username }));
+      console.log('username: ',username);
+      
+      sessionStorage.setItem("username", JSON.stringify({username}))
+      return true;
     } else {
-      sessionStorage.removeItem("authToken");
-      sessionStorage.removeItem("username");
+      return false;
     }
   } catch (error) {
     console.error("Error verifying token:", error);
@@ -108,4 +113,4 @@ const registerUser = async (username, password, email) => {
   }
 };
 
-export { login, registerUser };
+export { login, registerUser, verifyToken };
