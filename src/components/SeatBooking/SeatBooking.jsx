@@ -3,7 +3,7 @@ import { typeTikcet } from "../../constants/seatBooking";
 import Room from "../Room/Room";
 import TicketContext from "../../context/TicketContext/TicketContext";
 
-const SeatBooking = () => {
+const SeatBooking = ({schedule}) => {
   const { setTicketData, searchData } = useContext(TicketContext);
   const [seatQuantity, setSeatQuantity] = useState([]);
 
@@ -102,7 +102,7 @@ const SeatBooking = () => {
         </div>
       </div>
       {/* Chọn vị trí ghế */}
-      {searchData.time && <Room seats={seatQuantity}/>}
+      {searchData.time && <Room seats={seatQuantity} roomNum={schedule.roomNumber}/>}
       {/* Chọn bắp nước */}
       {/* <ListCombo onSelectCombos={onSelectCombos} /> */}
       {/* Thanh toán */}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Button from "../Button/Button";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import { login, registerUser } from "../../api/authService";
@@ -12,10 +12,15 @@ const Login = () => {
   const [rePassword, setRePassword] = useState("");
   const navigate = useNavigate();
 
+  // Ref
+  const passwordRef = useRef(null);
+  const loginRef = useRef(null);
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
+  // Kiểm tra thông tin
   const validateInfomation = () => {
     const usernamePasswordRegex = /^[a-zA-Z0-9]{1,16}$/;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -25,6 +30,7 @@ const Login = () => {
     else return 0;
   };
 
+  // Đăng nhập
   const handleLogin = async () => {
     const isValid = validateInfomation();
     if (isValid === 1) {
@@ -36,8 +42,8 @@ const Login = () => {
         const x = await login(username, password);
         if (x === 200) {
           alert("Đăng nhập thành công !");
-          navigate('/');
-          window.scrollTo(0,0);
+          navigate("/");
+          window.scrollTo(0, 0);
         } else {
           alert("Tài khoản hoặc mật khẩu không đúng !");
         }
@@ -48,6 +54,7 @@ const Login = () => {
     }
   };
 
+  // Đăng kí
   const handleRegis = () => {
     const isValid = validateInfomation();
     if (isValid === 1) {
@@ -59,10 +66,30 @@ const Login = () => {
     } else if (password !== rePassword) {
       alert("Mật khẩu chưa khớp với xác nhận");
     } else {
-      registerUser(username, password, email);
-      alert("Đăng kí thành công");
-      navigate('/');
-      window.scrollTo(0,0);
+      try {
+        registerUser(username, password, email);
+        alert("Đăng kí thành công");
+        navigate("/");
+        window.scrollTo(0, 0);
+      } catch (error) {
+        console.error("Lỗi đăng ký:", error);
+        alert("Có lỗi xảy ra khi đăng ký.");
+      }
+    }
+  };
+
+  // Chuyển input
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      passwordRef.current.focus();
+    }
+  };
+
+  const handleKeyDownLogin = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleLogin();
     }
   };
 
@@ -108,6 +135,7 @@ const Login = () => {
                 placeholder="Nhập tên tài khoản"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
+                onKeyDown={handleKeyDown}
               />
             </div>
             <div className="relative flex flex-col space-y-2">
@@ -118,6 +146,8 @@ const Login = () => {
                 placeholder="Nhập mật khẩu"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                ref={passwordRef}
+                onKeyDown={handleKeyDownLogin}
               />
 
               {/* Icon mắt với absolute để nó nằm ở góc phải */}
