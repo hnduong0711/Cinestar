@@ -4,55 +4,94 @@ import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { listTheater } from "../../constants/searchbox";
 import SelectData from "./SelectData";
 import TicketContext from "../../context/TicketContext/TicketContext";
-import { filmList } from "../../constants/movie";
+// import { filmList } from "../../constants/movie";
 import { schedule } from "../../constants/scheduleTest";
 import { useNavigate } from "react-router-dom";
+import movieService from "../../api/movieService";
+import { formattedSchedule, convertToDow } from "../../utils/dateFormat";
+import scheduleService from "../../api/scheduleService";
 
 const SearchBox = () => {
   const navigate = useNavigate();
   const { searchData, statusData, openList } = useContext(TicketContext);
-  const listFilm = filmList.map((item) => item.name);
-  // Lấy object phim
-  const findMovie = (name) => {
-    return filmList.find((item) => item.name === name);
+  const [listMovie, setListMovie] = useState();
+  const [listDay, setListDay] = useState([]);
+  const [listTime, setListTime] = useState([]);
+  const [savedSchedule, setSavedSchedule] = useState([]);
+
+  useEffect(() => {
+    const fetchFilmData = async () => {
+      const filmData = await movieService.getAllMoives();
+      const filteredFilm = filmData.records.reduce((acc, item) => {
+        acc.push(item.name);
+        return acc;
+      }, []);
+      setListMovie(filteredFilm);
+    };
+    fetchFilmData();
+  }, []);
+
+  const getFilmByName = async (name) => {
+    const film = await movieService.getFilmByName(name); // Đảm bảo có `await`
+    console.log("Film: ", film); // Kiểm tra dữ liệu trả về
+    return film;
   };
-  // Lấy date
-  const listDay = useMemo(() => {
-    return schedule.reduce((acc, item) => {
-      if (searchData.film) {
-        const film = findMovie(searchData.film);
-        if (film && item.id === film.id) {
-          const newItem = `${item.date}: ${item.dow}`;
-          acc.push(newItem);
+
+  // Lấy danh sách ngày
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const film = await getFilmByName(searchData.film);
+        if (film.length > 0) {
+          const idFilm = film[0].id;
+          const schedule = await scheduleService.getScheduleByIdFilm(idFilm);
+          const groupScheduleByDate = formattedSchedule(schedule);
+          setSavedSchedule(groupScheduleByDate);
+          const formattedDates = Object.keys(groupScheduleByDate);
+          const newListDay = formattedDates.map((item) => {
+            return `${item}: ${convertToDow(item)}`
+          })
+          setListDay(newListDay);
         }
+      } catch (error) {
+        console.error("Error fetching data: ", error);
       }
-      return acc;
-    }, []);
-  }, [searchData.film]);
-  // Lấy thời gian
-  const listTime = useMemo(() => {
+    };
+
     if (searchData.film) {
-      const film = findMovie(searchData.film);
-      const scheduleItem = schedule.find((item) => {
-        if (searchData.date) {
-          return (
-            item.date === searchData.date.split(":")[0] && item.id === film.id
-          );
-        }
-      });
-      if (scheduleItem) {
-        return scheduleItem.showTime.map((timeObj) => timeObj.time);
+      fetchData();
+    }
+  }, [searchData.film]);
+  
+
+  // Lấy danh sách thời gian
+  useEffect(() => {
+    if(searchData.date){
+      const x = savedSchedule[searchData.date];
+      if(x){
+        const y = x.reduce((acc, item) => {
+          acc.push(item.showTime);
+          return acc
+        }, [])
+        setListTime(y)
+      }else {
+        setListTime([])
       }
     }
-    return [];
-  }, [searchData.date, searchData.film]);
+  }, [searchData.date, savedSchedule])
 
+  console.log("listtime: ", listTime);
   console.log("search Data: ", searchData);
 
   // Xử lý đặt vé nhanh
   const quickSearchFilm = (name) => {
-    const film = findMovie(name);
-    navigate(`/movie/${film.id}`, { state: film });
+    const fetchData = async () => {
+      const film = await movieService.getFilmByName(name);
+      console.log('film: ',film);
+      
+      navigate(`/movie/${film.id}`, { state: film });
+    }
+    fetchData();
   };
 
   return (
@@ -71,7 +110,7 @@ const SearchBox = () => {
             </span>
             <ChevronDownIcon className="w-4 ml-2" />
           </div>
-          {/* List */}
+          {/* List theater*/}
           {statusData.theater && <SelectData list={listTheater} id="theater" />}
         </div>
         <div className="relative">
@@ -86,8 +125,8 @@ const SearchBox = () => {
             </span>
             <ChevronDownIcon className="w-4 ml-2" />
           </div>
-          {/* List */}
-          {statusData.film && <SelectData list={listFilm} id="film" />}
+          {/* List film*/}
+          {statusData.film && <SelectData list={listMovie} id="film" />}
         </div>
         <div className="relative">
           <div
@@ -116,8 +155,8 @@ const SearchBox = () => {
             </span>
             <ChevronDownIcon className="w-4 ml-2" />
           </div>
-          {/* List */}
-          {statusData.time && <SelectData list={listTime} id="time" />}
+        {/* List time*/}
+        {statusData.time && <SelectData list={listTime} id="time" />}
         </div>
 
         {/* Button booking */}

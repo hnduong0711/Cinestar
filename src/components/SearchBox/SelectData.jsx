@@ -71,11 +71,11 @@ const SelectData = ({ list, id }) => {
   };
 
   return (
-    <div className="bg-gray-100 rounded-sm absolute left-0 md:top-19 lg:top-14 backdrop-blur-xl shadow-2xl w-full z-[11] max-h-[220px] overflow-y-auto">
+    <div className="bg-gray-100 rounded-sm absolute left-0 md:top-19 lg:top-14 backdrop-blur-xl shadow-2xl w-fit min-w-full z-[11] max-h-[220px] overflow-y-auto">
       {list.map((item, index) => (
         <div
           key={index}
-          className="hover:bg-gray-300 flex items-center pl-1 cursor-pointer py-1 border-b border-gray-300 h-[55px]"
+          className="hover:bg-gray-300 text-[14px] uppercase flex items-center pl-1 cursor-pointer py-1 border-b border-gray-300 h-[55px] truncate"
           onClick={() => handleSelect(item, id)}
         >
           {item}
