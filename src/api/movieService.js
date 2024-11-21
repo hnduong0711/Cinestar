@@ -27,6 +27,22 @@ const movieService = {
   },
   // Thêm 1 movie
   // Cập nhật 1 movie
+  // Tìm kiếm theo tên
+  getFilmByName: async (name) => {
+    try {
+      const response = await axios.get(`${movie_base_url}/getAll`, {
+        params: { name },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      return response.data.records;
+    } catch (error) {
+      console.error("Error in getFilmByName: ", error.message);
+      return null;
+    }
+  }
+  
 };
 
 export default movieService;

@@ -24,8 +24,6 @@ const Now = () => {
     }
     fetchMovies();
   }, [])
-
-  console.log("movies api: ", movies);
   
 
   const settings = {
