@@ -80,8 +80,8 @@ const SearchBox = () => {
     }
   }, [searchData.date, savedSchedule])
 
-  console.log("listtime: ", listTime);
-  console.log("search Data: ", searchData);
+  // console.log("listtime: ", listTime);
+  // console.log("search Data: ", searchData);
 
   // Xử lý đặt vé nhanh
   const quickSearchFilm = (name) => {
@@ -89,7 +89,7 @@ const SearchBox = () => {
       const film = await movieService.getFilmByName(name);
       console.log('film: ',film);
       
-      navigate(`/movie/${film.id}`, { state: film });
+      navigate(`/movie/${film[0].id}`, { state: film[0] });
     }
     fetchData();
   };
