@@ -177,7 +177,7 @@ const MovieSchedule = ({ idFilm }) => {
       </div>
 
       {/* Chọn ghế */}
-      {day && time && <SeatBooking schedule={selectedSchedule} />}
+      {/* {day && time && <SeatBooking schedule={selectedSchedule} />} */}
     </div>
   );
 };

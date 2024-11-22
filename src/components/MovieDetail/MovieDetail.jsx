@@ -4,6 +4,7 @@ import { ClockIcon, SubtitleIcon, TagIcon } from "../../assets";
 import { GlobeAltIcon } from "@heroicons/react/24/outline";
 import MovieSchedule from "../MovieSchedule/MovieSchedule";
 import TicketContext from "../../context/TicketContext/TicketContext";
+import movieService from "../../api/movieService";
 
 const MovieDetail = () => {
   const location = useLocation();
@@ -12,10 +13,7 @@ const MovieDetail = () => {
   // useEffect(() => {
   //   // Nếu `film` không có trong `state`, tải lại từ server
   //   if (!film) {
-  //     fetch(`https://api.example.com/movies/${id}`)
-  //       .then((response) => response.json())
-  //       .then((data) => setFilm(data))
-  //       .catch((error) => console.error("Lỗi khi tải dữ liệu phim:", error));
+  //     movieService.getFilmByName()
   //   }
   // }, [film, id]);
   // if (!film) return <div>Loading...</div>; // Hiển thị Loading khi chờ dữ liệu
