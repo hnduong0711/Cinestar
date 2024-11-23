@@ -120,6 +120,10 @@ const MovieSchedule = ({ idFilm }) => {
     );
   }, [day, time, formattedSchedule]);
 
+  console.log('format schedule: ', formattedSchedule[day]);
+  console.log('selected ',selectedSchedule);
+  
+
   return (
     <div className="space-y-8">
       {/* Chọn rạp */}
@@ -177,7 +181,7 @@ const MovieSchedule = ({ idFilm }) => {
       </div>
 
       {/* Chọn ghế */}
-      {/* {day && time && <SeatBooking schedule={selectedSchedule} />} */}
+      {day && time && selectedSchedule && <SeatBooking schedule={selectedSchedule}/>}
     </div>
   );
 };

@@ -1,120 +1,125 @@
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Screen } from "../../assets";
-import { rooms, seatInRoom } from "../../constants/roomTest";
 import Seat from "./Seat";
-import { schedule } from "../../constants/scheduleTest";
 // import { filmList } from "../../constants/movie";
 import TicketContext from "../../context/TicketContext/TicketContext";
+import { seatService } from "../../api/reservationService";
+import scheduleService from "../../api/scheduleService";
 
-const Room = ({ roomNum, seats }) => {
+const Room = ({ schedule }) => {
   const { searchData } = useContext(TicketContext);
+  const [seats, setSeats] = useState([]);
+  const [cols, setCols] = useState(0);
+  const [rows, setRows] = useState(0);
+  const [bookedSeats, setBookedSeats] = useState([]);
+  const [selectedSeats, setSelectedSeats] = useState([]);
+  
 
-  console.log("search data in Room: ", searchData);
+  // lấy dữ liệu ghế
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await scheduleService.getScheduleByIdSchedule(schedule.id);
+      setSeats(data["seatInfo"]["allSeats"]);
+      setBookedSeats(data["seatInfo"]["bookedSeat"])
+    };
+    fetchData();
+  }, [schedule.roomNumber]);
 
-  // Lấy số phòng
-  // const getRoom = () => {
-  //   const film = filmList.find((item) => item.name === searchData.film);
-  //   // console.log('id film: ', film );
-  //   const selectedFilm = schedule.filter((item) => item.id === film.id);
-  //   if (!selectedFilm) return null;
-  //   // console.log('selected film: ', selectedFilm);
-  //   const selectedDay = selectedFilm.find(
-  //     (item) => item.date === searchData.date
-  //   );
-  //   // console.log('seleced day: ',selectedDay);
-  //   if (!selectedDay) return null;
-  //   const selectedTime = selectedDay.showTime.find(
-  //     (show) => show.time === searchData.time
-  //   );
-  //   // console.log('seleced time: ',selectedTime);
-  //   if (!selectedTime) return null;
-  //   return selectedTime.room;
-  // };
+  console.log('seat', seats);
+  console.log('booked ', bookedSeats);
+  
+  
 
-  // useEffect(() => {
-  //   if (searchData.time) {
-  //     getRoom(); // Chỉ gọi getRoom khi time có giá trị hợp lệ
-  //   }
-  // }, [searchData.time]);
+  // lấy số hàng
+  const uniqueRow = [...new Set(seats.map((item) => item.row))];
+  useEffect(() => {
+    setRows(uniqueRow.length);
+  }, [uniqueRow]);
 
-  // const room = rooms.find((room) => room.room === getRoom());
+  // lấy số cột
+  const maxColsPerRow = seats.reduce((acc, seat) => {
+    const row = seat.row;
+    const column = parseInt(seat.column);
+    const seatType = seat.seatType;
+    if (!acc[row]) acc[row] = 0;
+    acc[row] = Math.max(acc[row], column + (seatType === "couple" ? 1 : 0));
+    return acc;
+  }, {});
+  // tìm số cột tối đa trong tất cả các hàng
+  const maxCols = Math.max(...Object.values(maxColsPerRow));
+  useEffect(() => {
+    setCols(maxCols);
+  }, [maxColsPerRow]);
 
-  console.log("room: ", roomNum);
+  const bookedSeatKeys = new Set(
+    bookedSeats.map((seat) => `${seat.row}-${seat.column}`)
+  );
 
-  // const rows = room.rows;
-  // const cols = room.cols;
+  // console.log(seats);
+  console.log('booked ',bookedSeats);
 
-  // console.log("rows & cols: ", rows, cols);
-
-  // const [selectedSeats, setSelectedSeats] = useState([]);
-
-  // const getSeatByRoom = useMemo(() => {
-  //   return seatInRoom.filter((seat) => {
-  //     return seat.room === getRoom();
-  //   });
-  // }, []);
-
-  // const handleChoice = (seatNumber) => {
-  //   setSelectedSeats((prevSelectedSeats) => {
-  //     if (prevSelectedSeats.includes(seatNumber)) {
-  //       return prevSelectedSeats.filter((seat) => seat !== seatNumber);
-  //     } else {
-  //       return [...prevSelectedSeats, seatNumber];
-  //     }
-  //   });
-  // };
+  // chọn ghế
+  const handleChoice = (seatNumber) => {
+    setSelectedSeats((prevSelectedSeats) => {
+      if (prevSelectedSeats.includes(seatNumber)) {
+        return prevSelectedSeats.filter((seat) => seat !== seatNumber);
+      } else {
+        return [...prevSelectedSeats, seatNumber];
+      }
+    });
+  };
 
   return (
-    <div></div>
-    // <div className="flex flex-col gap-5 justify-center">
-    //   {/* Screen */}
-    //   <div className="flex m-auto relative">
-    //     <img src={Screen} alt="" />
-    //     <span className="text-3xl font-bold text-white absolute top-0 left-[50%] translate-x-[-50%] translate-y-[50%]">
-    //       Màn hình
-    //     </span>
-    //   </div>
-    //   {/* Content */}
-    //   <div className="sm:w-full md:w-[90%] lg:w-[85%] flex m-auto">
-    //     <div
-    //       className={`grid gap-y-4 gap-x-2 justify-items-center items-center w-full`}
-    //       style={{
-    //         gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
-    //         gridTemplateRows: `repeat(${rows}, minmax(0, 1fr))`,
-    //       }}
-    //     >
-    //       {getSeatByRoom.map((seat) => (
-    //         <Seat
-    //           key={seat.row + seat.col}
-    //           seatNumber={seat.row + seat.col}
-    //           isBooked={seat.isBooked || false} // Từ dữ liệu đổ xuống
-    //           isSelected={selectedSeats.includes(seat)}
-    //           isCouple={seat.type === "couple"}
-    //           onClick={() => handleChoice(seat)}
-    //         />
-    //       ))}
-    //     </div>
-    //   </div>
-    //   {/* Test */}
-    //   <div className="">
-    //     <div
-    //       className={`grid gap-y-4 gap-x-2 justify-items-center items-center w-full`}
-    //       style={{
-    //         gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
-    //         gridTemplateRows: `repeat(${rows}, minmax(0, 1fr))`,
-    //       }}
-    //     >
-    //       <div
-    //         className="bg-red-300"
-    //         onClick={() => {
-    //           console.log();
-    //         }}
-    //       >
-    //         A
-    //       </div>
-    //     </div>
-    //   </div>
-    // </div>
+    <div className="flex flex-col gap-5 justify-center">
+      {/* Screen */}
+      <div className="flex m-auto relative">
+        <img src={Screen} alt="" />
+        <span className="text-3xl font-bold text-white absolute top-0 left-[50%] translate-x-[-50%] translate-y-[50%]">
+          Màn hình
+        </span>
+      </div>
+      {/* Content */}
+      <div className="sm:w-full md:w-[90%] lg:w-[85%] flex m-auto">
+        <div
+          className={`grid gap-y-4 gap-x-2 justify-items-center items-center w-full`}
+          style={{
+            gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
+            gridTemplateRows: `repeat(${rows}, minmax(0, 1fr))`,
+          }}
+        >
+          {seats.map((seat) => (
+            <Seat
+              key={seat.row + seat.column}
+              seatNumber={seat.row + (seat.column < 10 ? "0"+seat.column : seat.column)}
+              isBooked={bookedSeatKeys.has(`${seat.row}-${seat.column}`)}
+              isSelected={selectedSeats.includes(seat)}
+              isCouple={seat.seatType === "couple"}
+              isNone = {seat.seatType === "none"}
+              onClick={() => handleChoice(seat)}
+            />
+          ))}
+        </div>
+      </div>
+      {/* Test */}
+      {/* <div className="">
+        <div
+          className={`grid gap-y-4 gap-x-2 justify-items-center items-center w-full`}
+          style={{
+            gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
+            gridTemplateRows: `repeat(${rows}, minmax(0, 1fr))`,
+          }}
+        >
+          <div
+            className="bg-red-300"
+            onClick={() => {
+              console.log();
+            }}
+          >
+            A
+          </div>
+        </div>
+      </div> */}
+    </div>
   );
 };
 

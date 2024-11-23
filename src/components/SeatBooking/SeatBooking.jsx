@@ -8,7 +8,9 @@ const SeatBooking = ({schedule}) => {
   const [seatQuantity, setSeatQuantity] = useState([]);
 
   
-  console.log('search data in SB: ',searchData);
+  // console.log('search data in SB: ',searchData);
+  console.log('schedule', schedule);
+  
 
   // Cập nhật số lượng ghế trong vé
   const handleUpdate = (id, type, newQuantity) => {
@@ -102,7 +104,7 @@ const SeatBooking = ({schedule}) => {
         </div>
       </div>
       {/* Chọn vị trí ghế */}
-      {searchData.time && <Room seats={seatQuantity} roomNum={schedule.roomNumber}/>}
+      {searchData.time && <Room seats={seatQuantity} schedule={schedule}/>}
       {/* Chọn bắp nước */}
       {/* <ListCombo onSelectCombos={onSelectCombos} /> */}
       {/* Thanh toán */}

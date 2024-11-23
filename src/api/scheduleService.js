@@ -16,6 +16,19 @@ const scheduleService = {
       console.log(error);
     }
   },
+
+  getScheduleByIdSchedule: async (idSchedule) => {
+    try {
+      const response = await axios.get(`${schedule_base_url}/${idSchedule}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  },
 };
 
 export default scheduleService;
