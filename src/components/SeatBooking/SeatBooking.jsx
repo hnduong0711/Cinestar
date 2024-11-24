@@ -8,7 +8,9 @@ const SeatBooking = ({schedule}) => {
   const [seatQuantity, setSeatQuantity] = useState([]);
 
   
-  console.log('search data in SB: ',searchData);
+  // console.log('search data in SB: ',searchData);
+  // console.log('schedule', schedule);
+  
 
   // Cập nhật số lượng ghế trong vé
   const handleUpdate = (id, type, newQuantity) => {
@@ -29,7 +31,7 @@ const SeatBooking = ({schedule}) => {
       }
     });
   };
-  console.log(seatQuantity);
+  console.log('seatQuan in SeatBooking', seatQuantity);
   // Tăng số lượng ghế trong vé
   const handleIncrease = (id, type) => {
     const currentTicket = seatQuantity.find((ticket) => ticket.id === id);
@@ -45,6 +47,7 @@ const SeatBooking = ({schedule}) => {
         : 0;
     handleUpdate(id, type, newQuantity);
   };
+  
 
   return (
     <div className="flex flex-col">
@@ -70,7 +73,7 @@ const SeatBooking = ({schedule}) => {
                     {ticket.type}
                   </div>
                   <div className="uppercase text-white">
-                    {ticket.textPrice} vnd
+                    {ticket.isSpecial ? schedule.singleSeatPrice/2 : ticket.type === "Đơn" ? schedule.singleSeatPrice : schedule.coupleSeatPrice} vnd
                   </div>
                 </div>
                 <div className="flex lg:mt-12">
@@ -102,7 +105,7 @@ const SeatBooking = ({schedule}) => {
         </div>
       </div>
       {/* Chọn vị trí ghế */}
-      {searchData.time && <Room seats={seatQuantity} roomNum={schedule.roomNumber}/>}
+      {searchData.time && <Room seatQuantity={seatQuantity} schedule={schedule}/>}
       {/* Chọn bắp nước */}
       {/* <ListCombo onSelectCombos={onSelectCombos} /> */}
       {/* Thanh toán */}
