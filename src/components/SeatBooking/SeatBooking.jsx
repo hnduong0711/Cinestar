@@ -9,7 +9,7 @@ const SeatBooking = ({schedule}) => {
 
   
   // console.log('search data in SB: ',searchData);
-  console.log('schedule', schedule);
+  // console.log('schedule', schedule);
   
 
   // Cập nhật số lượng ghế trong vé
@@ -31,7 +31,7 @@ const SeatBooking = ({schedule}) => {
       }
     });
   };
-  console.log(seatQuantity);
+  console.log('seatQuan in SeatBooking', seatQuantity);
   // Tăng số lượng ghế trong vé
   const handleIncrease = (id, type) => {
     const currentTicket = seatQuantity.find((ticket) => ticket.id === id);
@@ -47,6 +47,7 @@ const SeatBooking = ({schedule}) => {
         : 0;
     handleUpdate(id, type, newQuantity);
   };
+  
 
   return (
     <div className="flex flex-col">
@@ -72,7 +73,7 @@ const SeatBooking = ({schedule}) => {
                     {ticket.type}
                   </div>
                   <div className="uppercase text-white">
-                    {ticket.textPrice} vnd
+                    {ticket.isSpecial ? schedule.singleSeatPrice/2 : ticket.type === "Đơn" ? schedule.singleSeatPrice : schedule.coupleSeatPrice} vnd
                   </div>
                 </div>
                 <div className="flex lg:mt-12">
@@ -104,7 +105,7 @@ const SeatBooking = ({schedule}) => {
         </div>
       </div>
       {/* Chọn vị trí ghế */}
-      {searchData.time && <Room seats={seatQuantity} schedule={schedule}/>}
+      {searchData.time && <Room seatQuantity={seatQuantity} schedule={schedule}/>}
       {/* Chọn bắp nước */}
       {/* <ListCombo onSelectCombos={onSelectCombos} /> */}
       {/* Thanh toán */}

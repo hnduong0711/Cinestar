@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Screen } from "../../assets";
 import Seat from "./Seat";
 // import { filmList } from "../../constants/movie";
@@ -6,13 +6,15 @@ import TicketContext from "../../context/TicketContext/TicketContext";
 import { seatService } from "../../api/reservationService";
 import scheduleService from "../../api/scheduleService";
 
-const Room = ({ schedule }) => {
-  const { searchData } = useContext(TicketContext);
+const Room = ({ seatQuantity, schedule }) => {
   const [seats, setSeats] = useState([]);
   const [cols, setCols] = useState(0);
   const [rows, setRows] = useState(0);
   const [bookedSeats, setBookedSeats] = useState([]);
   const [selectedSeats, setSelectedSeats] = useState([]);
+
+  console.log('seatQuan in room: ', seatQuantity);
+  
   
 
   // lấy dữ liệu ghế
@@ -25,8 +27,8 @@ const Room = ({ schedule }) => {
     fetchData();
   }, [schedule.roomNumber]);
 
-  console.log('seat', seats);
-  console.log('booked ', bookedSeats);
+  // console.log('seat', seats);
+  // console.log('booked ', bookedSeats);
   
   
 
@@ -56,7 +58,7 @@ const Room = ({ schedule }) => {
   );
 
   // console.log(seats);
-  console.log('booked ',bookedSeats);
+  // console.log('booked ',bookedSeats);
 
   // chọn ghế
   const handleChoice = (seatNumber) => {

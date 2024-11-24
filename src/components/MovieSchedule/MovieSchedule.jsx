@@ -120,8 +120,8 @@ const MovieSchedule = ({ idFilm }) => {
     );
   }, [day, time, formattedSchedule]);
 
-  console.log('format schedule: ', formattedSchedule[day]);
-  console.log('selected ',selectedSchedule);
+  // console.log('format schedule: ', formattedSchedule[day]);
+  // console.log('selected ',selectedSchedule);
   
 
   return (
