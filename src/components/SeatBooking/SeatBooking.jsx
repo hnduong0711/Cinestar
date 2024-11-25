@@ -1,16 +1,13 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { typeTikcet } from "../../constants/seatBooking";
 import Room from "../Room/Room";
 import TicketContext from "../../context/TicketContext/TicketContext";
+import BuyCorn from '../../pages/BuyFood/index'
 
-const SeatBooking = ({schedule}) => {
+const SeatBooking = ({ schedule }) => {
   const { setTicketData, searchData } = useContext(TicketContext);
-  const [seatQuantity, setSeatQuantity] = useState([]);
-
-  
-  // console.log('search data in SB: ',searchData);
-  // console.log('schedule', schedule);
-  
+  const [seatQuantity, setSeatQuantity] = useState([{id: 1, type: 'single', soLuong: 0}, {id: 2, type: 'single', soLuong: 0}]);
+  const typeTicketRef = useRef(null);
 
   // Cập nhật số lượng ghế trong vé
   const handleUpdate = (id, type, newQuantity) => {
@@ -31,7 +28,6 @@ const SeatBooking = ({schedule}) => {
       }
     });
   };
-  console.log('seatQuan in SeatBooking', seatQuantity);
   // Tăng số lượng ghế trong vé
   const handleIncrease = (id, type) => {
     const currentTicket = seatQuantity.find((ticket) => ticket.id === id);
@@ -47,14 +43,18 @@ const SeatBooking = ({schedule}) => {
         : 0;
     handleUpdate(id, type, newQuantity);
   };
-  
+
+  // format price
+  function formatPrice(price) {
+    return price.toLocaleString("vi-VN");
+  }
 
   return (
     <div className="flex flex-col">
       {/* Chọn số lượng ghế */}
-      <div className="flex flex-col items-center gap-10 w-full">
+      <div ref={typeTicketRef} className="flex flex-col items-center gap-10 w-full">
         <div className="heading text-white text-ceter">Chọn loại vé</div>
-        <div className="grid lg:grid-cols-3 grid-rows-1 gap-5 w-full pb-20">
+        <div className="grid lg:grid-cols-2 grid-rows-1 gap-5 w-full pb-20">
           {typeTikcet.map((ticket) => {
             const foundTicket = seatQuantity.find(
               (item) => item.id === ticket.id
@@ -70,10 +70,13 @@ const SeatBooking = ({schedule}) => {
                     {ticket.name}
                   </div>
                   <div className="uppercase text-cinestar-gold">
-                    {ticket.type}
+                    {ticket.type === "single" ? "Đơn" : "Đôi"}
                   </div>
                   <div className="uppercase text-white">
-                    {ticket.isSpecial ? schedule.singleSeatPrice/2 : ticket.type === "Đơn" ? schedule.singleSeatPrice : schedule.coupleSeatPrice} vnd
+                    {ticket.type === "single"
+                      ? formatPrice(schedule.singleSeatPrice)
+                      : formatPrice(schedule.coupleSeatPrice)}
+                    vnd
                   </div>
                 </div>
                 <div className="flex lg:mt-12">
@@ -105,11 +108,16 @@ const SeatBooking = ({schedule}) => {
         </div>
       </div>
       {/* Chọn vị trí ghế */}
-      {searchData.time && <Room seatQuantity={seatQuantity} schedule={schedule}/>}
+      {searchData.time && (
+        <Room
+          seatQuantity={seatQuantity}
+          schedule={schedule}
+          setSeatQuantity={setSeatQuantity}
+          typeTicketRef={typeTicketRef}
+        />
+      )}
       {/* Chọn bắp nước */}
-      {/* <ListCombo onSelectCombos={onSelectCombos} /> */}
-      {/* Thanh toán */}
-      {/* <CheckOutFood /> */}
+      <BuyCorn />
     </div>
   );
 };
