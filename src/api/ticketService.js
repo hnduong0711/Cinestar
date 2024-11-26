@@ -1,22 +1,21 @@
 import axios from "axios";
 
-const food_case_url = "http://localhost:5006/reservation/api/Food";
+const ticket_base_url = "http://localhost:5006/reservation/api/Ticket";
 
-const foodService = {
-  getAllFood: async (token) => {
+const ticketService = {
+  addTicket: async (data, token) => {
     try {
-      const response = await axios.get(food_case_url, {
+      const response = await axios.post(`${ticket_base_url}`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       });
       return response.data;
-      
     } catch (error) {
       console.log(error);
     }
   },
 };
 
-export default foodService;
+export default ticketService;

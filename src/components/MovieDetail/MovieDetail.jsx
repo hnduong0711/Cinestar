@@ -1,5 +1,5 @@
-import React, { useContext, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { useLocation, useParams } from "react-router-dom";
 import { ClockIcon, SubtitleIcon, TagIcon } from "../../assets";
 import { GlobeAltIcon } from "@heroicons/react/24/outline";
 import MovieSchedule from "../MovieSchedule/MovieSchedule";
@@ -8,20 +8,21 @@ import movieService from "../../api/movieService";
 
 const MovieDetail = () => {
   const location = useLocation();
-  const film = location.state;
-
+  // const film = location.state;
+  const [film, setFilm] = useState(location.state || null);
+  const { id } = useParams();
+  
+  const { searchData, setSearchData } = useContext(TicketContext);
+  
   // useEffect(() => {
-  //   // Nếu `film` không có trong `state`, tải lại từ server
+  //   const fetchData = async() => {
+  //     const data = await movieService.getFilmById(id);
+  //     setFilm(data);
+  //   }
   //   if (!film) {
-  //     movieService.getFilmByName()
+  //     fetchData();
   //   }
   // }, [film, id]);
-  // if (!film) return <div>Loading...</div>; // Hiển thị Loading khi chờ dữ liệu
-
-
-  
-
-  const { setSearchData } = useContext(TicketContext);  
   
   useEffect(() => {
     setSearchData((prev) => ({

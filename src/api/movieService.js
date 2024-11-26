@@ -41,6 +41,22 @@ const movieService = {
       console.error("Error in getFilmByName: ", error.message);
       return null;
     }
+  },
+  // lấy phim theo id phim
+  getFilmById: async (id) => {
+    try {
+      const response = await axios.get(`${movie_base_url}/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      console.log('api ',response.data);
+      
+      return response.data;
+    } catch (error) {
+      console.error("Error in getFilmByName: ", error.message);
+      return null;
+    }
   }
   
 };

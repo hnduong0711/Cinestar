@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Screen } from "../../assets";
 import Seat from "./Seat";
 import TicketContext from "../../context/TicketContext/TicketContext";
@@ -10,11 +10,16 @@ const Room = ({ seatQuantity, schedule, setSeatQuantity, typeTicketRef }) => {
   const [cols, setCols] = useState(0);
   const [rows, setRows] = useState(0);
   const [bookedSeats, setBookedSeats] = useState([]);
+  const { ticketData, setTicketData } = useContext(TicketContext);
   const [selectedSeats, setSelectedSeats] = useState({
     selectedList: [],
     singleSeats: 0,
     coupleSeats: 0,
   });
+
+  // console.log('ticket ',ticketData);
+  // console.log('select ',selectedSeats.selectedList);
+  
 
   // lấy dữ liệu ghế
   useEffect(() => {
@@ -104,9 +109,14 @@ const Room = ({ seatQuantity, schedule, setSeatQuantity, typeTicketRef }) => {
             block: "center",
           });
         }
+        setTicketData({
+          seats: prevSelectedSeats.selectedList,
+        });
         return prevSelectedSeats; // Không cập nhật nếu vượt số lượng
       }
-
+      setTicketData({
+        seats: updatedSelectedList,
+      });
       return {
         ...prevSelectedSeats,
         selectedList: updatedSelectedList,
@@ -116,8 +126,8 @@ const Room = ({ seatQuantity, schedule, setSeatQuantity, typeTicketRef }) => {
     });
   };
 
-  console.log("selected ", selectedSeats);
-  console.log("seatQuan ", seatQuantity);
+  // console.log("selected ", selectedSeats.selectedList);
+  // console.log("seatQuan ", seatQuantity);
 
   return (
     <div className="flex flex-col gap-5 justify-center">

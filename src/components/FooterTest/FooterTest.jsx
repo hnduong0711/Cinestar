@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 
 const FooterTest = () => {
   return (
-    <div className='  bg-purple-blue-gradient w-full h-[700px] text-white '>
+    <div className='footer bg-purple-blue-gradient w-full h-full pt-10 relative text-white '>
       <div className='flex'>
         <div className='flex w-[40%]  mt-10 ml-10'>
           <div className='w-[100%]'>

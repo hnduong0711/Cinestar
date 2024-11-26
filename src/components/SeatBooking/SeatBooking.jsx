@@ -3,11 +3,14 @@ import { typeTikcet } from "../../constants/seatBooking";
 import Room from "../Room/Room";
 import TicketContext from "../../context/TicketContext/TicketContext";
 import BuyCorn from '../../pages/BuyFood/index'
+import ListCombo from "../../pages/BuyFood/CompoFirst";
+import CheckOutFood from "../../pages/BuyFood/CheckOutFood";
 
 const SeatBooking = ({ schedule }) => {
   const { setTicketData, searchData } = useContext(TicketContext);
-  const [seatQuantity, setSeatQuantity] = useState([{id: 1, type: 'single', soLuong: 0}, {id: 2, type: 'single', soLuong: 0}]);
+  const [seatQuantity, setSeatQuantity] = useState([{id: 1, type: 'single', soLuong: 0}, {id: 2, type: 'couple', soLuong: 0}]);
   const typeTicketRef = useRef(null);
+  const [foodCombo, setFoodCombo] = useState([]);
 
   // Cập nhật số lượng ghế trong vé
   const handleUpdate = (id, type, newQuantity) => {
@@ -48,6 +51,7 @@ const SeatBooking = ({ schedule }) => {
   function formatPrice(price) {
     return price.toLocaleString("vi-VN");
   }
+  
 
   return (
     <div className="flex flex-col">
@@ -117,7 +121,9 @@ const SeatBooking = ({ schedule }) => {
         />
       )}
       {/* Chọn bắp nước */}
-      <BuyCorn />
+      <ListCombo onSelectCombos={setFoodCombo} />
+      {/* Thanh toán */}
+      <CheckOutFood selectedCombos={foodCombo} selectedSeats={seatQuantity} schedule={schedule}/>
     </div>
   );
 };
