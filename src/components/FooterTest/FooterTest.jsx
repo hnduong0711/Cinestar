@@ -127,7 +127,7 @@ const FooterTest = () => {
         </div>
       </div>
       
-      <div className='flex w-full justify-center my-10'>
+      <div className='flex w-full justify-center mt-10'>
         <hr className='w-[95%]'/>
       </div>
 
@@ -148,7 +148,7 @@ const FooterTest = () => {
 
       
 
-      <div className=' flex flex-col w-full items-center justify-center my-20 md:text-[12px]'>
+      <div className=' flex flex-col w-full items-center justify-center mt-20 md:text-[12px]'>
         {/* <div className=''>
           sign
         </div> */}

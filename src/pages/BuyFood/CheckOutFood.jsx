@@ -1,6 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Button from "../../components/Button/Button";
 import { useNavigate } from "react-router-dom"; // Thêm dòng này
+import TicketContext from "../../context/TicketContext/TicketContext";
+import ticketService from "../../api/ticketService";
 
 const CheckOutFood = ({
   schedule,
@@ -9,10 +11,13 @@ const CheckOutFood = ({
   selectedSeats,
 }) => {
   const navigate = useNavigate();
+  const { searchData, ticketData } = useContext(TicketContext);
 
   // tạo sticky
   const [isAtFooter, setIsAtFooter] = useState(false);
   const paymentBarRef = useRef(null);
+
+  console.log(ticketData.seats);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -25,7 +30,9 @@ const CheckOutFood = ({
         const windowHeight = window.innerHeight;
 
         // Kiểm tra nếu thanh bar chạm vào footer
-        setIsAtFooter(footerTop <= windowHeight - paymentBarHeight + 75);
+        setIsAtFooter(
+          footerTop <= windowHeight - paymentBarHeight + 0.53 * paymentBarHeight
+        );
       }
     };
 
@@ -47,6 +54,7 @@ const CheckOutFood = ({
     }
     return acc;
   }, {});
+
   // Tính tiền ghế
   const totalPriceBySeats = selectedSeats.reduce((acc, item) => {
     const price =
@@ -55,11 +63,36 @@ const CheckOutFood = ({
         : schedule.coupleSeatPrice * item.soLuong;
     return acc + price;
   }, 0);
+
   // Tính tổng tất cả giá tiền (cộng dồn các ID)
-  const totalPrice = Object.values(totalPriceById).reduce(
-    (total, price) => total + price,
-    0
-  ) + totalPriceBySeats;
+  const totalPrice =
+    Object.values(totalPriceById).reduce((total, price) => total + price, 0) +
+    totalPriceBySeats;
+
+  const listSeatId = ticketData.seats.reduce((acc, seat) => {
+    acc.push(seat.id)
+    return acc
+  }, [])
+
+  const listFoodId = selectedCombos.reduce((acc, food) => {
+    acc.push(food.id);
+    return acc;
+  }, [])
+
+  console.log(listFoodId);
+  
+
+  const handleTicket = async() => {
+    const storedData = sessionStorage.getItem("authToken");
+    const {token} = JSON.parse(storedData);
+    const data = {
+      movieScheduleId: schedule.id,
+      seatId: listSeatId,
+      foodId: listFoodId,
+      totalTicket: t
+    }
+    const response = await ticketService.addTicket(data, token)
+  };
 
   const handlePayment = () => {
     navigate("stepper", { state: { totalPrice, selectedCombos } }); // Gửi data đến Stepper
@@ -72,47 +105,54 @@ const CheckOutFood = ({
       {totalPrice > 0 && (
         <div
           ref={paymentBarRef}
-          className={`payment-bar bg-cinestar-black w-full h-[130px] p-4 fixed bottom-0 z-10 left-0 transition-all duration-200 ${
+          className={`bg-cinestar-black w-full h-[150px] text-[15px] font-content p-4 text-white fixed bottom-0 z-10 left-0 transition-all duration-200 ${
             isAtFooter
               ? "absolute top-auto bottom-auto w-full z-10"
               : "fixed bottom-0 w-full z-10"
           }`}
         >
           <hr className="w-full" />
-          <div className="container mx-auto px-4 mt-5">
+          <div className="container mx-auto px-4 p-1">
             <div className="flex">
-              <div className="flex-grow-[6] w-[60%]">
+              {/* Hiển thị thông tin content của các combo đã chọn */}
+              <div className="flex flex-col justify-around w-[60%]">
+                {/* Tên phim */}
                 <div>
-                  <p className="text-[24px] text-white font-title">Duong</p>
+                  <p className="text-[24px] font-title">{searchData.film}</p>
                 </div>
+                {/* Tên rạp */}
                 <div>
-                  {/* Hiển thị thông tin content của các combo đã chọn */}
+                  <p className="text-[18px] font-bold">{searchData.theater}</p>
+                </div>
+                {/* Tên phòng, tên ghế */}
+                <div className=" ">
+                  <span>Phòng chiếu: {schedule.roomNumber}</span> |{" "}
+                  {ticketData.seats.map((seat, index) => (
+                    <span key={index} className="">
+                      {index > 0 && ", "} {seat.row + seat.column}
+                    </span>
+                  ))}{" "}
+                  | <span>{searchData.time}</span>
+                </div>
+                {/* Tên thức ăn */}
+                <div>
                   {selectedCombos.map((combo, index) => (
-                    <span
-                      key={index}
-                      className="text-white text-[13px] font-content"
-                    >
-                      {index > 0 && ", "}{" "}
-                      {/* Thêm dấu phẩy nếu không phải combo đầu tiên */}
-                      {combo.content}
+                    <span key={index} className="">
+                      {index > 0 && ", "} {combo.name}
                     </span>
                   ))}
                 </div>
               </div>
               <div className="w-[1px] bg-gray-300 mx-4"></div>
-              {/* Div 2 */}
-              <div className="flex-grow-[4] w-[40%] pr-15">
-                <div className="flex items-center">
-                  <div className="w-[50%] text-white font-content">
-                    Tạm tính
-                  </div>
-                  <div className="text-white font-content text-[15px]">
-                    {totalPrice.toLocaleString()} VNĐ
-                  </div>
+              {/* Thông tin thanh toán */}
+              <div className="flex flex-col items-center m-auto w-[40%]">
+                <div className="w-full flex justify-between p-2 text-[20px] font-bold">
+                  <div className="">Tạm tính</div>
+                  <div className="">{totalPrice.toLocaleString()} VNĐ</div>
                 </div>
                 <div>
                   <Button
-                    className="button md:button bg-cinestar-black w-[400px] h-[40px] text-white hidden group items-center font-content border border-solid border-white"
+                    className="button md:button bg-cinestar-black w-[400px] h-[40px] hidden group items-center  border border-solid border-white"
                     text="THANH TOÁN"
                     colorChange="bg-oragan-yellow-dradient"
                     onClick={handlePayment} // Sử dụng hàm handlePayment
