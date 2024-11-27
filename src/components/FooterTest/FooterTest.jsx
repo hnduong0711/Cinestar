@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 
 const FooterTest = () => {
   return (
-    <div className='  bg-purple-blue-gradient w-full h-[700px] text-white '>
+    <div className='footer bg-purple-blue-gradient w-full h-full pt-10 relative text-white '>
       <div className='flex'>
         <div className='flex w-[40%]  mt-10 ml-10'>
           <div className='w-[100%]'>
@@ -127,7 +127,7 @@ const FooterTest = () => {
         </div>
       </div>
       
-      <div className='flex w-full justify-center my-10'>
+      <div className='flex w-full justify-center mt-10'>
         <hr className='w-[95%]'/>
       </div>
 
@@ -148,7 +148,7 @@ const FooterTest = () => {
 
       
 
-      <div className=' flex flex-col w-full items-center justify-center my-20 md:text-[12px]'>
+      <div className=' flex flex-col w-full items-center justify-center mt-20 md:text-[12px]'>
         {/* <div className=''>
           sign
         </div> */}

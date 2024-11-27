@@ -21,7 +21,7 @@ const TicketContext = React.createContext({
   ticketData: {
     room: null,
     seats: [],
-    foods: []
+    foods: [],
   },
   setTicketData: () => {},
 });

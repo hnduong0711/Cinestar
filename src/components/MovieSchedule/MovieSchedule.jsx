@@ -4,6 +4,7 @@ import SeatBooking from "../SeatBooking/SeatBooking";
 import TicketContext from "../../context/TicketContext/TicketContext";
 import scheduleService from "../../api/scheduleService";
 import { listTheater } from "../../constants/searchbox";
+import foodService from "../../api/foodService";
 
 const MovieSchedule = ({ idFilm }) => {
   const { searchData, setSearchData } = useContext(TicketContext);
@@ -77,7 +78,7 @@ const MovieSchedule = ({ idFilm }) => {
     () => Object.keys(formattedSchedule),
     [formattedSchedule]
   );
-  
+
   useEffect(() => {
     if (!searchData.date && formattedDates.length > 0) {
       setDay(formattedDates[0]); // Đặt ngày đầu tiên từ danh sách
@@ -122,7 +123,6 @@ const MovieSchedule = ({ idFilm }) => {
 
   // console.log('format schedule: ', formattedSchedule[day]);
   // console.log('selected ',selectedSchedule);
-  
 
   return (
     <div className="space-y-8">
@@ -181,7 +181,9 @@ const MovieSchedule = ({ idFilm }) => {
       </div>
 
       {/* Chọn ghế */}
-      {day && time && selectedSchedule && <SeatBooking schedule={selectedSchedule}/>}
+      {day && time && selectedSchedule && (
+        <SeatBooking schedule={selectedSchedule} />
+      )}
     </div>
   );
 };

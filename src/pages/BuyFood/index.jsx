@@ -5,7 +5,7 @@ import CheckOutFood from './CheckOutFood';
 import Button from "../../components/Button/Button";
 
 const BuyCorn = () => {
-    const [selectedCinema, setSelectedCinema] = useState('');
+    // const [selectedCinema, setSelectedCinema] = useState('');
     const [selectedCombos, setSelectedCombos] = useState([]);
 
     const onSelectCombos = (combos) => {
@@ -15,13 +15,14 @@ const BuyCorn = () => {
     return (
         <div>
             <div className="container mx-auto px-4">
-                <div className='pt-[8rem] text-center'>
-                    <ChoseCinema setSelectedCinema={setSelectedCinema} />
-                    <ListCombo onSelectCombos={onSelectCombos} setSelectedCinema={setSelectedCinema} />
+                <div className='pt-[5rem] text-center'>
+                    {/* Sửa: bỏ cinema */}
+                    <ListCombo onSelectCombos={onSelectCombos}/>
                   
                 </div>
             </div>
-            <CheckOutFood selectedCinema={selectedCinema} selectedCombos={selectedCombos} />
+            {/* Bỏ cinema */}
+            <CheckOutFood selectedCombos={selectedCombos} />
         </div>
     );
 };
