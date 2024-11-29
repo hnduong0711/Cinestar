@@ -81,7 +81,7 @@ const ListCombo = ({ onSelectCombos, setSelectedCinema }) => {
     onSelectCombos(selectedCombos);
   }, [selectedCombos, onSelectCombos]);
 
-  console.log('selectedCombo: ',selectedCombos);
+  // console.log('selectedCombo: ',selectedCombos);
   
 
   return (
