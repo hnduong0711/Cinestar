@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { typeTikcet } from "../../constants/seatBooking";
 import Room from "../Room/Room";
 import TicketContext from "../../context/TicketContext/TicketContext";
@@ -7,7 +7,7 @@ import ListCombo from "../../pages/BuyFood/CompoFirst";
 import CheckOutFood from "../../pages/BuyFood/CheckOutFood";
 
 const SeatBooking = ({ schedule }) => {
-  const { setTicketData, searchData } = useContext(TicketContext);
+  const { ticketData, setTicketData, searchData } = useContext(TicketContext);
   const [seatQuantity, setSeatQuantity] = useState([{id: 1, type: 'single', soLuong: 0}, {id: 2, type: 'couple', soLuong: 0}]);
   const typeTicketRef = useRef(null);
   const [foodCombo, setFoodCombo] = useState([]);
@@ -31,12 +31,14 @@ const SeatBooking = ({ schedule }) => {
       }
     });
   };
+
   // Tăng số lượng ghế trong vé
   const handleIncrease = (id, type) => {
     const currentTicket = seatQuantity.find((ticket) => ticket.id === id);
     const newQuantity = currentTicket ? currentTicket.soLuong + 1 : 1;
     handleUpdate(id, type, newQuantity);
   };
+
   // Giảm số lượng ghế trong vé
   const handleDecrease = (id, type) => {
     const currentTicket = seatQuantity.find((ticket) => ticket.id === id);
@@ -51,6 +53,15 @@ const SeatBooking = ({ schedule }) => {
   function formatPrice(price) {
     return price.toLocaleString("vi-VN");
   }
+
+  // danh sách id ghế
+  
+
+  // danh sách id thức ăn
+  
+
+  // thêm 1 ghế
+  
   
 
   return (
@@ -118,6 +129,7 @@ const SeatBooking = ({ schedule }) => {
           schedule={schedule}
           setSeatQuantity={setSeatQuantity}
           typeTicketRef={typeTicketRef}
+          foodCombo={foodCombo}
         />
       )}
       {/* Chọn bắp nước */}

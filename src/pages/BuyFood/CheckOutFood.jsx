@@ -17,7 +17,7 @@ const CheckOutFood = ({
   const [isAtFooter, setIsAtFooter] = useState(false);
   const paymentBarRef = useRef(null);
 
-  console.log(ticketData.seats);
+  // console.log(ticketData.seats);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -69,36 +69,9 @@ const CheckOutFood = ({
     Object.values(totalPriceById).reduce((total, price) => total + price, 0) +
     totalPriceBySeats;
 
-  const listSeatId = ticketData.seats.reduce((acc, seat) => {
-    acc.push(seat.id)
-    return acc
-  }, [])
-
-  const listFoodId = selectedCombos.reduce((acc, food) => {
-    acc.push(food.id);
-    return acc;
-  }, [])
-
-  console.log(listFoodId);
-  
-
-  const handleTicket = async() => {
-    const storedData = sessionStorage.getItem("authToken");
-    const {token} = JSON.parse(storedData);
-    const data = {
-      movieScheduleId: schedule.id,
-      seatId: listSeatId,
-      foodId: listFoodId,
-      totalTicket: t
-    }
-    const response = await ticketService.addTicket(data, token)
-  };
-
   const handlePayment = () => {
     navigate("stepper", { state: { totalPrice, selectedCombos } }); // Gửi data đến Stepper
   };
-
-  console.log("seat ", selectedSeats);
 
   return (
     <div className="flex flex-col">

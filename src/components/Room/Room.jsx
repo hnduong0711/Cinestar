@@ -1,11 +1,12 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import { Screen } from "../../assets";
 import Seat from "./Seat";
 import TicketContext from "../../context/TicketContext/TicketContext";
 import { seatService } from "../../api/reservationService";
 import scheduleService from "../../api/scheduleService";
+import ticketService from "../../api/ticketService";
 
-const Room = ({ seatQuantity, schedule, setSeatQuantity, typeTicketRef }) => {
+const Room = ({ seatQuantity, schedule, typeTicketRef, foodCombo }) => {
   const [seats, setSeats] = useState([]);
   const [cols, setCols] = useState(0);
   const [rows, setRows] = useState(0);
@@ -16,10 +17,10 @@ const Room = ({ seatQuantity, schedule, setSeatQuantity, typeTicketRef }) => {
     singleSeats: 0,
     coupleSeats: 0,
   });
+  const [savedTicketId, setSavedTicketId] = useState(null);
 
   // console.log('ticket ',ticketData);
   // console.log('select ',selectedSeats.selectedList);
-  
 
   // lấy dữ liệu ghế
   useEffect(() => {
@@ -59,6 +60,29 @@ const Room = ({ seatQuantity, schedule, setSeatQuantity, typeTicketRef }) => {
   const bookedSeatKeys = new Set(
     bookedSeats.map((seat) => `${seat.row}-${seat.column}`)
   );
+
+  const isInitialMount = useRef(true);
+  console.log("id of ticket:", savedTicketId);
+  
+
+  // kiểm tra coi state đã cập nhật chưa
+  useEffect(() => {
+    if (isInitialMount.current) {
+      // Bỏ qua lần chạy đầu tiên
+      isInitialMount.current = false;
+      return;
+    }
+
+    if (ticketData.seats.length > 0 || foodCombo.length > 0) {
+      if(savedTicketId === null ){
+        createTicket();
+      }else{
+        updateTicket();
+      }
+    } else if (ticketData.seats.length === 0 && foodCombo.length === 0) {
+      deleteTicket();
+    }
+  }, [ticketData.seats, foodCombo]);
 
   // chọn ghế
   const handleChoice = (seat) => {
@@ -109,14 +133,16 @@ const Room = ({ seatQuantity, schedule, setSeatQuantity, typeTicketRef }) => {
             block: "center",
           });
         }
-        setTicketData({
-          seats: prevSelectedSeats.selectedList,
-        });
+        setTicketData((prevData) => ({
+          ...prevData,
+          seats: prevSelectedSeats.selectedList, // Cập nhật `seats` trong `ticketData`
+        }));
         return prevSelectedSeats; // Không cập nhật nếu vượt số lượng
       }
-      setTicketData({
-        seats: updatedSelectedList,
-      });
+      setTicketData((prevData) => ({
+        ...prevData,
+        seats: updatedSelectedList, // Cập nhật `seats` trong `ticketData`
+      }));
       return {
         ...prevSelectedSeats,
         selectedList: updatedSelectedList,
@@ -125,6 +151,51 @@ const Room = ({ seatQuantity, schedule, setSeatQuantity, typeTicketRef }) => {
       };
     });
   };
+
+  // tạo vé khi bấm vào ghế để giữ ghế
+  const createTicket = async () => {
+    const storedData = sessionStorage.getItem("authToken");
+    const { token } = JSON.parse(storedData);
+    const listSeatId = ticketData.seats.map((seat) => seat.id);
+    const listFoodId = foodCombo.map((food) => food.id);
+    const data = {
+      movieScheduleId: schedule.id,
+      seatId: listSeatId,
+      foodId: listFoodId,
+      totalTicket: 1,
+      totalPrice: 1,
+      userId: "aaa",
+    };
+    const response = await ticketService.addTicket(data, token);
+    setSavedTicketId(response.id);
+  };
+
+  // xóa vé khi không còn chọn ghế nào
+  const deleteTicket = async () => {
+    const storedData = sessionStorage.getItem("authToken");
+    const { token } = JSON.parse(storedData);
+    const response = await ticketService.deleteTicketById(savedTicketId, token);
+    console.log("delete:", response); 
+    setSavedTicketId(null);
+  };
+
+  const updateTicket = async () => {
+    const storedData = sessionStorage.getItem("authToken");
+    const { token } = JSON.parse(storedData);
+    const listSeatId = ticketData.seats.map((seat) => seat.id);
+    const listFoodId = foodCombo.map((food) => food.id);
+    const data = {
+      movieScheduleId: schedule.id,
+      seatId: listSeatId,
+      foodId: listFoodId,
+      totalTicket: 1,
+      totalPrice: 1,
+      userId: "aaa",
+    };
+    const response = await ticketService.updateTicket(savedTicketId, data, token);
+    console.log(response);
+    
+  }
 
   // console.log("selected ", selectedSeats.selectedList);
   // console.log("seatQuan ", seatQuantity);
