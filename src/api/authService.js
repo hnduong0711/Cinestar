@@ -69,9 +69,9 @@ const verifyToken = async (token) => {
 
     if (response.status === 200 && response.data) {
       const username = response.data.username;
-      console.log('username: ',username);
+      const id = response.data.id;
       
-      sessionStorage.setItem("username", JSON.stringify({username}))
+      sessionStorage.setItem("username", JSON.stringify({id, username}))
       return true;
     } else {
       return false;

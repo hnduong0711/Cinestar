@@ -1,8 +1,9 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Button from "../Button/Button";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import { login, registerUser } from "../../api/authService";
 import { useNavigate } from "react-router-dom";
+
 const Login = () => {
   const [haveAccount, setHaveAccount] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
@@ -15,6 +16,13 @@ const Login = () => {
   // Ref
   const passwordRef = useRef(null);
   const loginRef = useRef(null);
+
+  useEffect(() => {
+    const storedData = JSON.parse(sessionStorage.getItem("authToken"));
+    if (storedData) {
+      navigate('/user');
+    }
+  }, []);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
