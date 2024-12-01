@@ -2,51 +2,60 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { typeTikcet } from "../../constants/seatBooking";
 import Room from "../Room/Room";
 import TicketContext from "../../context/TicketContext/TicketContext";
-import BuyCorn from '../../pages/BuyFood/index'
+import BuyCorn from "../../pages/BuyFood/index";
 import ListCombo from "../../pages/BuyFood/CompoFirst";
 import CheckOutFood from "../../pages/BuyFood/CheckOutFood";
 
 const SeatBooking = ({ schedule }) => {
   const { ticketData, setTicketData, searchData } = useContext(TicketContext);
-  const [seatQuantity, setSeatQuantity] = useState([{id: 1, type: 'single', soLuong: 0}, {id: 2, type: 'couple', soLuong: 0}]);
   const typeTicketRef = useRef(null);
   const [foodCombo, setFoodCombo] = useState([]);
 
   // Cập nhật số lượng ghế trong vé
+  const [seatQuantity, setSeatQuantity] = useState([]);
+
+  // Hàm cập nhật ghế
   const handleUpdate = (id, type, newQuantity) => {
     setSeatQuantity((prevSeatQuantity) => {
-      // Kiểm tra xem vé có tồn tại trong state chưa
+      // Nếu số lượng là 0, xóa ghế khỏi danh sách
+      if (newQuantity === 0) {
+        return prevSeatQuantity.filter((ticket) => ticket.id !== id);
+      }
+
+      // Kiểm tra xem vé có tồn tại không
       const existingTicket = prevSeatQuantity.find(
         (ticket) => ticket.id === id
       );
 
       if (existingTicket) {
-        // Nếu đã có, cập nhật số lượng
+        // Nếu tồn tại, cập nhật số lượng
         return prevSeatQuantity.map((ticket) =>
           ticket.id === id ? { ...ticket, soLuong: newQuantity } : ticket
         );
       } else {
-        // Nếu chưa có, thêm vé mới vào
+        // Nếu chưa có, thêm ghế mới vào danh sách
         return [...prevSeatQuantity, { id, type, soLuong: newQuantity }];
       }
     });
   };
 
-  // Tăng số lượng ghế trong vé
+  // Hàm tăng số lượng ghế
   const handleIncrease = (id, type) => {
     const currentTicket = seatQuantity.find((ticket) => ticket.id === id);
     const newQuantity = currentTicket ? currentTicket.soLuong + 1 : 1;
     handleUpdate(id, type, newQuantity);
   };
 
-  // Giảm số lượng ghế trong vé
+  // Hàm giảm số lượng ghế
   const handleDecrease = (id, type) => {
     const currentTicket = seatQuantity.find((ticket) => ticket.id === id);
-    const newQuantity =
-      currentTicket && currentTicket.soLuong > 0
-        ? currentTicket.soLuong - 1
-        : 0;
-    handleUpdate(id, type, newQuantity);
+    const newQuantity = currentTicket ? currentTicket.soLuong - 1 : 0;
+    setTicketData((prev) => ({
+      ...prev,
+      seats: [],
+      foods: [],
+    }));
+    handleUpdate(id, type, Math.max(newQuantity, 0)); // Đảm bảo số lượng không âm
   };
 
   // format price
@@ -54,20 +63,13 @@ const SeatBooking = ({ schedule }) => {
     return price.toLocaleString("vi-VN");
   }
 
-  // danh sách id ghế
-  
-
-  // danh sách id thức ăn
-  
-
-  // thêm 1 ghế
-  
-  
-
   return (
     <div className="flex flex-col">
       {/* Chọn số lượng ghế */}
-      <div ref={typeTicketRef} className="flex flex-col items-center gap-10 w-full">
+      <div
+        ref={typeTicketRef}
+        className="flex flex-col items-center gap-10 w-full"
+      >
         <div className="heading text-white text-ceter">Chọn loại vé</div>
         <div className="grid lg:grid-cols-2 grid-rows-1 gap-5 w-full pb-20">
           {typeTikcet.map((ticket) => {
@@ -133,9 +135,15 @@ const SeatBooking = ({ schedule }) => {
         />
       )}
       {/* Chọn bắp nước */}
-      <ListCombo onSelectCombos={setFoodCombo} />
+      {seatQuantity.length > 0 && (
+        <ListCombo onSelectCombos={setFoodCombo} />
+      )}
       {/* Thanh toán */}
-      <CheckOutFood selectedCombos={foodCombo} selectedSeats={seatQuantity} schedule={schedule}/>
+      <CheckOutFood
+        selectedCombos={foodCombo}
+        selectedSeats={seatQuantity}
+        schedule={schedule}
+      />
     </div>
   );
 };

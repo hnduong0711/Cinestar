@@ -1,8 +1,7 @@
-import React, { useContext, useEffect, useState, useRef } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Screen } from "../../assets";
 import Seat from "./Seat";
 import TicketContext from "../../context/TicketContext/TicketContext";
-import { seatService } from "../../api/reservationService";
 import scheduleService from "../../api/scheduleService";
 import ticketService from "../../api/ticketService";
 
@@ -11,7 +10,7 @@ const Room = ({ seatQuantity, schedule, typeTicketRef, foodCombo }) => {
   const [cols, setCols] = useState(0);
   const [rows, setRows] = useState(0);
   const [bookedSeats, setBookedSeats] = useState([]);
-  const { ticketData, setTicketData } = useContext(TicketContext);
+  const { ticketData, setTicketData, setTicket } = useContext(TicketContext);
   const [selectedSeats, setSelectedSeats] = useState({
     selectedList: [],
     singleSeats: 0,
@@ -19,8 +18,8 @@ const Room = ({ seatQuantity, schedule, typeTicketRef, foodCombo }) => {
   });
   const [savedTicketId, setSavedTicketId] = useState(null);
 
-  // console.log('ticket ',ticketData);
-  // console.log('select ',selectedSeats.selectedList);
+  console.log("ticket ", ticketData);
+  // console.log('foodCobmo ',foodCombo.length);
 
   // lấy dữ liệu ghế
   useEffect(() => {
@@ -61,26 +60,19 @@ const Room = ({ seatQuantity, schedule, typeTicketRef, foodCombo }) => {
     bookedSeats.map((seat) => `${seat.row}-${seat.column}`)
   );
 
-  const isInitialMount = useRef(true);
-  console.log("id of ticket:", savedTicketId);
-  
-
   // kiểm tra coi state đã cập nhật chưa
   useEffect(() => {
-    if (isInitialMount.current) {
-      // Bỏ qua lần chạy đầu tiên
-      isInitialMount.current = false;
-      return;
-    }
-
-    if (ticketData.seats.length > 0 || foodCombo.length > 0) {
-      if(savedTicketId === null ){
+    if (ticketData.seats.length > 0) {
+      if (savedTicketId === null) {
         createTicket();
-      }else{
+      } else {
         updateTicket();
       }
-    } else if (ticketData.seats.length === 0 && foodCombo.length === 0) {
-      deleteTicket();
+    } else if (
+      savedTicketId !== null &&
+      (ticketData.seats.length === 0 || foodCombo.length === 0)
+    ) {
+      deleteTicket(); // Chỉ gọi delete khi có savedTicketId
     }
   }, [ticketData.seats, foodCombo]);
 
@@ -167,6 +159,8 @@ const Room = ({ seatQuantity, schedule, typeTicketRef, foodCombo }) => {
       userId: "aaa",
     };
     const response = await ticketService.addTicket(data, token);
+    console.log("Tạo ", response);
+    setTicket(response);
     setSavedTicketId(response.id);
   };
 
@@ -175,7 +169,12 @@ const Room = ({ seatQuantity, schedule, typeTicketRef, foodCombo }) => {
     const storedData = sessionStorage.getItem("authToken");
     const { token } = JSON.parse(storedData);
     const response = await ticketService.deleteTicketById(savedTicketId, token);
-    console.log("delete:", response); 
+    console.log("Xóa thành công");
+    setSelectedSeats((prev) => ({
+      ...prev,
+      selectedList: [],
+    }));
+    setTicket({});
     setSavedTicketId(null);
   };
 
@@ -192,13 +191,15 @@ const Room = ({ seatQuantity, schedule, typeTicketRef, foodCombo }) => {
       totalPrice: 1,
       userId: "aaa",
     };
-    const response = await ticketService.updateTicket(savedTicketId, data, token);
-    console.log(response);
-    
-  }
-
-  // console.log("selected ", selectedSeats.selectedList);
-  // console.log("seatQuan ", seatQuantity);
+    const response = await ticketService.updateTicket(
+      savedTicketId,
+      data,
+      token
+    );
+    console.log("Cập nhật: ", response);
+    setTicket(response);
+  };
+  
 
   return (
     <div className="flex flex-col gap-5 justify-center">
