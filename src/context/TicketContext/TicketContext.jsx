@@ -26,6 +26,7 @@ const TicketContext = React.createContext({
   setTicketData: () => {},
   // ticket
   ticket: null,
+  setTicket: () => {}
 });
 
 export default TicketContext;

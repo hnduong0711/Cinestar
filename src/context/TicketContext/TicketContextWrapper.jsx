@@ -31,7 +31,7 @@ const TicketContextWrapper = (props) => {
     foods: []
   });
 
-  const [ticket, setTicket] = useState({})
+  const [ticket, setTicket] = useState(null)
 
   return (
     <TicketContext.Provider value={{

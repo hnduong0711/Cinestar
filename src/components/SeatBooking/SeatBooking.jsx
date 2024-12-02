@@ -7,12 +7,20 @@ import ListCombo from "../../pages/BuyFood/CompoFirst";
 import CheckOutFood from "../../pages/BuyFood/CheckOutFood";
 
 const SeatBooking = ({ schedule }) => {
-  const { ticketData, setTicketData, searchData } = useContext(TicketContext);
+  const { ticketData, setTicketData, searchData, ticket } =
+    useContext(TicketContext);
   const typeTicketRef = useRef(null);
   const [foodCombo, setFoodCombo] = useState([]);
 
   // Cập nhật số lượng ghế trong vé
   const [seatQuantity, setSeatQuantity] = useState([]);
+
+  useEffect(() => {
+    setTicketData((prev) => ({
+      ...prev,
+      room: schedule.roomNumber,
+    }));
+  }, []);
 
   // Hàm cập nhật ghế
   const handleUpdate = (id, type, newQuantity) => {
@@ -135,15 +143,15 @@ const SeatBooking = ({ schedule }) => {
         />
       )}
       {/* Chọn bắp nước */}
-      {seatQuantity.length > 0 && (
-        <ListCombo onSelectCombos={setFoodCombo} />
-      )}
+      {seatQuantity.length > 0 && <ListCombo onSelectCombos={setFoodCombo} />}
       {/* Thanh toán */}
-      <CheckOutFood
-        selectedCombos={foodCombo}
-        selectedSeats={seatQuantity}
-        schedule={schedule}
-      />
+      {ticket && (
+        <CheckOutFood
+          selectedCombos={foodCombo}
+          selectedSeats={seatQuantity}
+          schedule={schedule}
+        />
+      )}
     </div>
   );
 };

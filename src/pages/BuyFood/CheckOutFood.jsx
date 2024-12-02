@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import Button from "../../components/Button/Button";
 import { useNavigate } from "react-router-dom"; // Thêm dòng này
 import TicketContext from "../../context/TicketContext/TicketContext";
+import ticketService from "../../api/ticketService";
 
 const CheckOutFood = ({
   schedule,
@@ -10,35 +11,46 @@ const CheckOutFood = ({
   selectedSeats,
 }) => {
   const navigate = useNavigate();
-  const { searchData, ticketData, ticket } = useContext(TicketContext);
+  const { searchData, ticketData, ticket, setTicket } = useContext(TicketContext);
+
+  const deleteTicket = async () => {
+    const storedData = sessionStorage.getItem("authToken");
+    const { token } = JSON.parse(storedData);
+    const response = await ticketService.deleteTicketById(ticket.id, token);
+    console.log("Xóa thành công");
+    setTicket({});
+  };
 
   // tạo sticky
   const [isAtFooter, setIsAtFooter] = useState(false);
   const paymentBarRef = useRef(null);
 
   // tạo countdown
-  // const [timeLeft, setTimeLeft] = useState(300); // Thời gian chờ
-  // const timerRef = useRef(null);
-  // const handleTimeout = () => {
-  //   alert("Hết thời gian đặt vé, vui lòng thử lại!");
-  //   // Reset trạng thái ứng dụng tại đây
-  // };
+  const [timeLeft, setTimeLeft] = useState(10); // Thời gian chờ
+  const timerRef = useRef(null);
+  const handleTimeout = () => {
+    alert("Hết thời gian đặt vé, vui lòng thử lại!");
+    window.location.reload();
+    window.scrollTo(0,0);
+    deleteTicket();
+    // Reset trạng thái ứng dụng tại đây
+  };
 
-  // useEffect(() => {
-  //   // Countdown logic
-  //   timerRef.current = setInterval(() => {
-  //     setTimeLeft((prevTime) => {
-  //       if (prevTime <= 1) {
-  //         clearInterval(timerRef.current);
-  //         handleTimeout(); // Gọi hàm hủy vé khi hết thời gian
-  //         return 0;
-  //       }
-  //       return prevTime - 1;
-  //     });
-  //   }, 1000);
+  useEffect(() => {
+    // Countdown logic
+    timerRef.current = setInterval(() => {
+      setTimeLeft((prevTime) => {
+        if (prevTime <= 1) {
+          clearInterval(timerRef.current);
+          handleTimeout(); // Gọi hàm hủy vé khi hết thời gian
+          return 0;
+        }
+        return prevTime - 1;
+      });
+    }, 1000);
 
-  //   return () => clearInterval(timerRef.current); // Dọn dẹp setInterval khi component unmount
-  // }, [handleTimeout]);
+    return () => clearInterval(timerRef.current); // Dọn dẹp setInterval khi component unmount
+  }, [handleTimeout]);
 
   // console.log(ticketData.seats);
 
@@ -92,7 +104,19 @@ const CheckOutFood = ({
     Object.values(totalPriceById).reduce((total, price) => total + price, 0) +
     totalPriceBySeats;
 
-  const handlePayment = () => {};
+  // hàm thanh toán
+  const handlePayment = () => {
+    navigate('/payment');
+  };
+
+  // đổi sang phút giây
+  const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${
+      remainingSeconds < 10 ? "0" : ""
+    }${remainingSeconds}`;
+  };
 
   return (
     <div className="flex flex-col">
@@ -142,7 +166,9 @@ const CheckOutFood = ({
               <div className="w-[40%] flex space-x-3 items-center">
                 <div className="bg-cinestar-gold text-black rounded-md p-2 font-title">
                   <div className="text-[14px]">Thời gian giữ vé:</div>
-                  <div className="text-[24px] font-bold">5:00</div>
+                  <div className="text-[24px] font-bold">
+                    {formatTime(timeLeft)}
+                  </div>
                 </div>
 
                 <div className="flex flex-col items-center m-auto">
@@ -151,7 +177,9 @@ const CheckOutFood = ({
                       ticket.discountId ? "line-through" : ""
                     }`}
                   >
-                    <div className="">Tạm tính</div>
+                    <div className="">
+                      {ticket.discountId ? "Tạm tính" : "Tổng"}
+                    </div>
                     <div className="">{totalPrice.toLocaleString()} VNĐ</div>
                   </div>
                   {ticket.discountId && (
