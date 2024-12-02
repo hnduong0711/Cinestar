@@ -27,10 +27,11 @@ const TicketContextWrapper = (props) => {
   // Detail booking
   const [ticketData, setTicketData] = useState({
     room: null,
-    seatNum: null,
     seats: [],
     foods: []
   });
+
+  const [ticket, setTicket] = useState(null)
 
   return (
     <TicketContext.Provider value={{
@@ -40,7 +41,9 @@ const TicketContextWrapper = (props) => {
         setStatusData,
         openList,
         ticketData,
-        setTicketData
+        setTicketData,
+        ticket,
+        setTicket
     }}>
         {props.children}
     </TicketContext.Provider>

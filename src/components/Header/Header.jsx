@@ -12,21 +12,41 @@ import ComboBox from "../Cbbox/ComboBox";
 import GlobalContext from "../../context/GlobalContext/GlobalContext";
 import SearchModal from "../Modal/SearchModal";
 import { listTheater, subnav } from "../../constants/header";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import {
+  UserCircleIcon,
+  ArrowLeftEndOnRectangleIcon,
+} from "@heroicons/react/24/outline";
 
 const Header = () => {
   const isSmallScreen = useWindowSize();
   const { setIsShowModal } = useContext(GlobalContext);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const usernameData = sessionStorage.getItem("username");
-  const username = usernameData
-    ? JSON.parse(usernameData)["username"]
-    : "Đăng nhập";
+  const [username, setUsername] = useState(
+    JSON.parse(sessionStorage.getItem("username"))?.username || "Đăng nhập"
+  );
+
+  useEffect(() => {
+    const storedData = sessionStorage.getItem("username");
+    setUsername(JSON.parse(storedData)?.username || "Đăng nhập");
+  }, [sessionStorage.getItem("username")]);
 
   const showModal = () => {
     setIsShowModal((prev) => !prev);
+  };
+
+  const handleLogout = () => {
+    sessionStorage.removeItem("authToken");
+    sessionStorage.removeItem("username");
+    setUsername("Đăng nhập");
+
+    if (location.pathname === "/user") {
+      navigate("/login"); // Chuyển hướng đến trang login
+    }
   };
 
   const handleClick = () => {
@@ -82,13 +102,44 @@ const Header = () => {
           />
         </div>
         {/* Login */}
-        <div className="">
-          <Link className="text-white flex items-center" to="login">
-            <img src={UserIcon} alt="user" width={24} height={24} />
-            <span className="ml-2 hidden lg:block hover:text-cinestar-gold hover:transition-all">
-              {username}
-            </span>
-          </Link>
+        <div className="relative w-[13%] text-white">
+          {username !== "Đăng nhập" ? (
+            // Người dùng đã đăng nhập
+            <div className="group w-full">
+              {/* Hiển thị tên và biểu tượng */}
+              <div className="flex items-center gap-2 cursor-pointer after:h-[25px] after:w-[50%] after:absolute after:top-3">
+                <UserCircleIcon className="w-6 h-6" />
+                <span>{username}</span>
+              </div>
+
+              {/* Dropdown menu */}
+              <div className="absolute mt-2 -left-[50%] bg-cinestar-black border border-slate-500 rounded-md p-3 flex-col space-y-3 hidden group-hover:flex w-full text-[14px]">
+                <Link
+                  to="user"
+                  className="flex items-center gap-2 hover:text-cinestar-gold"
+                >
+                  <UserCircleIcon className="w-6 h-6" />
+                  <span>Thông tin cá nhân</span>
+                </Link>
+                <div
+                  onClick={handleLogout}
+                  className="flex items-center gap-2 cursor-pointer hover:text-cinestar-gold"
+                >
+                  <ArrowLeftEndOnRectangleIcon className="w-6 h-6" />
+                  <span>Đăng xuất</span>
+                </div>
+              </div>
+            </div>
+          ) : (
+            // Người dùng chưa đăng nhập
+            <Link
+              to="login"
+              className="flex items-center gap-2 text-white hover:text-cinestar-gold transition-all duration-300"
+            >
+              <img src={UserIcon} alt="user" width={24} height={24} />
+              <span className="hidden lg:block">{username}</span>
+            </Link>
+          )}
         </div>
       </div>
 

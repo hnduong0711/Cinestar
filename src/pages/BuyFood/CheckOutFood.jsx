@@ -11,11 +11,46 @@ const CheckOutFood = ({
   selectedSeats,
 }) => {
   const navigate = useNavigate();
-  const { searchData, ticketData } = useContext(TicketContext);
+  const { searchData, ticketData, ticket, setTicket } = useContext(TicketContext);
+
+  const deleteTicket = async () => {
+    const storedData = sessionStorage.getItem("authToken");
+    const { token } = JSON.parse(storedData);
+    const response = await ticketService.deleteTicketById(ticket.id, token);
+    console.log("Xóa thành công");
+    setTicket({});
+  };
 
   // tạo sticky
   const [isAtFooter, setIsAtFooter] = useState(false);
   const paymentBarRef = useRef(null);
+
+  // tạo countdown
+  const [timeLeft, setTimeLeft] = useState(10); // Thời gian chờ
+  const timerRef = useRef(null);
+  const handleTimeout = () => {
+    alert("Hết thời gian đặt vé, vui lòng thử lại!");
+    window.location.reload();
+    window.scrollTo(0,0);
+    deleteTicket();
+    // Reset trạng thái ứng dụng tại đây
+  };
+
+  useEffect(() => {
+    // Countdown logic
+    timerRef.current = setInterval(() => {
+      setTimeLeft((prevTime) => {
+        if (prevTime <= 1) {
+          clearInterval(timerRef.current);
+          handleTimeout(); // Gọi hàm hủy vé khi hết thời gian
+          return 0;
+        }
+        return prevTime - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timerRef.current); // Dọn dẹp setInterval khi component unmount
+  }, [handleTimeout]);
 
   // console.log(ticketData.seats);
 
@@ -69,13 +104,23 @@ const CheckOutFood = ({
     Object.values(totalPriceById).reduce((total, price) => total + price, 0) +
     totalPriceBySeats;
 
+  // hàm thanh toán
   const handlePayment = () => {
-    navigate("stepper", { state: { totalPrice, selectedCombos } }); // Gửi data đến Stepper
+    navigate('/payment');
+  };
+
+  // đổi sang phút giây
+  const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${
+      remainingSeconds < 10 ? "0" : ""
+    }${remainingSeconds}`;
   };
 
   return (
     <div className="flex flex-col">
-      {totalPrice > 0 && (
+      {ticketData.seats.length > 0 && (
         <div
           ref={paymentBarRef}
           className={`bg-cinestar-black w-full h-[150px] text-[15px] font-content p-4 text-white fixed bottom-0 z-10 left-0 transition-all duration-200 ${
@@ -118,18 +163,41 @@ const CheckOutFood = ({
               </div>
               <div className="w-[1px] bg-gray-300 mx-4"></div>
               {/* Thông tin thanh toán */}
-              <div className="flex flex-col items-center m-auto w-[40%]">
-                <div className="w-full flex justify-between p-2 text-[20px] font-bold">
-                  <div className="">Tạm tính</div>
-                  <div className="">{totalPrice.toLocaleString()} VNĐ</div>
+              <div className="w-[40%] flex space-x-3 items-center">
+                <div className="bg-cinestar-gold text-black rounded-md p-2 font-title">
+                  <div className="text-[14px]">Thời gian giữ vé:</div>
+                  <div className="text-[24px] font-bold">
+                    {formatTime(timeLeft)}
+                  </div>
                 </div>
-                <div>
-                  <Button
-                    className="button md:button bg-cinestar-black w-[400px] h-[40px] hidden group items-center  border border-solid border-white"
-                    text="THANH TOÁN"
-                    colorChange="bg-oragan-yellow-dradient"
-                    onClick={handlePayment} // Sử dụng hàm handlePayment
-                  />
+
+                <div className="flex flex-col items-center m-auto">
+                  <div
+                    className={`w-full flex justify-between px-2 py-1 text-[18px] font-bold ${
+                      ticket.discountId ? "line-through" : ""
+                    }`}
+                  >
+                    <div className="">
+                      {ticket.discountId ? "Tạm tính" : "Tổng"}
+                    </div>
+                    <div className="">{totalPrice.toLocaleString()} VNĐ</div>
+                  </div>
+                  {ticket.discountId && (
+                    <div className="w-full flex justify-between px-2 py-1 text-[18px] font-bold text-cinestar-gold">
+                      <div className="">Tổng</div>
+                      <div className="">
+                        {ticket.totalAmount.toLocaleString()} VNĐ
+                      </div>
+                    </div>
+                  )}
+                  <div>
+                    <Button
+                      className="button md:button bg-cinestar-black w-[300px] h-[40px] hidden group items-center  border border-solid border-white"
+                      text="THANH TOÁN"
+                      colorChange="bg-oragan-yellow-dradient"
+                      onClick={handlePayment} // Sử dụng hàm handlePayment
+                    />
+                  </div>
                 </div>
               </div>
             </div>

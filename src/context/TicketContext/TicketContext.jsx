@@ -24,6 +24,9 @@ const TicketContext = React.createContext({
     foods: [],
   },
   setTicketData: () => {},
+  // ticket
+  ticket: null,
+  setTicket: () => {}
 });
 
 export default TicketContext;
