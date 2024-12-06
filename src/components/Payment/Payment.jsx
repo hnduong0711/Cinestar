@@ -20,6 +20,32 @@ const Payment = ({ timeLeft }) => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    // Lấy toàn bộ URL
+    const currentUrl = window.location.href;
+  
+    // Lấy các tham số query string
+    const urlParams = new URLSearchParams(window.location.search);
+  
+    // Ví dụ lấy các giá trị cụ thể
+    const vnpAmount = urlParams.get("vnp_Amount");
+    const vnpResponseCode = urlParams.get("vnp_ResponseCode");
+    const vnpTransactionStatus = urlParams.get("vnp_TransactionStatus");
+  
+    console.log("Full URL:", currentUrl);
+    console.log("Amount:", vnpAmount);
+    console.log("Response Code:", vnpResponseCode);
+    console.log("Transaction Status:", vnpTransactionStatus);
+  
+    // Kiểm tra nếu thanh toán thành công
+    if (vnpResponseCode === "00" && vnpTransactionStatus === "00") {
+      console.log("Payment successful!");
+    } else {
+      console.log("Payment failed!");
+    }
+  }, []);
+  
+
   const handlePayment = async () => {
     const { token } = JSON.parse(sessionStorage.getItem("authToken"));
     const data = {
@@ -30,12 +56,18 @@ const Payment = ({ timeLeft }) => {
       Name: user.username,
       UserId: user.id,
     };
-    console.log(data);
-    console.log(token);
-    
-    
     const response = await paymentSerVice.createPayment(data, token);
-    console.log(response);
+    window.location.href = response;
+
+    const urlParams = new URLSearchParams(window.location.search);
+
+    const vnpAmount = urlParams.get("vnp_Amount");
+    const vnpBankCode = urlParams.get("vnp_BankCode");
+    const vnpTransactionStatus = urlParams.get("vnp_TransactionStatus");
+
+    console.log("Amount:", vnpAmount);
+    console.log("Bank Code:", vnpBankCode);
+    console.log("Transaction Status:", vnpTransactionStatus);
   };
 
   return (

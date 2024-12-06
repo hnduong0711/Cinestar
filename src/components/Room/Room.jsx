@@ -156,7 +156,7 @@ const Room = ({ seatQuantity, schedule, typeTicketRef, foodCombo }) => {
       foodId: listFoodId,
       totalTicket: 1,
       totalPrice: 1,
-      userId: "aaa",
+      userId: JSON.parse(sessionStorage.getItem("username")).id,
     };
     const response = await ticketService.addTicket(data, token);
     console.log("Tạo ", response);
@@ -189,7 +189,7 @@ const Room = ({ seatQuantity, schedule, typeTicketRef, foodCombo }) => {
       foodId: listFoodId,
       totalTicket: 1,
       totalPrice: 1,
-      userId: "aaa",
+      userId: JSON.parse(sessionStorage.getItem("username")).id,
     };
     const response = await ticketService.updateTicket(
       savedTicketId,
