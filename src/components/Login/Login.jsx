@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Button from "../Button/Button";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import { login, registerUser } from "../../api/authService";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [haveAccount, setHaveAccount] = useState(true);
@@ -20,7 +20,7 @@ const Login = () => {
   useEffect(() => {
     const storedData = JSON.parse(sessionStorage.getItem("authToken"));
     if (storedData) {
-      navigate('/user');
+      navigate("/user");
     }
   }, []);
 
@@ -169,6 +169,9 @@ const Login = () => {
                   <EyeSlashIcon className="w-6 h-6 text-gray-500" /> // Icon khi ẩn mật khẩu
                 )}
               </span>
+            </div>
+            <div className="flex justify-end text-sm text-blue-500 underline cursor-pointer">
+              <Link to="/forgetpass">Quên mật khẩu</Link>
             </div>
             <div className="pt-10">
               <Button

@@ -26,7 +26,7 @@ const CheckOutFood = ({
   const paymentBarRef = useRef(null);
 
   // tạo countdown
-  const [timeLeft, setTimeLeft] = useState(10); // Thời gian chờ
+  const [timeLeft, setTimeLeft] = useState(300); // Thời gian chờ
   const timerRef = useRef(null);
   const handleTimeout = () => {
     alert("Hết thời gian đặt vé, vui lòng thử lại!");

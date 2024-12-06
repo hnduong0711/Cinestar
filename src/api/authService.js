@@ -70,8 +70,8 @@ const verifyToken = async (token) => {
     if (response.status === 200 && response.data) {
       const username = response.data.username;
       const id = response.data.id;
-      
-      sessionStorage.setItem("username", JSON.stringify({id, username}))
+
+      sessionStorage.setItem("username", JSON.stringify({ id, username }));
       return true;
     } else {
       return false;
@@ -96,7 +96,6 @@ const registerUser = async (username, password, email) => {
       body,
       {
         headers: {
-          // Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       }
@@ -110,6 +109,21 @@ const registerUser = async (username, password, email) => {
       "Error during registration:",
       error.response?.data || error.message
     );
+  }
+};
+
+const getOTP = async (email, token) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:5006/auth/api/Mail/confirm?email=${email}&token=${token}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  } catch (error) {
+    console.log(error);
   }
 };
 
