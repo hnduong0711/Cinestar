@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import SeatBooking from "../SeatBooking/SeatBooking";
 import TicketContext from "../../context/TicketContext/TicketContext";
@@ -8,6 +8,7 @@ import foodService from "../../api/foodService";
 
 const MovieSchedule = ({ idFilm }) => {
   const { searchData, setSearchData } = useContext(TicketContext);
+  const theaterRef = useRef(null);
 
   // Ngày trong tuần
   const days = [
@@ -110,25 +111,18 @@ const MovieSchedule = ({ idFilm }) => {
     setSearchData((prev) => ({ ...prev, time: selectedTime }));
   };
 
-  // const handleSelectTheater = (selectedTheater) => {
-  //   setTheater(selectedTheater);
-  //   setSearchData((prev) => ({ ...prev, theater: selectedTheater }));
-  // };
-
   const selectedSchedule = useMemo(() => {
     return (
       formattedSchedule[day]?.find((item) => item.showTime === time) || null
     );
   }, [day, time, formattedSchedule]);
 
-  // console.log('format schedule: ', formattedSchedule[day]);
-  // console.log('selected ',selectedSchedule);
 
   return (
     <div className="space-y-8">
       {/* Chọn rạp */}
       <div className="heading text-white text-center">Rạp Chiếu</div>
-      <div className="w-full h-14">
+      <div className="w-full h-14" ref={theaterRef}>
         <select
           className="border border-cinestar-gold rounded-md w-full h-full text-xl font-bold text-center"
           value={theater}
@@ -182,7 +176,7 @@ const MovieSchedule = ({ idFilm }) => {
 
       {/* Chọn ghế */}
       {day && time && selectedSchedule && (
-        <SeatBooking schedule={selectedSchedule} />
+        <SeatBooking schedule={selectedSchedule} theaterRef={theaterRef}/>
       )}
     </div>
   );

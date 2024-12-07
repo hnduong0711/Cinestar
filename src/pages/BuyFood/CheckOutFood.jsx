@@ -7,11 +7,14 @@ import ticketService from "../../api/ticketService";
 const CheckOutFood = ({
   schedule,
   selectedCombos,
-  onPayment,
+  theaterRef,
   selectedSeats,
 }) => {
   const navigate = useNavigate();
-  const { searchData, ticketData, ticket, setTicket } = useContext(TicketContext);
+  const { searchData, ticketData, ticket, setTicket } =
+    useContext(TicketContext);
+
+  console.log(searchData);
 
   const deleteTicket = async () => {
     const storedData = sessionStorage.getItem("authToken");
@@ -31,7 +34,7 @@ const CheckOutFood = ({
   const handleTimeout = () => {
     alert("Hết thời gian đặt vé, vui lòng thử lại!");
     window.location.reload();
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
     deleteTicket();
     // Reset trạng thái ứng dụng tại đây
   };
@@ -106,16 +109,23 @@ const CheckOutFood = ({
 
   // hàm thanh toán
   const handlePayment = () => {
-    navigate('/payment');
+    if (searchData.theater === null || searchData.theater === "") {
+      if (theaterRef.current) {
+        theaterRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }
+    } else {
+      navigate("/payment");
+    }
   };
 
   // đổi sang phút giây
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
-    return `${minutes}:${
-      remainingSeconds < 10 ? "0" : ""
-    }${remainingSeconds}`;
+    return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
   };
 
   return (

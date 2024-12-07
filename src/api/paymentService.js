@@ -6,8 +6,8 @@ const paymentSerVice = {
   createPayment: async (data, token) => {
     console.log("api token", token);
     console.log("api data", data);
-    console.log('api url', `${payment_base_url}/create_payment_url`);
-    
+    console.log("api url", `${payment_base_url}/create_payment_url`);
+
     try {
       const response = await axios.post(
         `${payment_base_url}/create_payment_url`,
@@ -19,6 +19,20 @@ const paymentSerVice = {
           },
         }
       );
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  acceptPayment: async (url, token) => {
+    try {
+      const response = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
       return response.data;
     } catch (error) {
       console.log(error);
