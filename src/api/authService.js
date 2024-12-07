@@ -112,19 +112,16 @@ const registerUser = async (username, password, email) => {
   }
 };
 
-const getOTP = async (email, token) => {
+const accessAccount = async (url) => {
   try {
-    const response = await axios.get(
-      `http://localhost:5006/auth/api/Mail/confirm?email=${email}&token=${token}`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await axios.get(url, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   } catch (error) {
     console.log(error);
   }
 };
 
-export { login, registerUser, verifyToken };
+export { login, registerUser, verifyToken, accessAccount };

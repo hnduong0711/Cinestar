@@ -1,17 +1,18 @@
-import React, { useEffect, useState } from "react";
-import paymentSerVice from "../../api/paymentService";
+import { useEffect, useState } from "react";
+import { accessAccount } from "../../api/authService";
 
-const PaymentResult = () => {
-  const [countdown, setCountdown] = useState(7);
+const AccessAccount = () => {
+  const [countdown, setCountdown] = useState(7); // Số giây đếm ngược ban đầu
 
   useEffect(() => {
-    const { token } = JSON.parse(sessionStorage.getItem("authToken"));
-    // Lấy toàn bộ URL
     const currentUrl = window.location.href;
     const queryString = currentUrl.split("?")[1];
-    const newUrl = `http://localhost:5006/payment/api/Payment/payment_result?${queryString}`;
-    const response = paymentSerVice.acceptPayment(newUrl, token);
+    const newUrl = `http://localhost:5006/auth/api/Mail/confirm?${queryString}`;
 
+    // Gửi yêu cầu xác nhận tài khoản
+    accessAccount(newUrl);
+
+    // Tạo bộ đếm thời gian
     const timer = setInterval(() => {
       setCountdown((prev) => {
         if (prev === 1) {
@@ -41,7 +42,7 @@ const PaymentResult = () => {
           d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
         />
       </svg>
-      <p>Thanh toán thành công!</p>
+      <p>Xác nhận tài khoản thành công!</p>
       <p className="pt-4">
         Bạn sẽ chuyển tới trang đăng nhập sau {countdown} giây...
       </p>
@@ -49,4 +50,4 @@ const PaymentResult = () => {
   );
 };
 
-export default PaymentResult;
+export default AccessAccount;

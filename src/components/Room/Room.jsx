@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useMemo } from "react";
 import { Screen } from "../../assets";
 import Seat from "./Seat";
 import TicketContext from "../../context/TicketContext/TicketContext";
@@ -19,7 +19,7 @@ const Room = ({ seatQuantity, schedule, typeTicketRef, foodCombo }) => {
   const [savedTicketId, setSavedTicketId] = useState(null);
 
   console.log("ticket ", ticketData);
-  // console.log('foodCobmo ',foodCombo.length);
+  console.log('schedule ',schedule);
 
   // lấy dữ liệu ghế
   useEffect(() => {
@@ -29,7 +29,7 @@ const Room = ({ seatQuantity, schedule, typeTicketRef, foodCombo }) => {
       setBookedSeats(data["seatInfo"]["bookedSeat"]);
     };
     fetchData();
-  }, [schedule.roomNumber]);
+  }, [schedule.roomNumber, schedule.id]);
 
   // xóa 1 vé trong số lượng vé đặt
 
@@ -56,9 +56,13 @@ const Room = ({ seatQuantity, schedule, typeTicketRef, foodCombo }) => {
   }, [maxColsPerRow]);
 
   // kiểm tra ghế đã đặt
-  const bookedSeatKeys = new Set(
-    bookedSeats.map((seat) => `${seat.row}-${seat.column}`)
-  );
+  // const bookedSeatKeys = new Set(
+  //   bookedSeats.map((seat) => `${seat.row}-${seat.column}`)
+  // );
+
+  const bookedSeatKeys = useMemo(() => {
+    return new Set(bookedSeats.map((seat) => `${seat.row}-${seat.column}`));
+  }, [bookedSeats, schedule.roomNumber]);
 
   // kiểm tra coi state đã cập nhật chưa
   useEffect(() => {
@@ -199,7 +203,6 @@ const Room = ({ seatQuantity, schedule, typeTicketRef, foodCombo }) => {
     console.log("Cập nhật: ", response);
     setTicket(response);
   };
-  
 
   return (
     <div className="flex flex-col gap-5 justify-center">

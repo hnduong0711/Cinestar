@@ -14,6 +14,7 @@ import { useRef } from "react";
 import Payment from "../components/Payment/Payment";
 import PaymentResult from "../components/Payment/PaymentResult";
 import ForgetPass from "../components/ForgetPass/ForgetPass";
+import AccessAccount from "../components/AccessAccount/AccessAccount";
 // import NowPage from '@/components/Now/Now'; // Trang "Now" có thể điều chỉnh
 // import NotFoundPage from '@/pages/NotFoundPage'; // Trang 404
 
@@ -33,6 +34,7 @@ export default function AppRouter() {
         <Route path="/payment" element={<Payment />} />
         <Route path="/payment/payment_result" element={<PaymentResult />} />
         <Route path="/forgetpass" element={<ForgetPass />} />
+        <Route path="/validaccount" element={<AccessAccount />} />
       </Routes>
       <FooterTest />
     </>
