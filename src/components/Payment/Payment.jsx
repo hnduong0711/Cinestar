@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import TicketContext from "../../context/TicketContext/TicketContext";
-import { ArrowLongRightIcon } from "@heroicons/react/16/solid";
 import Button from "../Button/Button";
 import userService from "../../api/userService";
 import paymentSerVice from "../../api/paymentService";

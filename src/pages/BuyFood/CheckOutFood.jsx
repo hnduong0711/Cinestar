@@ -117,6 +117,7 @@ const CheckOutFood = ({
         });
       }
     } else {
+      sessionStorage.removeItem("pendingTicket");
       navigate("/payment");
     }
   };

@@ -18,33 +18,62 @@ const ticketService = {
     }
   },
   // sửa vé
-  updateTicket: async(id, data, token) =>  {
-    try{
+  updateTicket: async (id, data, token) => {
+    try {
       const response = await axios.put(`${ticket_base_url}/${id}`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
-        }
+        },
       });
       return response.data;
-    }catch(error){
+    } catch (error) {
       console.log(error);
     }
   },
   // xóa vé
-  deleteTicketById: async (id, token) =>{
+  deleteTicketById: async (id, token) => {
     console.log("ID gửi đến API:", id);
-    try{
-      const response = await axios.delete(`${ticket_base_url}/${id}`,{
+    try {
+      const response = await axios.delete(`${ticket_base_url}/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
-        }
-      })
+        },
+      });
       console.log(response.data);
-    }catch(error){console.log(error);
+    } catch (error) {
+      console.log(error);
     }
-  }
+  },
+  // lấy tất cả vé
+  getAllTicketByUser: async (id, token) => {
+    try {
+      const response = await axios.get(`${ticket_base_url}/user/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  getTicketById: async (id, token) => {
+    try {
+      const response = await axios.get(`${ticket_base_url}/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  },
 };
 
 export default ticketService;
