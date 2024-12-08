@@ -18,12 +18,12 @@ export default {
       "booked-single-seat": "url('assets/Seat/bookedSingleSeat.svg')",
       "selected-couple-seat": "url('assets/Seat/selectedCoupleSeat.svg')",
       "booked-couple-seat": "url('assets/Seat/bookedCoupleSeat.svg')",
-      'custom-gradient': 'linear-gradient(90deg, rgba(86,47,132,1) 15%, rgba(47,84,171,1) 85%)',
+      "custom-gradient":
+        "linear-gradient(90deg, rgba(86,47,132,1) 15%, rgba(47,84,171,1) 85%)",
     },
     fontFamily: {
       title: ["Anton", "sans-serif"],
-      content : ["josefin sans", "sans-serif"]
-      
+      content: ["josefin sans", "sans-serif"],
     },
     extend: {
       colors: {
@@ -35,14 +35,12 @@ export default {
         "cinestar-purple": "#663399", //Màu tím
         "cinestar-orange": "#FF7201",
         "cinestar-black-opacity": "rgba(15, 23, 42, 0.7)",
-        "cinestar-custom-white" : '#f8fafc', // trắng cho chữ
+        "cinestar-custom-white": "#f8fafc", // trắng cho chữ
         "cinestar-custom-blue": "#365fbf",
-        "cinestar-custom-yellow" : "#f3ea28",
-        "cinestar-custom-bule" : "rgb(86,47,132)",
-        "cinestar-button-food" : "#94A3BB",
-        "cinestar-button-food-hover" : "#f3ea28",
-      
-
+        "cinestar-custom-yellow": "#f3ea28",
+        "cinestar-custom-bule": "rgb(86,47,132)",
+        "cinestar-button-food": "#94A3BB",
+        "cinestar-button-food-hover": "#f3ea28",
       },
       backgroundImage: {
         "purple-blue-gradient": "linear-gradient(to right, #7b2cbf, #4a90e2)",
@@ -51,10 +49,19 @@ export default {
       },
 
       borderRadius: {
-        'custom-10px': '10px',  // Khai báo border radius tùy chỉnh
+        "custom-10px": "10px", // Khai báo border radius tùy chỉnh
       },
       textUnderlineOffset: {
-        4: '4px',
+        4: "4px",
+      },
+      keyframes: {
+        scaleUpDown: {
+          "0%, 100%": { transform: "scale(1)" }, // Kích thước ban đầu
+          "50%": { transform: "scale(1.2)" }, // Phóng to ở giữa
+        },
+      },
+      animation: {
+        scaleLoop: "scaleUpDown 1s ease-in-out infinite", // Hiệu ứng lặp vô hạn
       },
     },
   },

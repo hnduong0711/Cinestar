@@ -2,11 +2,10 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { typeTikcet } from "../../constants/seatBooking";
 import Room from "../Room/Room";
 import TicketContext from "../../context/TicketContext/TicketContext";
-import BuyCorn from "../../pages/BuyFood/index";
 import ListCombo from "../../pages/BuyFood/CompoFirst";
 import CheckOutFood from "../../pages/BuyFood/CheckOutFood";
 
-const SeatBooking = ({ schedule }) => {
+const SeatBooking = ({ schedule, theaterRef }) => {
   const { ticketData, setTicketData, searchData, ticket } =
     useContext(TicketContext);
   const typeTicketRef = useRef(null);
@@ -150,6 +149,7 @@ const SeatBooking = ({ schedule }) => {
           selectedCombos={foodCombo}
           selectedSeats={seatQuantity}
           schedule={schedule}
+          theaterRef = {theaterRef}
         />
       )}
     </div>

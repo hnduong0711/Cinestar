@@ -1,11 +1,23 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { UserIcon } from "../../assets/index";
 import userService from "../../api/userService";
+import ticketService from "../../api/ticketService";
+import scheduleService from "../../api/scheduleService";
+import { ExclamationCircleIcon } from "@heroicons/react/16/solid";
+import DetailTickelModal from "../../components/Modal/DetailTickelModal";
 
 const UserPage = () => {
   const [tab, setTab] = useState(true);
+  const [allTicket, setAllTicket] = useState([]);
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [rePassword, setRePassword] = useState("");
+  const [newTicketList, setNewTicketList] = useState([]);
+  const [isShowModal, setIsShowModal] = useState(false);
+  const [ticketId, setTicketId] = useState();
 
   const setTabInfo = () => {
     setTab(true);
@@ -18,6 +30,8 @@ const UserPage = () => {
   const navigate = useNavigate();
 
   const [user, setUser] = useState(null);
+
+  // lấy data user
   useEffect(() => {
     const fetchData = async () => {
       const { token } = JSON.parse(sessionStorage.getItem("authToken"));
@@ -28,16 +42,57 @@ const UserPage = () => {
     fetchData();
   }, []);
 
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [rePassword, setRePassword] = useState("");
+  // lấy data ticket của user
+  useEffect(() => {
+    const { token } = JSON.parse(sessionStorage.getItem("authToken"));
+    const { id } = JSON.parse(sessionStorage.getItem("username"));
+    const getTicketByUser = async (id, token) => {
+      const response = await ticketService.getAllTicketByUser(id, token);
+      setAllTicket(response);
+      console.log(response);
+    };
+    getTicketByUser(id, token);
+  }, []);
 
   useEffect(() => {
     if (user) {
       setEmail(user.email || "");
     }
   }, [user]);
+
+  // định dạng ngày hiển thị
+  const formatDateTime = (dateTimeString) => {
+    const [date, time] = dateTimeString.split("T");
+    const formattedDate = date.split("-").reverse().join("/");
+    const formattedTime = time.slice(0, 5);
+    return `${formattedTime} | ${formattedDate}`;
+  };
+
+  // lấy schedule tạo ra list ticket mới
+  useEffect(() => {
+    const fetchData = async () => {
+      const updatedTickets = await Promise.all(
+        allTicket.map(async (ticket) => {
+          const schedule = await scheduleService.getScheduleByIdSchedule(
+            ticket.movieScheduleId
+          );
+          console.log(schedule);
+
+          return {
+            id: ticket.id,
+            filmName: schedule.movieSchedule.movie["name"],
+            showTime: formatDateTime(schedule.movieSchedule.showTime),
+            baseAmount: ticket.baseAmount,
+            detailTicket: <ExclamationCircleIcon className="size-6" />,
+          };
+        })
+      );
+      setNewTicketList(updatedTickets);
+    };
+    fetchData();
+  }, [allTicket]);
+
+  console.log(newTicketList);
 
   const handleChangeInfo = async () => {
     const data = {
@@ -52,7 +107,7 @@ const UserPage = () => {
     };
     const { token } = JSON.parse(sessionStorage.getItem("authToken"));
     const response = await userService.updateUser(user.id, data, token);
-    alert("Đổi thông tin thành công !")
+    alert("Đổi thông tin thành công !");
     console.log(response);
   };
 
@@ -84,12 +139,17 @@ const UserPage = () => {
     sessionStorage.removeItem("authToken");
     sessionStorage.removeItem("username");
     navigate("/");
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
   };
 
   if (!user) {
     return <div>Loading...</div>;
   }
+
+  const showDetail = (id) => {
+    console.log(id);
+    setTicketId(id);
+  };
 
   return (
     <div className=" min-h-screen p-8">
@@ -156,7 +216,9 @@ const UserPage = () => {
                 fill="#9C9C9C"
               />
             </svg>
-            <button className="ml-3 text-sm" onClick={handleLogout}>Đăng xuất</button>
+            <button className="ml-3 text-sm" onClick={handleLogout}>
+              Đăng xuất
+            </button>
           </div>
         </div>
 
@@ -222,7 +284,10 @@ const UserPage = () => {
                 ></input>
               </div>
             </div>
-            <button className="mt-4 bg-gray-200  py-2 px-4 rounded font-bold" onClick={changePassword}>
+            <button
+              className="mt-4 bg-gray-200  py-2 px-4 rounded font-bold"
+              onClick={changePassword}
+            >
               ĐỔI MẬT KHẨU
             </button>
           </div>
@@ -233,38 +298,48 @@ const UserPage = () => {
           <h1 className="text-2xl  text-white font-bold mb-6">
             LỊCH SỬ MUA HÀNG
           </h1>
-          <table className="text-white items-center border-collapse border border-white w-full bg-blue-900 table-auto">
-            <thead>
-              <tr>
-                <th className="border border-white">Mã đơn</th>
-                <th className="border border-white">Hoạt động</th>
-                <th className="border border-white">Chi Nhánh</th>
-                <th className="border border-white">Ngày</th>
-                <th className="border border-white">Tổng cộng</th>
-                <th className="border border-white">Điểm</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>2</td>
-                <td>3</td>
-                <td>4</td>
-                <td>5</td>
-                <td>6</td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td>2</td>
-                <td>3</td>
-                <td>4</td>
-                <td>5</td>
-                <td>6</td>
-              </tr>
-            </tbody>
-          </table>
+          <div className="grid grid-cols-4 items-center text-white border-collapse border border-white w-full bg-cinestar-custom-blue p-2">
+            {/* Header */}
+            <div className="font-bold text-center">Phim</div>
+            <div className="font-bold text-center">Thời gian</div>
+            <div className="font-bold text-center">Tổng tiền</div>
+            <div className="font-bold basis-[12%] text-center">Chi tiết vé</div>
+
+            {/* Body */}
+            {newTicketList.map((ticket, index) => (
+              <React.Fragment key={index}>
+                <div className="border-t border-white text-center py-2">
+                  {ticket.filmName}
+                </div>
+                <div className="border-t border-white text-center py-2">
+                  {ticket.showTime}
+                </div>
+                <div className="border-t border-white text-center py-2">
+                  {ticket.baseAmount.toLocaleString()} VND
+                </div>
+                <div className="border-t border-white text-center py-2 flex items-center justify-center">
+                  <button
+                    className="hover:opacity-80"
+                    onClick={() => {
+                      showDetail(ticket.id);
+                      setIsShowModal(true);
+                    }}
+                  >
+                    {ticket.detailTicket}
+                  </button>
+                </div>
+              </React.Fragment>
+            ))}
+          </div>
         </div>
       </div>
+      {isShowModal && (
+        <DetailTickelModal
+          ticketId = {ticketId}
+          isShowModal={isShowModal}
+          setIsShowModal={setIsShowModal}
+        />
+      )}
     </div>
   );
 };

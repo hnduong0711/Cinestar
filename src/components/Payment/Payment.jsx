@@ -1,16 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
 import TicketContext from "../../context/TicketContext/TicketContext";
-import { ArrowLongRightIcon } from "@heroicons/react/16/solid";
 import Button from "../Button/Button";
 import userService from "../../api/userService";
-import axios from "axios";
 import paymentSerVice from "../../api/paymentService";
 
 const Payment = ({ timeLeft }) => {
   const { ticket, searchData, ticketData } = useContext(TicketContext);
   const [user, setUser] = useState(null);
+  const [agree, setAgree] = useState(true);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     const fetchData = async () => {
       const { token } = JSON.parse(sessionStorage.getItem("authToken"));
       const { id } = JSON.parse(sessionStorage.getItem("username"));
@@ -20,54 +20,22 @@ const Payment = ({ timeLeft }) => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    // Lấy toàn bộ URL
-    const currentUrl = window.location.href;
-  
-    // Lấy các tham số query string
-    const urlParams = new URLSearchParams(window.location.search);
-  
-    // Ví dụ lấy các giá trị cụ thể
-    const vnpAmount = urlParams.get("vnp_Amount");
-    const vnpResponseCode = urlParams.get("vnp_ResponseCode");
-    const vnpTransactionStatus = urlParams.get("vnp_TransactionStatus");
-  
-    console.log("Full URL:", currentUrl);
-    console.log("Amount:", vnpAmount);
-    console.log("Response Code:", vnpResponseCode);
-    console.log("Transaction Status:", vnpTransactionStatus);
-  
-    // Kiểm tra nếu thanh toán thành công
-    if (vnpResponseCode === "00" && vnpTransactionStatus === "00") {
-      console.log("Payment successful!");
-    } else {
-      console.log("Payment failed!");
-    }
-  }, []);
-  
-
   const handlePayment = async () => {
-    const { token } = JSON.parse(sessionStorage.getItem("authToken"));
-    const data = {
-      OrderType: "online",
-      TicketID: ticket.id,
-      Amount: 1,
-      OrderDescription: ticket.id,
-      Name: user.username,
-      UserId: user.id,
-    };
-    const response = await paymentSerVice.createPayment(data, token);
-    window.location.href = response;
-
-    const urlParams = new URLSearchParams(window.location.search);
-
-    const vnpAmount = urlParams.get("vnp_Amount");
-    const vnpBankCode = urlParams.get("vnp_BankCode");
-    const vnpTransactionStatus = urlParams.get("vnp_TransactionStatus");
-
-    console.log("Amount:", vnpAmount);
-    console.log("Bank Code:", vnpBankCode);
-    console.log("Transaction Status:", vnpTransactionStatus);
+    if (agree) {
+      const { token } = JSON.parse(sessionStorage.getItem("authToken"));
+      const data = {
+        OrderType: "online",
+        TicketID: ticket.id,
+        Amount: 1,
+        OrderDescription: ticket.id,
+        Name: user.username,
+        UserId: user.id,
+      };
+      const response = await paymentSerVice.createPayment(data, token);
+      window.location.href = response;
+    } else {
+      alert("Vui lòng đồng ý điều khoản của Cinestar")
+    }
   };
 
   return (
@@ -112,7 +80,14 @@ const Payment = ({ timeLeft }) => {
               </select>
             </div>
             <div className="flex gap-2 items-center">
-              <input type="checkbox" className="size-4" />
+              <input
+                type="checkbox"
+                className="size-4"
+                checked
+                onClick={(prev) => {
+                  setAgree(!prev);
+                }}
+              />
               <span className="text-white">
                 Bạn đã đồng ý với điều khoản của Cinestar
               </span>

@@ -76,9 +76,9 @@ const Login = () => {
     } else {
       try {
         registerUser(username, password, email);
-        alert("Đăng kí thành công");
-        navigate("/");
-        window.scrollTo(0, 0);
+        alert("Vui lòng vào gmail để xác nhận tài khoản");
+        // navigate("/");
+        // window.scrollTo(0, 0);
       } catch (error) {
         console.error("Lỗi đăng ký:", error);
         alert("Có lỗi xảy ra khi đăng ký.");
