@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { filmList } from "../../constants/movie";
 import Movie from "../Movie/Movie";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import Slider from "react-slick";
@@ -7,24 +6,42 @@ import "./now.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import movieService from "../../api/movieService";
+import scheduleService from "../../api/scheduleService";
 
 const Now = () => {
   const sliderRef = useRef(null);
 
-  const [movies, setMovies] = useState([]);
+  const [nowShowing, setNowShowing] = useState([]); // Phim đang chiếu
+  console.log(nowShowing);
+  
 
   useEffect(() => {
     const fetchMovies = async () => {
-      try{
+      try {
         const data = await movieService.getAllMoives();
-        setMovies(data.records);
-      }catch(error){
-        console.log(error);
+        const allMovies = data.records;
+
+        // Phân loại phim
+        const nowShowingMovies = [];
+        const addedMovieIds = new Set(); // Dùng để theo dõi phim đã được thêm
+
+        for (const film of allMovies) {
+          const schedule = await scheduleService.getScheduleByIdFilm(film.id);
+
+          if (schedule && schedule.length > 0 && !addedMovieIds.has(film.id)) {
+            nowShowingMovies.push(film); // Thêm phim vào danh sách
+            addedMovieIds.add(film.id); // Đánh dấu phim đã được thêm
+          }
+        }
+
+        setNowShowing(nowShowingMovies);
+      } catch (error) {
+        console.log("Lỗi khi lấy dữ liệu phim:", error);
       }
-    }
+    };
+
     fetchMovies();
-  }, [])
-  
+  }, []);
 
   const settings = {
     infinite: true,
@@ -56,12 +73,11 @@ const Now = () => {
       },
     ],
   };
+
   return (
     <div className="w-full py-20 lg:px-20 md:px-5 xs:px-2">
       <div className="flex flex-col items-center">
-        <div className="heading text-gray-100 pb-4">
-          Phim đang chiếu
-        </div>
+        <div className="heading text-gray-100 pb-4">Phim đang chiếu</div>
         <div className="relative w-full">
           {/* Nút Chevron trái */}
           <ChevronLeftIcon
@@ -72,7 +88,7 @@ const Now = () => {
           {/* Slider */}
           <div className="w-[90%] flex m-auto">
             <Slider {...settings} ref={sliderRef} className="w-full">
-              {movies.map((film) => (
+              {nowShowing.map((film) => (
                 <Movie key={film.id} film={film} />
               ))}
             </Slider>

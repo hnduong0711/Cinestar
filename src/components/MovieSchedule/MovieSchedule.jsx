@@ -63,16 +63,118 @@ const MovieSchedule = ({ idFilm }) => {
   }, [idFilm, searchData.date]);
 
   // Định dạng ngày và nhóm theo ngày
+  // const formattedSchedule = useMemo(() => {
+  //   const groupByDate = filmSchedule.reduce((acc, item) => {
+  //     const date = formatDate(item.showTime);
+  //     const time = formatTime(item.showTime);
+  //     if (!acc[date]) acc[date] = [];
+  //     acc[date].push({ ...item, showTime: time });
+  //     return acc;
+  //   }, {});
+  //   return groupByDate;
+  // }, [filmSchedule]);
+
   const formattedSchedule = useMemo(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Đặt thời gian về 00:00 để so sánh chỉ ngày
+
     const groupByDate = filmSchedule.reduce((acc, item) => {
-      const date = formatDate(item.showTime);
-      const time = formatTime(item.showTime);
-      if (!acc[date]) acc[date] = [];
-      acc[date].push({ ...item, showTime: time });
+      const itemDate = new Date(item.showTime);
+      itemDate.setHours(0, 0, 0, 0); // Đặt thời gian về 00:00 để so sánh chỉ ngày
+
+      // Chỉ lấy các ngày từ hôm nay trở đi
+      if (itemDate >= today) {
+        const date = formatDate(item.showTime);
+        const time = formatTime(item.showTime);
+
+        if (!acc[date]) acc[date] = [];
+        acc[date].push({ ...item, showTime: time });
+      }
+
       return acc;
     }, {});
-    return groupByDate;
+
+    // Sắp xếp groupByDate theo thứ tự tăng dần ngày
+    const sortedGroupByDate = Object.keys(groupByDate)
+      .sort((a, b) => {
+        const dateA = new Date(a.split("/").reverse().join("-"));
+        const dateB = new Date(b.split("/").reverse().join("-"));
+        return dateA - dateB;
+      })
+      .reduce((acc, date) => {
+        acc[date] = groupByDate[date];
+        return acc;
+      }, {});
+
+    return sortedGroupByDate;
   }, [filmSchedule]);
+
+  const listTime = useMemo(() => {
+    const now = new Date(); // Thời gian hiện tại
+
+    return (
+      formattedSchedule[day]
+        ?.map((item) => item.showTime)
+        .filter((time) => {
+          // Lấy thông tin ngày và giờ từ `day` và `time`
+          const [dayPart, monthPart, yearPart] = day.split("/").map(Number); // Chuyển ngày từ chuỗi "dd/mm/yyyy" thành số
+          const [hours, minutes] = time.split(":").map(Number); // Chuyển giờ từ chuỗi "hh:mm" thành số
+
+          // Tạo đối tượng `Date` từ ngày và giờ của từng mục
+          const itemDateTime = new Date(
+            yearPart,
+            monthPart - 1,
+            dayPart,
+            hours,
+            minutes
+          );
+
+          // Giữ lại các mục có thời gian >= thời gian hiện tại
+          return itemDateTime >= now;
+        })
+        .sort((a, b) => {
+          const [hourA, minuteA] = a.split(":").map(Number);
+          const [hourB, minuteB] = b.split(":").map(Number);
+          return hourA !== hourB ? hourA - hourB : minuteA - minuteB;
+        }) || []
+    );
+  }, [day, formattedSchedule]);
+
+  // const listTime = useMemo(() => {
+  //   // Lấy danh sách thời gian và sắp xếp tăng dần
+  //   return (
+  //     formattedSchedule[day]
+  //       ?.map((item) => item.showTime)
+  //       .sort((a, b) => {
+  //         const [hourA, minuteA] = a.split(":").map(Number);
+  //         const [hourB, minuteB] = b.split(":").map(Number);
+  //         return hourA !== hourB ? hourA - hourB : minuteA - minuteB;
+  //       }) || []
+  //   );
+  // }, [day, formattedSchedule]);
+
+  // const formattedSchedule = useMemo(() => {
+  //   const today = new Date();
+  //   today.setHours(0, 0, 0, 0); // Đặt thời gian về 00:00 để so sánh chỉ ngày
+
+  //   const groupByDate = filmSchedule.reduce((acc, item) => {
+  //     const itemDate = new Date(item.showTime);
+  //     itemDate.setHours(0, 0, 0, 0); // Đặt thời gian về 00:00 để so sánh chỉ ngày
+
+  //     // Chỉ lấy các ngày từ hôm nay trở đi
+  //     if (itemDate >= today) {
+  //       const date = formatDate(item.showTime);
+  //       const time = formatTime(item.showTime);
+
+  //       if (!acc[date]) acc[date] = [];
+  //       acc[date].push({ ...item, showTime: time });
+  //     }
+
+  //     return acc;
+  //   }, {});
+
+  //   return groupByDate;
+  // }, [filmSchedule]);
 
   // Danh sách ngày và thời gian theo lịch chiếu
   const formattedDates = useMemo(
@@ -87,10 +189,10 @@ const MovieSchedule = ({ idFilm }) => {
     }
   }, [formattedDates, searchData.date]);
 
-  const listTime = useMemo(
-    () => formattedSchedule[day]?.map((item) => item.showTime) || [],
-    [day, formattedSchedule]
-  );
+  // const listTime = useMemo(
+  //   () => formattedSchedule[day]?.map((item) => item.showTime) || [],
+  //   [day, formattedSchedule]
+  // );
 
   // Thay đổi lựa chọn ngày, giờ, rạp
   const handleSelectTheater = (selectedTheater) => {
@@ -116,7 +218,6 @@ const MovieSchedule = ({ idFilm }) => {
       formattedSchedule[day]?.find((item) => item.showTime === time) || null
     );
   }, [day, time, formattedSchedule]);
-
 
   return (
     <div className="space-y-8">
@@ -176,7 +277,7 @@ const MovieSchedule = ({ idFilm }) => {
 
       {/* Chọn ghế */}
       {day && time && selectedSchedule && (
-        <SeatBooking schedule={selectedSchedule} theaterRef={theaterRef}/>
+        <SeatBooking schedule={selectedSchedule} theaterRef={theaterRef} />
       )}
     </div>
   );

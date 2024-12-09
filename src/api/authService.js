@@ -119,8 +119,9 @@ const accessAccount = async (url) => {
         "Content-Type": "application/json",
       },
     });
+    return response.data;
   } catch (error) {
-    console.log(error);
+    throw error.response ? error.response.data : error;
   }
 };
 

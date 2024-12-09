@@ -6,7 +6,7 @@ import ListCombo from "../../pages/BuyFood/CompoFirst";
 import CheckOutFood from "../../pages/BuyFood/CheckOutFood";
 
 const SeatBooking = ({ schedule, theaterRef }) => {
-  const { ticketData, setTicketData, searchData, ticket } =
+  const { ticketData, setTicketData, searchData, ticket, setTicket } =
     useContext(TicketContext);
   const typeTicketRef = useRef(null);
   const [foodCombo, setFoodCombo] = useState([]);
@@ -20,6 +20,13 @@ const SeatBooking = ({ schedule, theaterRef }) => {
       room: schedule.roomNumber,
     }));
   }, []);
+
+  useEffect(() => {
+    if (seatQuantity.length === 0 && ticket) {
+      setTicket(null); // Xóa ticket nếu không có ghế được chọn
+    }
+  }, [seatQuantity]);
+  
 
   // Hàm cập nhật ghế
   const handleUpdate = (id, type, newQuantity) => {

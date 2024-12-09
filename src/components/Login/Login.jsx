@@ -28,6 +28,10 @@ const Login = () => {
     setShowPassword(!showPassword);
   };
 
+  useEffect(() => {
+    window.scrollTo(0,0);
+  }, [])
+
   // Kiểm tra thông tin
   const validateInfomation = () => {
     const usernamePasswordRegex = /^[a-zA-Z0-9]{1,16}$/;

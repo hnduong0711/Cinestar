@@ -3,11 +3,14 @@ import GlobalContext from "./GlobalContext";
 
 const GlobalContextWrapper = (props) => {
   const [isShowModal, setIsShowModal] = useState(false);
+  const [name, setName] = useState("");
 
   return (
     <GlobalContext.Provider value={{
         isShowModal,
-        setIsShowModal
+        setIsShowModal,
+        name,
+        setName
     }}>
         {props.children}
     </GlobalContext.Provider>

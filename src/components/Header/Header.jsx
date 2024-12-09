@@ -18,12 +18,14 @@ import {
   UserCircleIcon,
   ArrowLeftEndOnRectangleIcon,
 } from "@heroicons/react/24/outline";
+import ticketService from "../../api/ticketService";
 
 const Header = () => {
   const isSmallScreen = useWindowSize();
-  const { setIsShowModal } = useContext(GlobalContext);
+  const { setIsShowModal, name, setName } = useContext(GlobalContext);
   const navigate = useNavigate();
   const location = useLocation();
+  console.log(name);
 
   const usernameData = sessionStorage.getItem("username");
   const [username, setUsername] = useState(
@@ -40,10 +42,15 @@ const Header = () => {
   };
 
   const handleLogout = () => {
-    sessionStorage.removeItem("authToken");
-    sessionStorage.removeItem("username");
+    // const { id } = JSON.parse(sessionStorage.getItem("pendingTicket"));
+    // const { token } = JSON.parse(sessionStorage.getItem("authToken"));
+    // if (id) {
+    //   console.log(id);
+    //   ticketService.deleteTicketById(id, token);
+    // }
+    sessionStorage.clear();
     setUsername("Đăng nhập");
-
+    window.location.assign("http://localhost:5173/");
     if (location.pathname === "/user") {
       navigate("/login"); // Chuyển hướng đến trang login
     }
@@ -51,6 +58,13 @@ const Header = () => {
 
   const handleClick = () => {
     navigate("/popcorn-drink");
+  };
+
+  const handleSearch = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      navigate("/searchfilm");
+    }
   };
 
   return (
@@ -81,6 +95,9 @@ const Header = () => {
               type="text"
               className="hidden md:block rounded-2xl h-10 pl-3 text-sm w-[280px]"
               placeholder="Tìm kiếm"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              onKeyDown={handleSearch}
             />
             <img
               src={SearchIcon}

@@ -130,6 +130,12 @@ const UserPage = () => {
         };
         const { token } = JSON.parse(sessionStorage.getItem("authToken"));
         const response = await userService.updateUser(user.id, data, token);
+        if(response){
+          setPassword("");
+          setNewPassword("");
+          setRePassword("");
+          alert("Đổi mật khẩu thành công !");
+        }
         console.log(response);
       }
     }

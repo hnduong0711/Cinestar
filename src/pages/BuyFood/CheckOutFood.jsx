@@ -15,7 +15,8 @@ const CheckOutFood = ({
     useContext(TicketContext);
 
   console.log(searchData);
-
+  console.log(ticket);
+  
   const deleteTicket = async () => {
     const storedData = sessionStorage.getItem("authToken");
     const { token } = JSON.parse(storedData);
@@ -131,7 +132,7 @@ const CheckOutFood = ({
 
   return (
     <div className="flex flex-col">
-      {ticketData.seats.length > 0 && (
+      {ticket && ticketData.seats.length > 0 && (
         <div
           ref={paymentBarRef}
           className={`bg-cinestar-black w-full h-[150px] text-[15px] font-content p-4 text-white fixed bottom-0 z-10 left-0 transition-all duration-200 ${

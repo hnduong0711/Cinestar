@@ -4,6 +4,7 @@ import Seat from "./Seat";
 import TicketContext from "../../context/TicketContext/TicketContext";
 import scheduleService from "../../api/scheduleService";
 import ticketService from "../../api/ticketService";
+import { useNavigate } from "react-router-dom";
 
 const Room = ({ seatQuantity, schedule, typeTicketRef, foodCombo }) => {
   const [seats, setSeats] = useState([]);
@@ -17,6 +18,7 @@ const Room = ({ seatQuantity, schedule, typeTicketRef, foodCombo }) => {
     coupleSeats: 0,
   });
   const [savedTicketId, setSavedTicketId] = useState(null);
+  const navigate = useNavigate();
 
   // console.log("ticket ", ticketData);
   // console.log('schedule ',schedule);
@@ -37,12 +39,13 @@ const Room = ({ seatQuantity, schedule, typeTicketRef, foodCombo }) => {
   }, []);
 
   // lấy dữ liệu ghế
+  const fetchData = async () => {
+    const data = await scheduleService.getScheduleByIdSchedule(schedule.id);
+    setSeats(data["seatInfo"]["allSeats"]);
+    setBookedSeats(data["seatInfo"]["bookedSeat"]);
+  };
+  
   useEffect(() => {
-    const fetchData = async () => {
-      const data = await scheduleService.getScheduleByIdSchedule(schedule.id);
-      setSeats(data["seatInfo"]["allSeats"]);
-      setBookedSeats(data["seatInfo"]["bookedSeat"]);
-    };
     fetchData();
   }, [schedule.roomNumber, schedule.id]);
 
@@ -70,10 +73,54 @@ const Room = ({ seatQuantity, schedule, typeTicketRef, foodCombo }) => {
     setCols(maxCols);
   }, [maxColsPerRow]);
 
-  // kiểm tra ghế đã đặt
-  // const bookedSeatKeys = new Set(
-  //   bookedSeats.map((seat) => `${seat.row}-${seat.column}`)
-  // );
+  console.log(rows, cols);
+
+  // code mới
+  const processSeats = () => {
+    const seatsByRow = seats.reduce((acc, seat) => {
+      if (!acc[seat.row]) acc[seat.row] = [];
+      acc[seat.row].push(seat);
+      return acc;
+    }, {});
+
+    const processedSeats = [];
+    Object.keys(seatsByRow).forEach((row) => {
+      const seatsInRow = seatsByRow[row];
+      const maxColumn = Math.max(
+        ...seatsInRow.map((seat) => parseInt(seat.column))
+      );
+
+      for (let col = 1; col <= maxColumn; col++) {
+        // Kiểm tra xem có ghế thật ở vị trí này hay không
+        const existingSeat = seatsInRow.find(
+          (seat) => parseInt(seat.column) === col
+        );
+
+        if (existingSeat) {
+          // Nếu ghế thật là ghế đôi (couple), bỏ qua ghế tiếp theo
+          if (existingSeat.seatType === "couple") {
+            processedSeats.push(existingSeat);
+            col++; // Bỏ qua ghế tiếp theo vì ghế couple chiếm 2 vị trí
+          } else {
+            processedSeats.push(existingSeat);
+          }
+        } else {
+          // Tạo ghế ảo nếu không có ghế thật
+          processedSeats.push({
+            row,
+            column: col.toString(),
+            seatType: "single", // Ghế ảo là single
+            id: `${row}-${col}`, // ID tạm
+            isVirtual: true, // Đánh dấu là ghế ảo
+          });
+        }
+      }
+    });
+
+    return processedSeats;
+  };
+
+  console.log(processSeats());
 
   const bookedSeatKeys = useMemo(() => {
     return new Set(bookedSeats.map((seat) => `${seat.row}-${seat.column}`));
@@ -166,6 +213,11 @@ const Room = ({ seatQuantity, schedule, typeTicketRef, foodCombo }) => {
   // tạo vé khi bấm vào ghế để giữ ghế
   const createTicket = async () => {
     const storedData = sessionStorage.getItem("authToken");
+    if(!storedData){
+      alert("Vui lòng đăng nhập trước khi đặt vé !");
+      navigate('/login');
+      return;
+    }
     const { token } = JSON.parse(storedData);
     const listSeatId = ticketData.seats.map((seat) => seat.id);
     const listFoodId = foodCombo.map((food) => food.id);
@@ -179,6 +231,21 @@ const Room = ({ seatQuantity, schedule, typeTicketRef, foodCombo }) => {
     };
     const response = await ticketService.addTicket(data, token);
     console.log("Tạo ", response);
+    if (!response) {
+      alert("Ghế này đã được đặt trước !");
+      setSelectedSeats((prev) => ({
+        ...prev,
+        selectedList: prev.selectedList.slice(0, -1),
+        singleSeats: prev.selectedList
+          .slice(0, -1)
+          .filter((s) => s.seatType === "single").length,
+        coupleSeats: prev.selectedList
+          .slice(0, -1)
+          .filter((s) => s.seatType === "couple").length,
+      }));
+      fetchData();
+      return;
+    }
     sessionStorage.setItem(
       "pendingTicket",
       JSON.stringify({ id: response.id })
@@ -197,7 +264,7 @@ const Room = ({ seatQuantity, schedule, typeTicketRef, foodCombo }) => {
       ...prev,
       selectedList: [],
     }));
-    setTicket({});
+    setTicket(null);
     setSavedTicketId(null);
   };
 
@@ -220,6 +287,21 @@ const Room = ({ seatQuantity, schedule, typeTicketRef, foodCombo }) => {
       token
     );
     console.log("Cập nhật: ", response);
+    if (!response) {
+      alert("Ghế này đã được đặt trước !");
+      setSelectedSeats((prev) => ({
+        ...prev,
+        selectedList: prev.selectedList.slice(0, -1),
+        singleSeats: prev.selectedList
+          .slice(0, -1)
+          .filter((s) => s.seatType === "single").length,
+        coupleSeats: prev.selectedList
+          .slice(0, -1)
+          .filter((s) => s.seatType === "couple").length,
+      }));
+      fetchData();
+      return;
+    }
     setTicket(response);
   };
 
@@ -241,7 +323,7 @@ const Room = ({ seatQuantity, schedule, typeTicketRef, foodCombo }) => {
             gridTemplateRows: `repeat(${rows}, minmax(0, 1fr))`,
           }}
         >
-          {seats.map((seat) => (
+          {processSeats().map((seat) => (
             <Seat
               key={seat.row + seat.column}
               seatNumber={
@@ -250,7 +332,7 @@ const Room = ({ seatQuantity, schedule, typeTicketRef, foodCombo }) => {
               isBooked={bookedSeatKeys.has(`${seat.row}-${seat.column}`)}
               isSelected={selectedSeats["selectedList"].includes(seat)}
               isCouple={seat.seatType === "couple"}
-              isNone={seat.seatType === "none"}
+              isVirtual={seat.isVirtual}
               onClick={() => handleChoice(seat)}
             />
           ))}
